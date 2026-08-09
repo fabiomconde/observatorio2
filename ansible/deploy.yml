@@ -3,8 +3,8 @@
   hosts: all
   become: no
   vars:
-    app_dir: /srv/servidor_principal/apps/observatorio
-    repo_dir: /srv/servidor_principal/apps/observatorio
+    app_dir: /srv/servidor_principal/apps/observatorio2
+    repo_dir: /srv/servidor_principal/apps/observatorio2
 
   tasks:
     - name: Forçar descarte de alterações locais e puxar código
