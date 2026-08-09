@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Erro interno{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="display-1 fw-bold text-danger">500</div>
+    <h1 class="fw-bold" style="color: var(--cor-escura);">Erro interno do servidor</h1>
+    <p class="text-muted">Algo deu errado do nosso lado. Tente novamente em instantes.</p>
+    <a href="{% url 'core:home' %}" class="btn btn-primary mt-3">
+        <i class="bi bi-house"></i> Voltar ao início
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ grupo.titulo }}{% endblock %}
+
+{% block content %}
+<section class="page-header" style="background: linear-gradient(135deg, {{ grupo.cor }} 0%, var(--cor-escura) 100%);">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'core:grupos' %}">Grupos de Trabalho</a></li>
+                <li class="breadcrumb-item active">{{ grupo.titulo }}</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold"><i class="bi {{ grupo.icone|default:'bi-diagram-3' }}"></i> {{ grupo.titulo }}</h1>
+        {% if grupo.coordenador %}
+        <p class="lead mb-0">Coordenação: {{ grupo.coordenador }}</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <p class="lead">{{ grupo.descricao_curta }}</p>
+            <div class="article-content">
+                {{ grupo.descricao|linebreaks }}
+            </div>
+        </div>
+        <aside class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h6 class="text-uppercase small fw-bold mb-3" style="color: var(--cor-destaque);">Outros eixos</h6>
+                    {% for r in relacionados %}
+                    <a href="{% url 'core:grupo_detalhe' r.slug %}" class="d-block py-2 border-bottom text-decoration-none text-dark">
+                        <i class="bi {{ r.icone|default:'bi-diagram-3' }}" style="color: {{ r.cor }};"></i>
+                        {{ r.titulo }}
+                    </a>
+                    {% empty %}
+                    <p class="text-muted small mb-0">Sem outros grupos.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <a href="{% url 'core:grupos' %}" class="btn btn-outline-primary mt-3 w-100">
+                <i class="bi bi-arrow-left"></i> Todos os grupos
+            </a>
+        </aside>
+    </div>
+</div>
+{% endblock %}

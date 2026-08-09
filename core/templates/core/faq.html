@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Perguntas Frequentes</h1>
+        <p class="lead">Tire suas dúvidas sobre o projeto, dados e métodos.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    {% if categorias %}
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a href="{% url 'core:faq' %}" class="btn btn-sm {% if not categoria_ativa %}btn-primary{% else %}btn-outline-primary{% endif %}">Todas</a>
+        {% for cat in categorias %}
+        <a href="?categoria={{ cat }}" class="btn btn-sm {% if categoria_ativa|lower == cat|lower %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ cat }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="accordion accordion-flush" id="faqAccordion">
+        {% for faq in perguntas %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="{{ forloop.first|yesno:'true,false' }}" aria-controls="collapse{{ forloop.counter }}">
+                    <strong>{{ faq.pergunta }}</strong>
+                </button>
+            </h2>
+            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-secondary">{{ faq.resposta|linebreaks }}</div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">Nenhuma pergunta cadastrada ainda.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

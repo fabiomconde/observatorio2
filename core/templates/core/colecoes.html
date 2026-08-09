@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Coleções{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item active">Coleções</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold">Coleções de dados</h1>
+        <p class="lead">Snapshots anuais de mapas, estatísticas e séries históricas.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        {% for c in colecoes %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 hover-lift">
+                {% if c.destaque %}
+                <div class="card-header bg-primary text-white fw-bold">
+                    <i class="bi bi-star-fill"></i> Em destaque
+                </div>
+                {% endif %}
+                <div class="card-body p-4">
+                    <h4 class="fw-bold">{{ c.nome }}</h4>
+                    <p class="text-muted small mb-2">
+                        <i class="bi bi-calendar-range"></i>
+                        {{ c.ano_inicio }}–{{ c.ano_fim }} · {{ c.anos_cobertura }} anos
+                    </p>
+                    {% if c.lancado_em %}
+                    <p class="text-muted small mb-3"><i class="bi bi-rocket-takeoff"></i> Lançada em {{ c.lancado_em|date:"d/m/Y" }}</p>
+                    {% endif %}
+                    <p class="text-secondary small">{{ c.resumo|truncatechars:180 }}</p>
+                </div>
+                <div class="card-footer bg-white border-0 pb-4">
+                    <a href="#" class="btn btn-outline-primary btn-sm disabled" aria-disabled="true">
+                        <i class="bi bi-download"></i> Em breve — download
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">Nenhuma coleção cadastrada.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

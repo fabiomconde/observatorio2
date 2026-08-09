@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    image: mapbiomas-clone-web
+    container_name: mapbiomas_web
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             python manage.py seed_data &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --access-logfile -"
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    container_name: mapbiomas_db
+    environment:
+      POSTGRES_DB: mapbiomas
+      POSTGRES_USER: mapbiomas
+      POSTGRES_PASSWORD: mapbiomas
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pg_data:
+  static_volume:
+  media_volume:

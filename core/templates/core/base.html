@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ SITE_DESCRIPTION }}">
+    <meta name="theme-color" content="#0d3b66">
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %} — {{ SITE_NAME }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{% static 'core/img/favicon.svg' %}">
+    <link rel="stylesheet" href="{% static 'core/css/site.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- ============= TOP BAR ============= -->
+    <div class="top-bar">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center">
+            <div class="top-links">
+                <a href="#"><i class="bi bi-globe-americas"></i> PT-BR</a>
+                <a href="#"><i class="bi bi-translate"></i> EN</a>
+                <a href="#"><i class="bi bi-universal-access"></i> Acessibilidade</a>
+            </div>
+            <div class="top-links">
+                <a href="{% url 'core:contato' %}"><i class="bi bi-envelope"></i> Contato</a>
+                <a href="/admin/"><i class="bi bi-shield-lock"></i> Painel admin</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============= HEADER PRINCIPAL ============= -->
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'core:home' %}">
+                    <span class="brand-logo">🌎</span>
+                    <span class="brand-text">
+                        <strong>{{ SITE_NAME }}</strong>
+                        <small>Observatório Territorial</small>
+                    </span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Alternar navegação">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'core:home' %}">Início</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if 'o-projeto' in request.path or 'grupos' in request.path or 'membros' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">O Projeto</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'core:quem_somos' %}"><i class="bi bi-info-circle"></i> Sobre o Observatório</a></li>
+                                <li><a class="dropdown-item" href="{% url 'core:grupos' %}"><i class="bi bi-diagram-3"></i> Grupos de Trabalho</a></li>
+                                <li><a class="dropdown-item" href="{% url 'core:membros' %}"><i class="bi bi-people"></i> Membros</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if 'biomas' in request.path or 'colecoes' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dados &amp; Mapas</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'core:biomas' %}"><i class="bi bi-globe-americas"></i> Biomas</a></li>
+                                <li><a class="dropdown-item" href="{% url 'core:colecoes' %}"><i class="bi bi-collection"></i> Coleções</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'core:glossario' %}"><i class="bi bi-book"></i> Glossário</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'publicacoes' in request.path %}active{% endif %}" href="{% url 'core:publicacoes' %}">Publicações</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'noticias' in request.path %}active{% endif %}" href="{% url 'core:noticias' %}">Notícias</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'faq' in request.path %}active{% endif %}" href="{% url 'core:faq' %}">FAQ</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <form class="d-flex header-search-form" role="search" action="{% url 'core:busca' %}" method="get">
+                                <i class="bi bi-search"></i>
+                                <input class="form-control" type="search" name="q" placeholder="Buscar…" value="{{ request.GET.q|default:'' }}" aria-label="Buscar no site">
+                            </form>
+                        </li>
+
+                        <li class="nav-item ms-lg-2">
+                            <a class="btn btn-accent" href="{% url 'core:contato' %}">
+                                <i class="bi bi-chat-dots"></i> Fale conosco
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ============= MENSAGENS ============= -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ============= CONTEÚDO ============= -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ============= FOOTER ============= -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-4">
+                    <div class="footer-brand">
+                        <span class="brand-logo">🌎</span>
+                        <span class="brand-text">
+                            <strong style="color:#fff;">{{ SITE_NAME }}</strong>
+                            <small style="color:rgba(255,255,255,.6);">Observatório Territorial</small>
+                        </span>
+                    </div>
+                    <p class="small" style="color:rgba(255,255,255,.7);">{{ SITE_DESCRIPTION }}</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6>O Projeto</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="{% url 'core:quem_somos' %}">Sobre</a></li>
+                        <li><a href="{% url 'core:grupos' %}">Grupos de Trabalho</a></li>
+                        <li><a href="{% url 'core:membros' %}">Membros</a></li>
+                        <li><a href="{% url 'core:quem_somos' %}#parceiros">Parceiros</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6>Dados</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="{% url 'core:biomas' %}">Biomas</a></li>
+                        <li><a href="{% url 'core:colecoes' %}">Coleções</a></li>
+                        <li><a href="{% url 'core:publicacoes' %}">Publicações</a></li>
+                        <li><a href="{% url 'core:glossario' %}">Glossário</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6>Comunicação</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="{% url 'core:noticias' %}">Notícias</a></li>
+                        <li><a href="{% url 'core:faq' %}">FAQ</a></li>
+                        <li><a href="{% url 'core:contato' %}">Contato</a></li>
+                        <li><a href="/admin/">Painel admin</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-12 col-lg-2">
+                    <h6>Receba atualizações</h6>
+                    <form class="footer-newsletter" onsubmit="event.preventDefault(); alert('Demo: newsletter não configurada.');">
+                        <div class="input-group input-group-sm">
+                            <input type="email" class="form-control" placeholder="Seu e-mail" required>
+                            <button class="btn btn-accent" type="submit"><i class="bi bi-send"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+                <span>© {% now "Y" %} {{ SITE_NAME }}. Dados abertos sob licença CC-BY-SA.</span>
+                <span>Construído com Django · Bootstrap · Ciência aberta</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'core/js/site.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

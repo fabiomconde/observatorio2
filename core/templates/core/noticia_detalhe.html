@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ noticia.titulo }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'core:noticias' %}">Notícias</a></li>
+                <li class="breadcrumb-item active">{{ noticia.titulo|truncatechars:40 }}</li>
+            </ol>
+        </nav>
+        {% if noticia.categoria %}<span class="pub-type" style="background: {{ noticia.categoria.cor }};">{{ noticia.categoria.nome }}</span>{% endif %}
+        <h1 class="fw-bold mt-2">{{ noticia.titulo }}</h1>
+        <p class="mb-0" style="color: rgba(255,255,255,.85);">
+            <i class="bi bi-calendar3"></i>
+            {{ noticia.publicado_em|date:"d \d\e F \d\e Y" }}
+        </p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <article class="article-content">
+                {% if noticia.imagem %}
+                <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}" class="img-fluid rounded mb-4">
+                {% endif %}
+                <p class="lead">{{ noticia.resumo }}</p>
+                <div class="article-body article-content with-dropcap">
+                    {{ noticia.conteudo|linebreaks }}
+                </div>
+            </article>
+        </div>
+        <aside class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-uppercase small fw-bold mb-3" style="color: var(--cor-destaque);">Relacionadas</h6>
+                    {% for r in relacionadas %}
+                    <a href="{% url 'core:noticia_detalhe' r.slug %}" class="d-block py-2 border-bottom text-decoration-none text-dark">
+                        <small class="text-muted d-block">{{ r.publicado_em|date:"d/m/Y" }}</small>
+                        {{ r.titulo }}
+                    </a>
+                    {% empty %}
+                    <p class="text-muted small mb-0">Sem notícias relacionadas.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Busca{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Busca</h1>
+        {% if termo %}
+        <p class="lead">Resultados para: <strong>"{{ termo }}"</strong></p>
+        {% else %}
+        <p class="lead">Use o campo acima para buscar por termos.</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="container py-5">
+    <form class="row g-2 mb-4" method="get">
+        <div class="col-md-10">
+            <input type="text" name="q" value="{{ termo }}" class="form-control" placeholder="Termo de busca…">
+        </div>
+        <div class="col-md-2 d-grid">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Buscar</button>
+        </div>
+    </form>
+
+    {% if termo %}
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <h2 class="section-title h4">Notícias ({{ noticias|length }})</h2>
+                {% for n in noticias %}
+                <a href="{% url 'core:noticia_detalhe' n.slug %}" class="text-decoration-none text-dark">
+                    <div class="pub-card mb-3" style="--pub-cor: {{ n.categoria.cor|default:'#0d3b66' }};">
+                        <span class="pub-type">{{ n.categoria.nome|default:'Notícia' }}</span>
+                        <div class="pub-title h6 mb-1">{{ n.titulo }}</div>
+                        <div class="pub-meta"><i class="bi bi-calendar3"></i> {{ n.publicado_em|date:"d/m/Y" }}</div>
+                    </div>
+                </a>
+                {% empty %}
+                <p class="text-muted small">Nenhuma notícia encontrada.</p>
+                {% endfor %}
+            </div>
+            <div class="col-lg-6">
+                <h2 class="section-title h4">Publicações ({{ publicacoes|length }})</h2>
+                {% for pub in publicacoes %}
+                <a href="{% url 'core:publicacao_detalhe' pub.slug %}" class="text-decoration-none text-dark">
+                    <div class="pub-card mb-3" style="--pub-cor: {{ pub.tipo.cor }};">
+                        <span class="pub-type"><i class="bi {{ pub.tipo.icone|default:'bi-file-earmark-text' }}"></i> {{ pub.tipo.nome }}</span>
+                        <div class="pub-title h6 mb-1">{{ pub.titulo }}</div>
+                        <div class="pub-meta">
+                            {% if pub.publicado_em %}<span><i class="bi bi-calendar3"></i> {{ pub.publicado_em|date:"d/m/Y" }}</span>{% endif %}
+                            {% if pub.autores %}<span class="text-truncate"><i class="bi bi-person"></i> {{ pub.autores|truncatechars:30 }}</span>{% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                <p class="text-muted small">Nenhuma publicação encontrada.</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Contato{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Fale conosco</h1>
+        <p class="lead">Dúvidas, parcerias, imprensa ou sugestões — escreva para a gente.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nome *</label>
+                        <input name="nome" type="text" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">E-mail *</label>
+                        <input name="email" type="email" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Assunto *</label>
+                        <input name="assunto" type="text" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Mensagem *</label>
+                        <textarea name="mensagem" rows="6" class="form-control" required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="bi bi-send"></i> Enviar mensagem
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <aside class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt text-primary"></i> Onde estamos</h5>
+                    <p class="text-muted small mb-4">Iniciativa distribuída, com coordenação multi-institucional.</p>
+
+                    <h5 class="fw-bold mb-3"><i class="bi bi-envelope text-primary"></i> E-mail</h5>
+                    <p class="text-muted small mb-4">contato@{{ SITE_NAME|lower|slugify }}.org</p>
+
+                    <h5 class="fw-bold mb-3"><i class="bi bi-share text-primary"></i> Mídia</h5>
+                    <p class="text-muted small mb-0">Imprensa, dados para reportagens e materiais institucionais.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

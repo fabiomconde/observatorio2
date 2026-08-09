@@ -1,0 +1,90 @@
+{% extends 'core/base.html' %}
+
+{% block title %}O Projeto{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item active" aria-current="page">O Projeto</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold">O Observatório</h1>
+        <p class="lead">Ciência aberta, tecnologia e impacto para políticas públicas.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <span class="section-eyebrow">Sobre nós</span>
+            <h2 class="section-title">Quem somos</h2>
+            <p>O <strong>{{ SITE_NAME }}</strong> é uma iniciativa multi-institucional que envolve universidades, ONGs e empresas de tecnologia.</p>
+            <p>Nosso propósito é revelar as transformações do território brasileiro por meio da ciência, tornando o conhecimento sobre o uso da terra acessível a todos.</p>
+
+            <h3 class="fw-bold mt-5 mb-3" style="color: var(--cor-escura);">Como trabalhamos</h3>
+            <p>Combinamos séries históricas de imagens de satélite, aprendizado de máquina e validação por especialistas para produzir mapas anuais de cobertura e uso da terra. Todo o processo é aberto e auditável.</p>
+        </div>
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-bullseye text-primary"></i> Missão</h5>
+                    <p class="text-muted small mb-4">Gerar e disseminar conhecimento sobre a cobertura e o uso da terra, com rigor científico e transparência.</p>
+                    <h5 class="fw-bold mb-3"><i class="bi bi-eye text-primary"></i> Visão</h5>
+                    <p class="text-muted small mb-0">Tornar-se referência global em monitoramento territorial colaborativo e aberto.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title text-center mt-5">Nossos pilares</h2>
+    <div class="row g-4">
+        {% for pilar in pilares %}
+        <div class="col-md-6 col-lg-3">
+            <div class="pilar-card h-100">
+                <div class="display-4">{{ pilar.icone }}</div>
+                <h5>{{ pilar.titulo }}</h5>
+                <p>{{ pilar.descricao }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">Em breve, nossos pilares.</div>
+        {% endfor %}
+    </div>
+
+    {% if grupos %}
+    <h2 class="section-title text-center mt-5">Eixos de pesquisa</h2>
+    <p class="text-center text-muted mb-4">Conheça nossos grupos de trabalho que conduzem a operação do observatório.</p>
+    <div class="row g-3">
+        {% for g in grupos %}
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'core:grupo_detalhe' g.slug %}" class="text-decoration-none text-dark">
+                <div class="gt-card" style="--gt-cor: {{ g.cor }};">
+                    <div class="gt-icon"><i class="bi {{ g.icone|default:'bi-diagram-3' }}"></i></div>
+                    <h5>{{ g.titulo }}</h5>
+                    <p>{{ g.descricao_curta|truncatechars:130 }}</p>
+                    {% if g.coordenador %}<div class="gt-coord">Coord.: {{ g.coordenador }}</div>{% endif %}
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'core:grupos' %}" class="btn btn-outline-primary">Ver todos os grupos de trabalho <i class="bi bi-arrow-right"></i></a>
+    </div>
+    {% endif %}
+
+    {% if parceiros %}
+    <h2 class="section-title text-center mt-5" id="parceiros">Rede de parceiros</h2>
+    <div class="row g-3 justify-content-center align-items-center mt-2">
+        {% for p in parceiros %}
+        <div class="col-6 col-md-3 col-lg-2">
+            <div class="parceiro-card text-center">{{ p.nome }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

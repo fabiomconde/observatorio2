@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Grupos de Trabalho{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'core:quem_somos' %}">O Projeto</a></li>
+                <li class="breadcrumb-item active">Grupos de Trabalho</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold">Grupos de Trabalho</h1>
+        <p class="lead">Eixos de pesquisa que articulam nossa rede de colaboradores.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        {% for g in grupos %}
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'core:grupo_detalhe' g.slug %}" class="text-decoration-none text-dark">
+                <div class="gt-card h-100" style="--gt-cor: {{ g.cor }};">
+                    <div class="gt-icon"><i class="bi {{ g.icone|default:'bi-diagram-3' }}"></i></div>
+                    <h5>{{ g.titulo }}</h5>
+                    <p>{{ g.descricao_curta|truncatechars:160 }}</p>
+                    {% if g.coordenador %}<div class="gt-coord">Coord.: {{ g.coordenador }}</div>{% endif %}
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">Nenhum grupo de trabalho cadastrado.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

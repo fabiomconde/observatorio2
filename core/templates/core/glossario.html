@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Glossário{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Glossário</h1>
+        <p class="lead">Termos e conceitos do monitoramento territorial.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="d-flex flex-wrap gap-1 justify-content-center mb-4 letter-nav">
+        {% for l in alfabeto %}
+        <a href="?letra={{ l }}" class="btn btn-sm {% if letra_ativa == l %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ l }}</a>
+        {% endfor %}
+        <a href="{% url 'core:glossario' %}" class="btn btn-sm {% if not letra_ativa %}btn-primary{% else %}btn-outline-secondary{% endif %}">Todos</a>
+    </div>
+
+    <p class="text-muted small text-center mb-4">{{ total_termos }} termo{{ total_termos|pluralize }} encontrado{{ total_termos|pluralize }}.</p>
+
+    {% for letra, termos in termos_por_letra.items %}
+    <h3 class="section-title h4 mt-4">{{ letra }}</h3>
+    <div class="list-group mb-3">
+        {% for t in termos %}
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-1" style="color: var(--cor-escura);">{{ t.termo }}</h5>
+                {% if t.categoria %}<small class="text-muted">{{ t.categoria }}</small>{% endif %}
+            </div>
+            <p class="mb-1 text-secondary">{{ t.definicao|linebreaks }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% empty %}
+    <div class="alert alert-info text-center">Nenhum termo encontrado para esta letra.</div>
+    {% endfor %}
+</div>
+{% endblock %}

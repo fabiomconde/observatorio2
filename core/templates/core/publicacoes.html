@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Publicações{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item active">Publicações</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold">Publicações</h1>
+        <p class="lead">Relatórios, artigos, notas técnicas, legislação e boletins do observatório.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <form class="row g-2 mb-4" method="get">
+        <div class="col-md-9">
+            <input type="text" name="q" value="{{ termo }}" class="form-control" placeholder="Buscar por título, autor ou palavra-chave…">
+        </div>
+        <div class="col-md-3 d-grid">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Buscar</button>
+        </div>
+    </form>
+
+    <div class="tipo-filter">
+        <a href="{% url 'core:publicacoes' %}" class="btn btn-sm {% if not tipo_ativo %}btn-primary{% else %}btn-outline-primary{% endif %}">Todas</a>
+        {% for t in tipos %}
+        <a href="?tipo={{ t.slug }}" class="btn btn-sm {% if tipo_ativo == t.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">
+            <i class="bi {{ t.icone|default:'bi-file-earmark-text' }}"></i> {{ t.nome }}
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if page_obj %}
+    <div class="row g-3">
+        {% for pub in page_obj %}
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'core:publicacao_detalhe' pub.slug %}" class="text-decoration-none text-dark">
+                <div class="pub-card" style="--pub-cor: {{ pub.tipo.cor }};">
+                    <span class="pub-type"><i class="bi {{ pub.tipo.icone|default:'bi-file-earmark-text' }}"></i> {{ pub.tipo.nome }}</span>
+                    <div class="pub-title">{{ pub.titulo }}</div>
+                    <div class="pub-summary">{{ pub.resumo|truncatechars:160 }}</div>
+                    <div class="pub-meta">
+                        {% if pub.publicado_em %}<span><i class="bi bi-calendar3"></i> {{ pub.publicado_em|date:"d/m/Y" }}</span>{% endif %}
+                        {% if pub.autores %}<span class="text-truncate" style="max-width: 50%;"><i class="bi bi-person"></i> {{ pub.autores|truncatechars:30 }}</span>{% endif %}
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="mt-5" aria-label="Paginação">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ termo }}&tipo={{ tipo_ativo }}">‹ Anterior</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">‹ Anterior</span></li>
+            {% endif %}
+            {% for n in page_obj.paginator.page_range %}
+            {% if page_obj.number == n %}
+            <li class="page-item active"><span class="page-link">{{ n }}</span></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ n }}&q={{ termo }}&tipo={{ tipo_ativo }}">{{ n }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ termo }}&tipo={{ tipo_ativo }}">Próxima ›</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Próxima ›</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-info">Nenhuma publicação encontrada.</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Membros{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item active">Membros</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold">Membros</h1>
+        <p class="lead">Pesquisadores, coordenadores e colaboradores que articulam a rede.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        {% for m in membros %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="membro-card">
+                <div class="membro-avatar">{{ m.nome|slice:":1"|upper }}</div>
+                <h5>{{ m.nome }}</h5>
+                {% if m.funcao %}<div class="funcao">{{ m.funcao }}</div>{% endif %}
+                {% if m.instituicao %}<div class="instituicao">{{ m.instituicao }}</div>{% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">Nenhum membro cadastrado.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
