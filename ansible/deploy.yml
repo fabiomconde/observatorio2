@@ -1,0 +1,26 @@
+---
+- name: Deploy Observatório App
+  hosts: all
+  become: no
+  vars:
+    app_dir: /srv/servidor_principal/apps/observatorio
+    repo_dir: /srv/servidor_principal/apps/observatorio
+
+  tasks:
+    - name: Forçar descarte de alterações locais e puxar código
+      ansible.builtin.shell: |
+        git reset --hard HEAD
+        git pull origin main
+      args:
+        chdir: "{{ repo_dir }}"
+
+    - name: Gerar arquivo .env seguro no servidor
+      ansible.builtin.copy:
+        content: "{{ lookup('env', 'DOTENV_SECRET') }}"
+        dest: "{{ app_dir }}/.env"
+        mode: '0600'
+
+    - name: Reconstruir a imagem e subir os containers
+      ansible.builtin.shell: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+      args:
+        chdir: "{{ app_dir }}"
