@@ -1,6 +1,6 @@
-# 🌎 MapBiomas Clone
+# 🌎 Observatório Socioambiental
 
-Clone institucional do site do MapBiomas, construído em **Django 5**.
+Clone institucional do site do Observatório Socioambiental, construído em **Django 5**.
 
 > O objetivo é servir como projeto de estudo / portfólio, replicando as
 > principais seções de um site institucional de monitoramento territorial:
@@ -32,19 +32,19 @@ Clone institucional do site do MapBiomas, construído em **Django 5**.
 
 ```bash
 # 1. Instale dependências
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 # 2. Migrações + dados de demonstração
-python manage.py migrate
-python manage.py seed_data
+python3 manage.py migrate
+python3 manage.py seed_data
 
 # 3. Crie um superusuário para acessar /admin
-python manage.py createsuperuser
+python3 manage.py createsuperuser
 
 # 4. Suba o servidor
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 Acesse:

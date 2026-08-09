@@ -37,7 +37,7 @@ class PublicSiteTests(TestCase):
         )
         self.colecao = Colecao.objects.create(
             nome="Coleção 9", ano_inicio=1985, ano_fim=2023,
-            resumo="Coleção 9 do MapBiomas", destaque=True,
+            resumo="Coleção 9 do Observatório Socioambiental", destaque=True,
         )
         self.grupo = GrupoTrabalho.objects.create(
             titulo="Recursos Hídricos", icone="bi-droplet-half", cor="#0277bd",
@@ -45,7 +45,7 @@ class PublicSiteTests(TestCase):
         )
         self.membro = Membro.objects.create(nome="Dra. Ana Souza", funcao="Coordenadora", instituicao="UFAM")
         self.noticia = Noticia.objects.create(
-            titulo="MapBiomas lança Coleção 9",
+            titulo="Observatório Socioambiental lança Coleção 9",
             slug="mapbiomas-lanca-colecao-9",
             resumo="Resumo teste",
             conteudo="Conteúdo de teste com mais de uma linha.\nLinha dois.",
@@ -96,7 +96,7 @@ class PublicSiteTests(TestCase):
     def test_noticias_listagem(self):
         r = self.client.get(reverse("core:noticias"))
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "MapBiomas lança Coleção 9")
+        self.assertContains(r, "Observatório Socioambiental lança Coleção 9")
 
     def test_noticias_busca(self):
         r = self.client.get(reverse("core:noticias") + "?q=Coleção")
@@ -106,7 +106,7 @@ class PublicSiteTests(TestCase):
     def test_noticia_detalhe(self):
         r = self.client.get(reverse("core:noticia_detalhe", args=[self.noticia.slug]))
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "MapBiomas lança Coleção 9")
+        self.assertContains(r, "Observatório Socioambiental lança Coleção 9")
 
     def test_faq(self):
         r = self.client.get(reverse("core:faq"))
@@ -159,7 +159,7 @@ class PublicSiteTests(TestCase):
     def test_busca(self):
         r = self.client.get(reverse("core:busca") + "?q=Coleção")
         self.assertEqual(r.status_code, 200)
-        self.assertContains(r, "MapBiomas lança Coleção 9")
+        self.assertContains(r, "Observatório Socioambiental lança Coleção 9")
 
     def test_busca_vazia(self):
         r = self.client.get(reverse("core:busca"))

@@ -1,5 +1,5 @@
 """
-Django settings for the MapBiomas Clone project.
+Django settings for the Observatório Socioambiental project.
 
 Production-ready defaults via env vars. Safe to develop locally with DEBUG=True.
 """
@@ -143,7 +143,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Used in templates via {{ SITE_NAME }}, etc.
 from django.conf import settings  # noqa: E402  (keep at bottom)
 
-SITE_NAME = "MapBiomas Clone"
+SITE_NAME = "Observatório Socioambiental"
 SITE_TAGLINE = "Observatório multi-institucional de monitoramento territorial"
 SITE_DESCRIPTION = (
     "Iniciativa multi-institucional dedicada a revelar as transformações do "

@@ -1,4 +1,4 @@
-// Pequenas melhorias de UX para o site MapBiomas Clone
+// Pequenas melhorias de UX para o site Observatório Socioambiental
 
 document.addEventListener('DOMContentLoaded', () => {
     // Auto-fechar alertas após 6s

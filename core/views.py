@@ -1,5 +1,5 @@
 """
-Public-facing views for the MapBiomas Clone.
+Public-facing views for the Observatório Socioambiental.
 
 Each view is a thin wrapper that fetches data from the ORM and delegates
 rendering to a template. There is no business logic here.

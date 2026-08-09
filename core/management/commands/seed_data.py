@@ -1,5 +1,5 @@
 """
-Idempotent seed command — populates the database with MapBiomas-flavored
+Idempotent seed command — populates the database with Observatório Socioambiental-flavored
 demo data so the project is browsable on a fresh install.
 """
 
@@ -131,14 +131,14 @@ class Command(BaseCommand):
         pubs = [
             ("Atlas da Cobertura da Terra no Brasil (2010–2023)",
              "Atlas consolidado com mapas temáticos e estatísticas por município, estado e bacia.",
-             "MapBiomas; Coleção 9", date(2024, 7, 1), "Relatório", True),
+             "Observatório Socioambiental; Coleção 9", date(2024, 7, 1), "Relatório", True),
             ("Panorama das Queimadas no Pantanal em 2024",
              "Análise de cicatrizes, severidade e relação com variáveis climáticas.",
              "GT Fogo e Cicatrizes", date(2024, 10, 12), "Nota Técnica", True),
             ("Mudanças Climáticas e Recursos Hídricos na Amazônia",
              "Cenários projeções de vazão e estresse hídrico até 2050.",
              "GT Recursos Hídricos; INPE", date(2024, 5, 8), "Artigo", False),
-            ("Guia de Uso de Dados MapBiomas",
+            ("Guia de Uso de Dados Observatório Socioambiental",
              "Como citar, baixar e cruzar os dados da plataforma em pesquisas e políticas públicas.",
              "GT Transparência e Dados", date(2024, 3, 20), "Manual", False),
             ("Boletim Mensal de Fogo nº 42",
@@ -178,9 +178,9 @@ class Command(BaseCommand):
         # ---- Notícias ---------------------------------------------------- #
         noticias = [
             (
-                "MapBiomas lança Coleção 9",
+                "Observatório Socioambiental lança Coleção 9",
                 "Novos dados mostram a evolução do uso da terra no Brasil em 39 anos.",
-                ("A Coleção 9 do MapBiomas traz mapas anuais de cobertura e uso da terra "
+                ("A Coleção 9 do Observatório Socioambiental traz mapas anuais de cobertura e uso da terra "
                  "de 1985 a 2023, com novos módulos de fogo e água, além de estatísticas "
                  "por município, estado e bacia hidrográfica."),
                 date(2026, 8, 10), True, "Cobertura e Uso",
@@ -203,12 +203,12 @@ class Command(BaseCommand):
             (
                 "Fogo na Amazônia em 2024",
                 "Boletim especial analisa cicatrizes de queimadas.",
-                ("O módulo de fogo do MapBiomas traz dados inéditos sobre cicatrizes "
+                ("O módulo de fogo do Observatório Socioambiental traz dados inéditos sobre cicatrizes "
                  "de queimadas e sua relação com o desmatamento."),
                 date(2026, 5, 4), False, "Fogo",
             ),
             (
-                "Seminário Internacional MapBiomas",
+                "Seminário Internacional Observatório Socioambiental",
                 "Encontro reúne especialistas em monitoramento territorial.",
                 ("Pesquisadores de mais de 20 países discutem métodos de mapeamento "
                  "colaborativo e ciência aberta."),
@@ -217,7 +217,7 @@ class Command(BaseCommand):
             (
                 "Mata Atlântica: fragmentos conectados",
                 "Análise identifica corredores ecológicos prioritários.",
-                ("Estudo do MapBiomas mapeia os principais fragmentos e corredores da "
+                ("Estudo do Observatório Socioambiental mapeia os principais fragmentos e corredores da "
                  "Mata Atlântica, apoiando políticas de restauração."),
                 date(2026, 3, 22), False, "Cobertura e Uso",
             ),
@@ -241,8 +241,8 @@ class Command(BaseCommand):
 
         # ---- FAQ --------------------------------------------------------- #
         faqs = [
-            ("Geral", "O que é o MapBiomas?",
-             "O MapBiomas é uma iniciativa multi-institucional que envolve universidades, "
+            ("Geral", "O que é o Observatório Socioambiental?",
+             "O Observatório Socioambiental é uma iniciativa multi-institucional que envolve universidades, "
              "ONGs e empresas de tecnologia, dedicada a gerar mapas anuais de cobertura e "
              "uso da terra do Brasil."),
             ("Geral", "Os dados são gratuitos?",
@@ -255,13 +255,13 @@ class Command(BaseCommand):
              "Por meio de algoritmos de aprendizado de máquina aplicados a séries "
              "temporais de imagens Landsat, validados por especialistas."),
             ("Técnico", "Posso usar os dados em publicações?",
-             "Sim, basta citar a fonte: Projeto MapBiomas — Coleção X, ano, URL de acesso."),
+             "Sim, basta citar a fonte: Projeto Observatório Socioambiental — Coleção X, ano, URL de acesso."),
             ("Técnico", "Com que frequência os mapas são atualizados?",
              "Anualmente. A cada nova coleção, publicamos mapas, estatísticas e painéis."),
             ("Acesso", "Preciso me cadastrar para baixar?",
              "Não, o acesso é totalmente livre."),
-            ("Acesso", "Como citar o MapBiomas?",
-             "Projeto MapBiomas — Coleção X [ano]. Disponível em: https://mapbiomas.org. "
+            ("Acesso", "Como citar o Observatório Socioambiental?",
+             "Projeto Observatório Socioambiental — Coleção X [ano]. Disponível em: https://mapbiomas.org. "
              "Acesso em: [data]."),
         ]
         for ordem, (cat, q, a) in enumerate(faqs):

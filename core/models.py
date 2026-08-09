@@ -1,5 +1,5 @@
 """
-Domain models for the MapBiomas Clone app.
+Domain models for the Observatório Socioambiental app.
 
 All entities used across the public site and the Django admin live here.
 """
@@ -60,7 +60,7 @@ class Bioma(TimeStampedModel):
 # Coleções / Datasets
 # --------------------------------------------------------------------- #
 class Colecao(TimeStampedModel):
-    """Annual MapBiomas collection (a snapshot of all maps for a year)."""
+    """Annual Observatório Socioambiental collection (a snapshot of all maps for a year)."""
 
     nome = models.CharField(_("nome"), max_length=120, unique=True)
     slug = models.SlugField(_("slug"), max_length=140, unique=True, blank=True)

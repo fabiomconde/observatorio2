@@ -7,7 +7,7 @@ from django.conf import settings
 
 def site_meta(request):
     return {
-        "SITE_NAME": getattr(settings, "SITE_NAME", "MapBiomas Clone"),
+        "SITE_NAME": getattr(settings, "SITE_NAME", "Observatório Socioambiental"),
         "SITE_TAGLINE": getattr(
             settings, "SITE_TAGLINE", "Monitoramento da cobertura e uso da terra"
         ),
