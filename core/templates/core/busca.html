@@ -30,7 +30,7 @@
                 <h2 class="section-title h4">Notícias ({{ noticias|length }})</h2>
                 {% for n in noticias %}
                 <a href="{% url 'core:noticia_detalhe' n.slug %}" class="text-decoration-none text-dark">
-                    <div class="pub-card mb-3" style="--pub-cor: {{ n.categoria.cor|default:'#0d3b66' }};">
+                    <div class="pub-card mb-3" style="--pub-cor: {{ n.categoria.cor|default:'#1b4332' }};">
                         <span class="pub-type">{{ n.categoria.nome|default:'Notícia' }}</span>
                         <div class="pub-title h6 mb-1">{{ n.titulo }}</div>
                         <div class="pub-meta"><i class="bi bi-calendar3"></i> {{ n.publicado_em|date:"d/m/Y" }}</div>

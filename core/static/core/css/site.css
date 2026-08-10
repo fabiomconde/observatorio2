@@ -1,25 +1,24 @@
 /* =====================================================
    Observatório Socioambiental — tema "Observatório institucional"
-   Paleta: azul #0d3b66 + acento laranja #ee964b
-   Inspirado no layout típico de Observatórios (RMM, etc.)
+   Paleta: verde escuro #1b4332 + acento dourado #cd9e46
    ===================================================== */
 
 :root {
-    --cor-principal: #0d3b66;
-    --cor-escura: #082a4a;
-    --cor-clara: #1d4e89;
-    --cor-destaque: #ee964b;
-    --cor-destaque-escuro: #d77f30;
-    --cor-sucesso: #1d7a47;
-    --cor-fundo: #f4f6f8;
+    --cor-principal: #1b4332;
+    --cor-escura: #081c15;
+    --cor-clara: #2d6a4f;
+    --cor-destaque: #cd9e46;
+    --cor-destaque-escuro: #b58838;
+    --cor-sucesso: #40916c;
+    --cor-fundo: #f8f6f0;
     --cor-fundo-alt: #ffffff;
-    --cor-texto: #1f2937;
-    --cor-muted: #5a6678;
-    --cor-borda: #e3e7ec;
+    --cor-texto: #1c211e;
+    --cor-muted: #57605b;
+    --cor-borda: #dce0db;
     --radius: 6px;
-    --shadow-sm: 0 1px 2px rgba(13, 59, 102, 0.06);
-    --shadow-md: 0 4px 12px rgba(13, 59, 102, 0.10);
-    --shadow-lg: 0 12px 30px rgba(13, 59, 102, 0.14);
+    --shadow-sm: 0 1px 2px rgba(27, 67, 50, 0.06);
+    --shadow-md: 0 4px 12px rgba(27, 67, 50, 0.10);
+    --shadow-lg: 0 12px 30px rgba(27, 67, 50, 0.14);
 }
 
 * { box-sizing: border-box; }
@@ -171,7 +170,7 @@ h1, h2, h3, h4, h5, h6 {
 .header-search-form .form-control:focus {
     background: #fff;
     border-color: var(--cor-clara);
-    box-shadow: 0 0 0 .2rem rgba(29, 78, 137, .15);
+    box-shadow: 0 0 0 .2rem rgba(45, 106, 79, .15);
 }
 .header-search-form .bi-search {
     position: absolute;
@@ -199,7 +198,7 @@ h1, h2, h3, h4, h5, h6 {
    ===================================================== */
 .hero {
     background:
-        linear-gradient(135deg, rgba(8,42,74,.92) 0%, rgba(13,59,102,.86) 50%, rgba(29,78,137,.78) 100%),
+        linear-gradient(135deg, rgba(8, 28, 21, .92) 0%, rgba(27, 67, 50, .86) 50%, rgba(45, 106, 79, .78) 100%),
         url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&q=80') center/cover;
     color: white;
     padding: 90px 0 100px;
@@ -210,7 +209,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero .hero-eyebrow {
     display: inline-block;
     padding: .35rem 1rem;
-    background: rgba(238,150,75,.2);
+    background: rgba(205, 158, 70, .2);
     color: var(--cor-destaque);
     border-radius: 50px;
     font-size: .8rem;
@@ -218,7 +217,7 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: .12em;
     text-transform: uppercase;
     margin-bottom: 1rem;
-    border: 1px solid rgba(238,150,75,.4);
+    border: 1px solid rgba(205, 158, 70, .4);
 }
 .hero-search {
     background: #fff;
@@ -281,7 +280,7 @@ h1, h2, h3, h4, h5, h6 {
 .hover-lift:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-md) !important;
-    border-color: rgba(29, 78, 137, .25);
+    border-color: rgba(45, 106, 79, .25);
 }
 
 /* =====================================================
@@ -305,7 +304,7 @@ h1, h2, h3, h4, h5, h6 {
 .gt-icon {
     width: 50px; height: 50px;
     border-radius: 10px;
-    background: rgba(13, 59, 102, .08);
+    background: rgba(27, 67, 50, .08);
     color: var(--gt-cor, var(--cor-principal));
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 1.6rem;
@@ -480,13 +479,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 .accordion-button:not(.collapsed) {
     color: var(--cor-principal);
-    background: #eaf0f7;
-    box-shadow: inset 0 -1px 0 rgba(13, 59, 102, .1);
+    background: #e8f0eb;
+    box-shadow: inset 0 -1px 0 rgba(27, 67, 50, .1);
 }
-.accordion-button:hover { background: #f4f6f8; }
-.accordion-button:focus { box-shadow: 0 0 0 .2rem rgba(29, 78, 137, .15); border-color: transparent; }
+.accordion-button:hover { background: #f0f2ef; }
+.accordion-button:focus { box-shadow: 0 0 0 .2rem rgba(45, 106, 79, .15); border-color: transparent; }
 .accordion-button::after {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230d3b66'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%231b4332'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
 /* =====================================================
@@ -588,7 +587,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .form-control:focus, .form-select:focus {
     border-color: var(--cor-clara);
-    box-shadow: 0 0 0 .2rem rgba(29, 78, 137, .15);
+    box-shadow: 0 0 0 .2rem rgba(45, 106, 79, .15);
 }
 .form-label { font-weight: 500; color: var(--cor-escura); font-size: .92rem; }
 
@@ -625,7 +624,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1rem;
 }
 .site-footer .footer-brand .brand-logo {
-    background: linear-gradient(135deg, var(--cor-destaque) 0%, #f4a261 100%);
+    background: linear-gradient(135deg, var(--cor-destaque) 0%, #dfb464 100%);
 }
 .site-footer .social-icons a {
     display: inline-flex; align-items: center; justify-content: center;
