@@ -93,11 +93,13 @@ if DB_ENGINE == "postgres":
         }
     }
 else:
+    SQLITE_DIR = BASE_DIR / "sqlite_data"
+    SQLITE_DIR.mkdir(parents=True, exist_ok=True)
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
             # Salva o banco dentro de uma pasta segura chamada 'sqlite_data'
-            'NAME': BASE_DIR / 'sqlite_data' / 'db.sqlite3',
+            "NAME": SQLITE_DIR / "db.sqlite3",
         }
     }
 

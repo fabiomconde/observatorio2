@@ -48,4 +48,4 @@ docker-logs:
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	rm -rf staticfiles db.sqlite3
+	rm -rf staticfiles db.sqlite3 sqlite_data

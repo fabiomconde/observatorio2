@@ -99,21 +99,39 @@ h1, h2, h3, h4, h5, h6 {
 .site-header .navbar-brand {
     display: flex;
     align-items: center;
-    gap: .75rem;
-    padding: .8rem 0;
+    padding: .3rem 0;
     color: var(--cor-escura);
 }
-.brand-logo {
-    width: 46px; height: 46px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--cor-principal) 0%, var(--cor-clara) 100%);
-    color: #fff;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 1.6rem;
-    box-shadow: var(--shadow-sm);
+.site-logo-img {
+    height: 50px;
+    max-height: 50px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    transition: transform .2s ease;
 }
-.brand-text strong { display: block; font-size: 1.15rem; line-height: 1.1; color: var(--cor-escura); }
-.brand-text small { color: var(--cor-muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
+.site-logo-img:hover {
+    transform: scale(1.02);
+}
+.footer-logo-box {
+    background: #ffffff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: inline-block;
+}
+.footer-logo-img {
+    height: 44px;
+    max-height: 44px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+@media (max-width: 768px) {
+    .site-logo-img {
+        height: 38px;
+        max-height: 38px;
+    }
+}
 
 .navbar-nav .nav-link {
     font-weight: 500;

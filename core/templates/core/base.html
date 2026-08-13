@@ -37,15 +37,12 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'core:home' %}">
-                    <span class="brand-logo">🌎</span>
-                    <span class="brand-text">
-                        <strong>{{ SITE_NAME }}</strong>
-                        <small>Observatório Territorial</small>
-                    </span>
+                    <img src="{% static 'core/img/logo.png' %}" alt="{{ SITE_NAME }}" class="site-logo-img">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Alternar navegação">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                
                 <div class="collapse navbar-collapse" id="mainNav">
                     <ul class="navbar-nav ms-auto align-items-lg-center">
                         <li class="nav-item">
@@ -123,12 +120,10 @@
         <div class="container">
             <div class="row gy-4">
                 <div class="col-lg-4">
-                    <div class="footer-brand">
-                        <span class="brand-logo">🌎</span>
-                        <span class="brand-text">
-                            <strong style="color:#fff;">{{ SITE_NAME }}</strong>
-                            <small style="color:rgba(255,255,255,.6);">Observatório Territorial</small>
-                        </span>
+                    <div class="footer-brand mb-3">
+                        <div class="footer-logo-box">
+                            <img src="{% static 'core/img/logo.png' %}" alt="{{ SITE_NAME }}" class="footer-logo-img">
+                        </div>
                     </div>
                     <p class="small" style="color:rgba(255,255,255,.7);">{{ SITE_DESCRIPTION }}</p>
                     <div class="social-icons mt-3">
