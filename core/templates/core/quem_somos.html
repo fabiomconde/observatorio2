@@ -67,7 +67,7 @@
 
     {% if grupos %}
     <h2 class="section-title text-center mt-5">Eixos de pesquisa</h2>
-    <p class="text-center text-muted mb-4">Conheça nossos grupos de trabalho que conduzem a operação do observatório.</p>
+    <p class="text-center text-muted mb-4">Conheça os eixos de pesquisa do observatório.</p>
     <div class="row g-3">
         {% for g in grupos %}
         <div class="col-md-6 col-lg-4">
@@ -83,7 +83,7 @@
         {% endfor %}
     </div>
     <div class="text-center mt-4">
-        <a href="{% url 'core:grupos' %}" class="btn btn-outline-primary">Ver todos os grupos de trabalho <i class="bi bi-arrow-right"></i></a>
+        <a href="{% url 'core:grupos' %}" class="btn btn-outline-primary">Ver todos os eixos temáticos <i class="bi bi-arrow-right"></i></a>
     </div>
     {% endif %}
 

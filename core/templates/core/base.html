@@ -53,7 +53,7 @@
                             <a class="nav-link dropdown-toggle {% if 'o-projeto' in request.path or 'grupos' in request.path or 'membros' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">O Projeto</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'core:quem_somos' %}"><i class="bi bi-info-circle"></i> Sobre o Observatório</a></li>
-                                <li><a class="dropdown-item" href="{% url 'core:grupos' %}"><i class="bi bi-diagram-3"></i> Grupos de Trabalho</a></li>
+                                <li><a class="dropdown-item" href="{% url 'core:grupos' %}"><i class="bi bi-diagram-3"></i> Eixos Temáticos</a></li>
                                 <li><a class="dropdown-item" href="{% url 'core:membros' %}"><i class="bi bi-people"></i> Membros</a></li>
                             </ul>
                         </li>
@@ -140,7 +140,7 @@
                     <h6>O Projeto</h6>
                     <ul class="list-unstyled small">
                         <li><a href="{% url 'core:quem_somos' %}">Sobre</a></li>
-                        <li><a href="{% url 'core:grupos' %}">Grupos de Trabalho</a></li>
+                        <li><a href="{% url 'core:grupos' %}">Eixos Temáticos</a></li>
                         <li><a href="{% url 'core:membros' %}">Membros</a></li>
                         <li><a href="{% url 'core:quem_somos' %}#parceiros">Parceiros</a></li>
                     </ul>
