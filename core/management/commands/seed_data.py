@@ -585,16 +585,16 @@ class Command(BaseCommand):
     ("Territorialidade e Integração", "🗺️",
      "Leitura integrada do território, considerando as relações entre sociedade, ambiente, economia, cultura e espaço.", 2),
 
-    ("Conhecimento e Evidências", "🔬",
+    ("Conhecimento e Evidências", "📖",
      "Produção de conhecimento baseada em evidências, métodos transparentes e informações rastreáveis e confiáveis.", 3),
 
     ("Interdisciplinaridade e Colaboração", "🤝",
      "Integração de diferentes áreas do conhecimento, saberes e experiências para compreender problemas complexos de forma colaborativa.", 4),
 
-    ("Transparência, Ética e Responsabilidade", "🔎",
+    ("Transparência, Ética e Responsabilidade", "👁️",
      "Gestão responsável da informação, com transparência, ética, proteção de dados e compromisso com a qualidade das informações.", 5),
 
-    ("Incidência e Transformação Social", "📢",
+    ("Incidência e Transformação Social", "✊",
      "Produção de conhecimento voltada à participação social, às políticas públicas e à transformação das realidades e desigualdades identificadas.", 6),
 ]
         for titulo, icone, desc, ordem in pilares:
