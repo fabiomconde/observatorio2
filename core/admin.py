@@ -8,6 +8,7 @@ from .models import (
     Bioma,
     CategoriaNoticia,
     Colecao,
+    Distrito,
     Faq,
     GrupoTrabalho,
     Membro,
@@ -16,6 +17,7 @@ from .models import (
     Parceiro,
     Pilar,
     Publicacao,
+    Regiao,
     TermoGlossario,
     TipoPublicacao,
 )
@@ -26,6 +28,22 @@ class BiomaAdmin(admin.ModelAdmin):
     list_display = ("nome", "ativo", "atualizado_em")
     list_filter = ("ativo",)
     search_fields = ("nome", "descricao")
+    prepopulated_fields = {"slug": ("nome",)}
+
+
+@admin.register(Regiao)
+class RegiaoAdmin(admin.ModelAdmin):
+    list_display = ("nome", "ativo", "atualizado_em")
+    list_filter = ("ativo",)
+    search_fields = ("nome", "descricao")
+    prepopulated_fields = {"slug": ("nome",)}
+
+
+@admin.register(Distrito)
+class DistritoAdmin(admin.ModelAdmin):
+    list_display = ("nome", "tipo", "regiao", "populacao", "area_km2", "ativo")
+    list_filter = ("regiao", "tipo", "ativo")
+    search_fields = ("nome", "codigo_ibge", "descricao")
     prepopulated_fields = {"slug": ("nome",)}
 
 

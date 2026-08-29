@@ -57,6 +57,111 @@ class Bioma(TimeStampedModel):
 
 
 # --------------------------------------------------------------------- #
+# Regiões e Distritos
+# --------------------------------------------------------------------- #
+class Regiao(TimeStampedModel):
+    """Região territorial do município (ex: Alto Madeira, Médio Madeira, Baixo Madeira)."""
+
+    nome = models.CharField(_("nome"), max_length=80, unique=True)
+    slug = models.SlugField(_("slug"), max_length=100, unique=True, blank=True)
+    descricao = models.TextField(_("descrição"), blank=True)
+    icone = models.CharField(
+        _("ícone (Bootstrap Icons)"),
+        max_length=40,
+        default="bi-map",
+        blank=True,
+    )
+    cor = models.CharField(_("cor (hex)"), max_length=7, default="#0d3b66")
+    ativo = models.BooleanField(_("ativo"), default=True)
+
+    class Meta:
+        ordering = ["nome"]
+        verbose_name = _("Região")
+        verbose_name_plural = _("Regiões")
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nome)
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.nome
+
+
+class Distrito(TimeStampedModel):
+    """Distritos do município de Porto Velho/RO."""
+
+    nome = models.CharField(_("nome"), max_length=100, unique=True)
+    slug = models.SlugField(_("slug"), max_length=120, unique=True, blank=True)
+    codigo_ibge = models.CharField(_("código IBGE"), max_length=20, blank=True)
+    tipo = models.CharField(_("tipo"), max_length=40, default="Distrito")
+    populacao = models.PositiveIntegerField(_("população"), null=True, blank=True)
+    domicilios = models.PositiveIntegerField(_("domicílios"), null=True, blank=True)
+    area_km2 = models.FloatField(_("área (km²)"), null=True, blank=True)
+    densidade = models.FloatField(_("densidade demográfica (hab/km²)"), null=True, blank=True)
+    regiao = models.ForeignKey(
+        Regiao,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="distritos",
+        verbose_name=_("região"),
+    )
+    criacao = models.CharField(_("data/ano de criação"), max_length=60, blank=True)
+    distancia_sede_km = models.PositiveIntegerField(_("distância da sede (km)"), null=True, blank=True)
+    descricao = models.TextField(_("descrição"), blank=True)
+    tags = models.JSONField(_("tags / palavras-chave"), default=list, blank=True)
+    icone = models.CharField(_("ícone (emoji ou BI)"), max_length=40, default="bi-geo-alt", blank=True)
+    cor = models.CharField(_("cor (hex)"), max_length=7, default="#1d4e89")
+    ativo = models.BooleanField(_("ativo"), default=True)
+
+    class Meta:
+        ordering = ["-populacao", "nome"]
+        verbose_name = _("Distrito")
+        verbose_name_plural = _("Distritos")
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nome)
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.nome
+
+    @property
+    def populacao_formatada(self) -> str:
+        if self.populacao is None:
+            return "—"
+        return f"{self.populacao:,}".replace(",", ".")
+
+    @property
+    def domicilios_formatados(self) -> str:
+        if self.domicilios is None:
+            return "—"
+        return f"{self.domicilios:,}".replace(",", ".")
+
+    @property
+    def area_formatada(self) -> str:
+        if self.area_km2 is None:
+            return "—"
+        val = self.area_km2
+        if val == int(val):
+            return f"{int(val):,}".replace(",", ".")
+        formatted = f"{val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        return formatted.rstrip("0").rstrip(",")
+
+    @property
+    def densidade_formatada(self) -> str:
+        if self.densidade is None:
+            return "—"
+        val = self.densidade
+        if val == int(val):
+            return f"{int(val):,}".replace(",", ".")
+        formatted = f"{val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        return formatted.rstrip("0").rstrip(",")
+
+
+# --------------------------------------------------------------------- #
 # Coleções / Datasets
 # --------------------------------------------------------------------- #
 class Colecao(TimeStampedModel):

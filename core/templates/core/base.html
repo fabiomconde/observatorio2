@@ -59,9 +59,10 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {% if 'biomas' in request.path or 'colecoes' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dados &amp; Mapas</a>
+                            <a class="nav-link dropdown-toggle {% if 'biomas' in request.path or 'distritos' in request.path or 'colecoes' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dados &amp; Mapas</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'core:biomas' %}"><i class="bi bi-globe-americas"></i> Biomas</a></li>
+                                <!-- <li><a class="dropdown-item" href="{% url 'core:biomas' %}"><i class="bi bi-globe-americas"></i> Biomas</a></li> -->
+                                <li><a class="dropdown-item" href="{% url 'core:distritos' %}"><i class="bi bi-geo-alt"></i> Distritos</a></li>
                                 <li><a class="dropdown-item" href="{% url 'core:colecoes' %}"><i class="bi bi-collection"></i> Coleções</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'core:glossario' %}"><i class="bi bi-book"></i> Glossário</a></li>
@@ -149,6 +150,7 @@
                     <h6>Dados</h6>
                     <ul class="list-unstyled small">
                         <li><a href="{% url 'core:biomas' %}">Biomas</a></li>
+                        <li><a href="{% url 'core:distritos' %}">Distritos</a></li>
                         <li><a href="{% url 'core:colecoes' %}">Coleções</a></li>
                         <li><a href="{% url 'core:publicacoes' %}">Publicações</a></li>
                         <li><a href="{% url 'core:glossario' %}">Glossário</a></li>

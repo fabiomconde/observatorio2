@@ -12,6 +12,7 @@ from core.models import (
     Bioma,
     CategoriaNoticia,
     Colecao,
+    Distrito,
     Faq,
     GrupoTrabalho,
     Membro,
@@ -20,6 +21,7 @@ from core.models import (
     Parceiro,
     Pilar,
     Publicacao,
+    Regiao,
     TermoGlossario,
     TipoPublicacao,
 )
@@ -34,6 +36,13 @@ class PublicSiteTests(TestCase):
         self.bioma = Bioma.objects.create(
             nome="Amazônia", icone="🌳", cor="#1b5e20",
             descricao="Maior floresta tropical do mundo."
+        )
+        self.regiao = Regiao.objects.create(
+            nome="Médio Madeira", descricao="Região central."
+        )
+        self.distrito = Distrito.objects.create(
+            nome="Jaci-Paraná", tipo="Distrito", populacao=11672,
+            regiao=self.regiao, descricao="Segundo distrito mais populoso."
         )
         self.colecao = Colecao.objects.create(
             nome="Coleção 9", ano_inicio=1985, ano_fim=2023,
@@ -136,6 +145,18 @@ class PublicSiteTests(TestCase):
         r = self.client.get(reverse("core:bioma_detalhe", args=[self.bioma.slug]))
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, "Amazônia")
+
+    def test_distritos(self):
+        r = self.client.get(reverse("core:distritos"))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Jaci-Paraná")
+        self.assertContains(r, "11.672")
+
+    def test_distrito_detalhe(self):
+        r = self.client.get(reverse("core:distrito_detalhe", args=[self.distrito.slug]))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Jaci-Paraná")
+        self.assertContains(r, "11.672")
 
     def test_colecoes(self):
         r = self.client.get(reverse("core:colecoes"))

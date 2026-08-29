@@ -16,6 +16,7 @@ from .models import (
     Bioma,
     CategoriaNoticia,
     Colecao,
+    Distrito,
     Faq,
     GrupoTrabalho,
     Membro,
@@ -24,6 +25,7 @@ from .models import (
     Parceiro,
     Pilar,
     Publicacao,
+    Regiao,
     TermoGlossario,
     TipoPublicacao,
 )
@@ -108,6 +110,91 @@ def biomas(request):
 def bioma_detalhe(request, slug):
     bioma = get_object_or_404(Bioma, slug=slug, ativo=True)
     return render(request, "core/bioma_detalhe.html", {"bioma": bioma})
+
+
+def distritos(request):
+    regiao_slug = request.GET.get("regiao", "").strip()
+    termo = request.GET.get("q", "").strip()
+
+    qs = Distrito.objects.filter(ativo=True).select_related("regiao")
+    if regiao_slug:
+        qs = qs.filter(regiao__slug=regiao_slug)
+    if termo:
+        qs = qs.filter(
+            Q(nome__icontains=termo)
+            | Q(descricao__icontains=termo)
+            | Q(tags__icontains=termo)
+        )
+
+    regioes = Regiao.objects.filter(ativo=True)
+    pop_total = sum(d.populacao for d in qs if d.populacao)
+
+    indicadores = [
+        {
+            "titulo": "Distritos",
+            "valor": qs.count(),
+            "unidade": "distritos oficiais",
+            "icone": "bi-geo-alt",
+            "descricao": "Distritos de Porto Velho/RO.",
+        },
+        {
+            "titulo": "População Total",
+            "valor": f"{pop_total:,}".replace(",", "."),
+            "unidade": "habitantes",
+            "icone": "bi-people",
+            "descricao": "População nos distritos selecionados.",
+        },
+        {
+            "titulo": "Regiões",
+            "valor": regioes.count(),
+            "unidade": "regiões territoriais",
+            "icone": "bi-map",
+            "descricao": "Alto Madeira, Médio Madeira e Baixo Madeira.",
+        },
+        {
+            "titulo": "Área municipal",
+            "valor": "34.091",
+            "unidade": "km²",
+            "icone": "bi-bounding-box",
+            "descricao": "Área territorial de Porto Velho em 2024.",
+        },
+    ]
+
+    context = {
+        "distritos": qs,
+        "regioes": regioes,
+        "regiao_ativa": regiao_slug,
+        "termo": termo,
+        "indicadores": indicadores,
+    }
+    return render(request, "core/distritos.html", context)
+
+
+def distrito_detalhe(request, slug):
+    distrito = get_object_or_404(
+        Distrito.objects.select_related("regiao"), slug=slug, ativo=True
+    )
+    relacionados = (
+        Distrito.objects.filter(ativo=True)
+        .exclude(pk=distrito.pk)
+        .order_by("-populacao")[:4]
+    )
+    dimensoes = [
+        "Conflitos Agrários, Fundiários e Territoriais",
+        "Pressões Ambientais, Mudanças Climáticas e Justiça Climática",
+        "Violências, Segurança Pública e Direitos Humanos",
+        "Dinâmicas Econômicas, Produtivas e Conflitos Socioambientais",
+        "Respostas Institucionais e Políticas Públicas",
+    ]
+    return render(
+        request,
+        "core/distrito_detalhe.html",
+        {
+            "distrito": distrito,
+            "relacionados": relacionados,
+            "dimensoes": dimensoes,
+        },
+    )
 
 
 def colecoes(request):

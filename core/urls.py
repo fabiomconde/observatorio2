@@ -20,6 +20,8 @@ urlpatterns = [
     # Dados & Mapas
     path("biomas/", views.biomas, name="biomas"),
     path("biomas/<slug:slug>/", views.bioma_detalhe, name="bioma_detalhe"),
+    path("distritos/", views.distritos, name="distritos"),
+    path("distritos/<slug:slug>/", views.distrito_detalhe, name="distrito_detalhe"),
     path("colecoes/", views.colecoes, name="colecoes"),
 
     # Publicações
