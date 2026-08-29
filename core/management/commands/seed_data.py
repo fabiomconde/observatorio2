@@ -615,10 +615,12 @@ class Command(BaseCommand):
         # ]
 
         membros = [
-            ("Amanda", "Coordenadora Adjunta", "UNIR"),
-            ("Larissa", "Equipe de Dados — Dados Sociais e Direitos Humanos", "UNIR"),
-            ("Laura", "Equipe de Dados — Dados Ambientais, Econômicos e Produtivos", "UNIR"),
-            ("Fábio", "Coordenador da Plataforma Digital", "IFRO"),
+            ("Luciana","Coordenadora Geral", "UNIR"), #
+            ("Amanda", "Coordenadora Adjunta", "UNIR"), #
+            ("Fábio", "Coordenador da Plataforma Digital", "IFRO"),#
+            ("Evelyn Morales", "Coordenadora de Comunicação", "UNIR"), #
+            ("Larissa", "Equipe de Dados — Dados Sociais e Direitos Humanos", "UNIR"),#
+            ("Laura", "Equipe de Dados — Dados Ambientais, Econômicos e Produtivos", "UNIR"),#
             ("Júnior", "Apoio à Plataforma Digital", "UNIR"),
             ("Maria Eduarda", "Bolsista de Comunicação", "UNIR"),
             ("Berg/Talita", "Apoio Administrativo", "UNIR"),
@@ -631,12 +633,10 @@ class Command(BaseCommand):
 
         # ---- Parceiros --------------------------------------------------- #
         parceiros = [
-            ("Universidade A", "universidade", "https://example.org"),
-            ("Instituto B", "ONG", "https://example.org"),
-            ("Empresa C", "tecnologia", "https://example.org"),
-            ("Rede D", "rede", "https://example.org"),
-            ("Fundação E", "fundação", "https://example.org"),
-            ("Empresa F", "tecnologia", "https://example.org"),
+            ("Comissão Pastoral da Terra – Regional Rondônia (CPT-RO)", "ONG", "https://example.org"),
+            ("Movimento dos Atingidos por Barragens em Rondônia (MAB-RO)", "ONG", "https://example.org"),
+            ("Comitê de Defesa da Vida Amazônica na Bacia do Rio Madeira (COMVIDA)", "ONG", "https://example.org"),
+            ("Cáritas Brasileira Regional Noroeste", "ONG", "https://example.org"),
         ]
         for ordem, (nome, tipo, site) in enumerate(parceiros):
             Parceiro.objects.update_or_create(
