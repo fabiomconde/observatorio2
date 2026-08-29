@@ -71,36 +71,84 @@ class Command(BaseCommand):
             )
 
         # ---- Grupos de Trabalho ---------------------------------------- #
+        # grupos = [
+        #     ("Recursos Hídricos", "bi-droplet-half", "#0277bd",
+        #      "Análise de bacias, qualidade da água e disponibilidade hídrica no território.",
+        #      "Monitoramento de bacias hidrográficas, qualidade da água e disponibilidade para abastecimento, "
+        #      "irrigação e geração de energia.",
+        #      "Dra. Ana Souza", 1),
+        #     ("Mudanças Climáticas", "bi-cloud-rain", "#1d4e89",
+        #      "Riscos climáticos, emissões e adaptação nos biomas brasileiros.",
+        #      "Estudo de cenários climáticos, emissões de GEE e estratégias de adaptação em nível regional.",
+        #      "Dr. Carlos Lima", 2),
+        #     ("Cobertura e Uso da Terra", "bi-globe-americas", "#2e7d32",
+        #      "Mapeamento anual da cobertura vegetal e uso do solo desde 1985.",
+        #      "Geração dos mapas anuais de cobertura e uso da terra, em parceria com universidades e ONGs.",
+        #      "Dra. Beatriz Alves", 3),
+        #     ("Fogo e Cicatrizes", "bi-fire", "#e64a19",
+        #      "Detecção de cicatrizes de queimadas e análise de risco de fogo.",
+        #      "Monitoramento via satélite de cicatrizes de queimadas e avaliação do impacto sobre a vegetação.",
+        #      "Dr. Felipe Rocha", 4),
+        #     ("Água e Superfícies Hídricas", "bi-tsunami", "#039be5",
+        #      "Variação de corpos d'água, reservatórios e cheias.",
+        #      "Análise multi-temporal de lagos, rios e reservatórios para apoiar políticas de recursos hídricos.",
+        #      "Dra. Juliana Castro", 5),
+        #     ("Transparência e Dados", "bi-shield-check", "#6a1b9a",
+        #      "Acesso aberto a dados, métodos e códigos de processamento.",
+        #      "Promoção de ciência aberta, com dados e métodos publicados sob licenças livres.",
+        #      "Dr. Marcos Vieira", 6),
+        #     ("Ordenamento Territorial", "bi-map", "#bf6f2a",
+        #      "Suporte técnico a planos diretores e zoneamento.",
+        #      "Apoio técnico a processos de planejamento urbano e zoneamento ambiental nos estados e municípios.",
+        #      "Dra. Renata Borges", 7),
+        # ]
         grupos = [
-            ("Recursos Hídricos", "bi-droplet-half", "#0277bd",
-             "Análise de bacias, qualidade da água e disponibilidade hídrica no território.",
-             "Monitoramento de bacias hidrográficas, qualidade da água e disponibilidade para abastecimento, "
-             "irrigação e geração de energia.",
-             "Dra. Ana Souza", 1),
-            ("Mudanças Climáticas", "bi-cloud-rain", "#1d4e89",
-             "Riscos climáticos, emissões e adaptação nos biomas brasileiros.",
-             "Estudo de cenários climáticos, emissões de GEE e estratégias de adaptação em nível regional.",
-             "Dr. Carlos Lima", 2),
-            ("Cobertura e Uso da Terra", "bi-globe-americas", "#2e7d32",
-             "Mapeamento anual da cobertura vegetal e uso do solo desde 1985.",
-             "Geração dos mapas anuais de cobertura e uso da terra, em parceria com universidades e ONGs.",
-             "Dra. Beatriz Alves", 3),
-            ("Fogo e Cicatrizes", "bi-fire", "#e64a19",
-             "Detecção de cicatrizes de queimadas e análise de risco de fogo.",
-             "Monitoramento via satélite de cicatrizes de queimadas e avaliação do impacto sobre a vegetação.",
-             "Dr. Felipe Rocha", 4),
-            ("Água e Superfícies Hídricas", "bi-tsunami", "#039be5",
-             "Variação de corpos d'água, reservatórios e cheias.",
-             "Análise multi-temporal de lagos, rios e reservatórios para apoiar políticas de recursos hídricos.",
-             "Dra. Juliana Castro", 5),
-            ("Transparência e Dados", "bi-shield-check", "#6a1b9a",
-             "Acesso aberto a dados, métodos e códigos de processamento.",
-             "Promoção de ciência aberta, com dados e métodos publicados sob licenças livres.",
-             "Dr. Marcos Vieira", 6),
-            ("Ordenamento Territorial", "bi-map", "#bf6f2a",
-             "Suporte técnico a planos diretores e zoneamento.",
-             "Apoio técnico a processos de planejamento urbano e zoneamento ambiental nos estados e municípios.",
-             "Dra. Renata Borges", 7),
+
+    ("Conflitos Agrários, Fundiários e Territoriais", "bi-map", "#795548",
+
+     "Monitoramento dos conflitos relacionados à terra, ao território e à regularização fundiária.",
+
+     "Acompanhamento de disputas por terra e território, ocupações, despejos, processos de grilagem "
+     "e regularização fundiária, identificando comunidades e territórios afetados.",
+
+     "Coordenação do Eixo", 1),
+
+    ("Pressões Ambientais, Mudanças Climáticas e Justiça Climática", "bi-globe-americas", "#2e7d32",
+
+     "Monitoramento das pressões sobre o meio ambiente e dos impactos das mudanças climáticas.",
+
+     "Análise de desmatamento, queimadas, degradação ambiental, eventos climáticos extremos, "
+     "disponibilidade e qualidade da água, contaminação e desigualdades relacionadas à justiça climática.",
+
+     "Coordenação do Eixo", 2),
+
+    ("Violências, Segurança Pública e Direitos Humanos", "bi-shield-exclamation", "#c62828",
+
+     "Acompanhamento das diferentes formas de violência e das violações de direitos nos territórios.",
+
+     "Monitoramento de ameaças, agressões, homicídios, criminalização, violência institucional e "
+     "situações de risco enfrentadas por comunidades, defensores de direitos e outros grupos vulnerabilizados.",
+
+     "Coordenação do Eixo", 3),
+
+    ("Dinâmicas Econômicas, Produtivas e Conflitos Socioambientais", "bi-bar-chart-line", "#ef6c00",
+
+     "Análise das atividades econômicas e produtivas e de seus impactos sobre os territórios.",
+
+     "Estudo das relações entre agropecuária, mineração, exploração florestal, infraestrutura, "
+     "empreendimentos, cadeias produtivas e a geração ou agravamento de conflitos socioambientais.",
+
+     "Coordenação do Eixo", 4),
+
+    ("Respostas Institucionais e Políticas Públicas", "bi-building-check", "#1565c0",
+
+     "Análise da atuação do Estado diante dos conflitos e das demandas das comunidades.",
+
+     "Monitoramento da presença ou ausência do Estado, das ações de prevenção, proteção e reparação, "
+     "bem como das políticas públicas e iniciativas voltadas à garantia de direitos nos territórios em conflito.",
+
+     "Coordenação do Eixo", 5),
+
         ]
         for titulo, icone, cor, curta, desc, coord, ordem in grupos:
             GrupoTrabalho.objects.update_or_create(
@@ -295,15 +343,27 @@ class Command(BaseCommand):
 
         # ---- Pilares ----------------------------------------------------- #
         pilares = [
-            ("Ciência Colaborativa", "🔬",
-             "Rede aberta de pesquisadores e instituições que produzem dados e métodos com rigor científico.", 0),
-            ("Tecnologia e Inovação em Nuvem", "💻",
-             "Processamento de milhões de imagens de satélite em plataformas escaláveis de cloud computing.", 1),
-            ("Transparência e Dados Abertos", "🔓",
-             "Publicação aberta, gratuita e com licença livre de mapas, estatísticas e códigos.", 2),
-            ("Impacto para Políticas Públicas", "📜",
-             "Subsídio a decisões de gestores, pesquisadores, jornalistas e sociedade civil.", 3),
-        ]
+    ("Conflitos Socioambientais e Direitos Humanos", "⚖️",
+     "Centralidade dos conflitos socioambientais e da garantia dos direitos humanos na compreensão da realidade territorial.", 0),
+
+    ("Justiça Climática e Equidade", "🌎",
+     "Análise da justiça climática, do racismo ambiental e das desigualdades que afetam de forma diferente comunidades e territórios.", 1),
+
+    ("Territorialidade e Integração", "🗺️",
+     "Leitura integrada do território, considerando as relações entre sociedade, ambiente, economia, cultura e espaço.", 2),
+
+    ("Conhecimento e Evidências", "🔬",
+     "Produção de conhecimento baseada em evidências, métodos transparentes e informações rastreáveis e confiáveis.", 3),
+
+    ("Interdisciplinaridade e Colaboração", "🤝",
+     "Integração de diferentes áreas do conhecimento, saberes e experiências para compreender problemas complexos de forma colaborativa.", 4),
+
+    ("Transparência, Ética e Responsabilidade", "🔎",
+     "Gestão responsável da informação, com transparência, ética, proteção de dados e compromisso com a qualidade das informações.", 5),
+
+    ("Incidência e Transformação Social", "📢",
+     "Produção de conhecimento voltada à participação social, às políticas públicas e à transformação das realidades e desigualdades identificadas.", 6),
+]
         for titulo, icone, desc, ordem in pilares:
             Pilar.objects.update_or_create(
                 titulo=titulo,
@@ -311,14 +371,24 @@ class Command(BaseCommand):
             )
 
         # ---- Membros ---------------------------------------------------- #
+        # membros = [
+        #     ("Dra. Ana Souza", "Coordenadora GT Recursos Hídricos", "UFAM"),
+        #     ("Dr. Carlos Lima", "Coordenador GT Mudanças Climáticas", "INPA"),
+        #     ("Dra. Beatriz Alves", "Coordenadora GT Cobertura e Uso", "USP"),
+        #     ("Dr. Felipe Rocha", "Coordenador GT Fogo e Cicatrizes", "UFRJ"),
+        #     ("Dra. Juliana Castro", "Coordenadora GT Água", "UFPA"),
+        #     ("Dr. Marcos Vieira", "Coordenador GT Transparência e Dados", "UFMG"),
+        #     ("Dra. Renata Borges", "Coordenadora GT Ordenamento Territorial", "UFBA"),
+        # ]
+
         membros = [
-            ("Dra. Ana Souza", "Coordenadora GT Recursos Hídricos", "UFAM"),
-            ("Dr. Carlos Lima", "Coordenador GT Mudanças Climáticas", "INPA"),
-            ("Dra. Beatriz Alves", "Coordenadora GT Cobertura e Uso", "USP"),
-            ("Dr. Felipe Rocha", "Coordenador GT Fogo e Cicatrizes", "UFRJ"),
-            ("Dra. Juliana Castro", "Coordenadora GT Água", "UFPA"),
-            ("Dr. Marcos Vieira", "Coordenador GT Transparência e Dados", "UFMG"),
-            ("Dra. Renata Borges", "Coordenadora GT Ordenamento Territorial", "UFBA"),
+            ("Amanda", "Coordenadora Adjunta", "UNIR"),
+            ("Larissa", "Equipe de Dados — Dados Sociais e Direitos Humanos", "UNIR"),
+            ("Laura", "Equipe de Dados — Dados Ambientais, Econômicos e Produtivos", "UNIR"),
+            ("Fábio", "Coordenador da Plataforma Digital", "IFRO"),
+            ("Júnior", "Apoio à Plataforma Digital", "UNIR"),
+            ("Maria Eduarda", "Bolsista de Comunicação", "UNIR"),
+            ("Berg/Talita", "Apoio Administrativo", "UNIR"),
         ]
         for ordem, (nome, funcao, inst) in enumerate(membros):
             Membro.objects.update_or_create(

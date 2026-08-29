@@ -10,8 +10,8 @@
         <div class="row">
             <div class="col-lg-9">
                 <span class="hero-eyebrow"><i class="bi bi-globe-americas"></i> Ciência aberta · Dados públicos</span>
-                <h1 class="mb-3">Observatório multi-institucional de monitoramento territorial</h1>
-                <p class="lead mb-4">Cruzamos imagens de satélite, ciência e políticas públicas para revelar transformações do território, da água e do fogo no Brasil desde 1985.</p>
+                <h1 class="mb-3">Observatório de Conflitos Socioambientais e Direitos Humanos</h1>
+                <p class="lead mb-4">Transformar dados dispersos em conhecimento socialmente relevante e útil ao controle social e às políticas públicas.</p>
                 <form class="hero-search" action="{% url 'core:busca' %}" method="get" role="search">
                     <input class="form-control" type="search" name="q" placeholder="Buscar por mapas, relatórios, notícias…">
                     <button type="submit"><i class="bi bi-search"></i> Buscar</button>
@@ -26,12 +26,12 @@
     <div class="container">
         <div class="row text-center text-lg-start">
             <div class="col-6 col-md-3">
-                <div class="stat-number">39</div>
-                <div class="stat-label">anos de mapeamento</div>
+                <div class="stat-number">12</div>
+                <div class="stat-label">distritos monitorados</div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="stat-number">6</div>
-                <div class="stat-label">biomas monitorados</div>
+                <div class="stat-number">5</div>
+                <div class="stat-label">eixos estratégicos</div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-number">7</div>
@@ -183,9 +183,9 @@
 <section class="py-5" style="background: var(--cor-fundo);">
     <div class="container">
         <div class="text-center mb-4">
-            <span class="section-eyebrow">Cobertura nacional</span>
-            <h2 class="section-title text-center">Os 6 biomas brasileiros</h2>
-            <p class="text-muted">Acompanhamos a dinâmica de cada bioma com séries históricas e painéis interativos.</p>
+            <span class="section-eyebrow">Cobertura local</span>
+            <h2 class="section-title text-center">Os 12 distritos de Porto Velho/Rondônia</h2>
+            <p class="text-muted">Acompanhamos a dinâmica de cada distrito com publicações, dados abertos, notícias e painéis interativos.</p>
         </div>
         <div class="row g-3">
             {% for b in biomas %}

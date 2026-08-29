@@ -146,11 +146,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Used in templates via {{ SITE_NAME }}, etc.
 from django.conf import settings  # noqa: E402  (keep at bottom)
 
-SITE_NAME = "Observatório Socioambiental"
-SITE_TAGLINE = "Observatório multi-institucional de monitoramento territorial"
+SITE_NAME = "Observatório de Conflitos Socioambientais e Direitos Humanos"
+SITE_TAGLINE = "Ciência aberta, tecnologia e impacto para políticas públicas."
 SITE_DESCRIPTION = (
-    "Iniciativa multi-institucional dedicada a revelar as transformações do "
-    "território por meio de ciência aberta, dados públicos e tecnologia em nuvem."
+    "Iniciativa de pesquisa, formação engajada e incidência política sobre os conflitos socioambientais e as condições de acesso aos direitos humanos em Porto Velho."
 )
 
 # Paleta inspirada em observatórios institucionais
