@@ -7,57 +7,90 @@
     <div class="container">
         <h1 class="fw-bold">Busca</h1>
         {% if termo %}
-        <p class="lead">Resultados para: <strong>"{{ termo }}"</strong></p>
+        <p class="lead mb-0">Resultados para: <strong>"{{ termo }}"</strong></p>
         {% else %}
-        <p class="lead">Use o campo acima para buscar por termos.</p>
+        <p class="lead mb-0">Use o campo abaixo para buscar por termos.</p>
         {% endif %}
     </div>
 </section>
 
 <div class="container py-5">
-    <form class="row g-2 mb-4" method="get">
+    <form class="row g-2 mb-5" method="get" action="{% url 'core:busca' %}">
         <div class="col-md-10">
-            <input type="text" name="q" value="{{ termo }}" class="form-control" placeholder="Termo de busca…">
+            <input type="text" name="q" value="{{ termo }}" class="form-control form-control-lg" placeholder="Termo de busca…">
         </div>
         <div class="col-md-2 d-grid">
-            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Buscar</button>
+            <button class="btn btn-primary btn-lg" type="submit"><i class="bi bi-search"></i> Buscar</button>
         </div>
     </form>
 
     {% if termo %}
-        <div class="row g-5">
-            <div class="col-lg-6">
-                <h2 class="section-title h4">Notícias ({{ noticias|length }})</h2>
+        <div class="row g-4 align-items-start">
+            <!-- Coluna de Notícias -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center justify-content-between pb-2 mb-3 border-bottom">
+                    <h2 class="h4 fw-bold mb-0 text-primary-dark">
+                        <i class="bi bi-newspaper me-2"></i>Notícias
+                    </h2>
+                    <span class="badge bg-secondary rounded-pill fs-6">{{ noticias|length }}</span>
+                </div>
+                
+                <div class="search-list">
                 {% for n in noticias %}
-                <a href="{% url 'core:noticia_detalhe' n.slug %}" class="text-decoration-none text-dark">
-                    <div class="pub-card mb-3" style="--pub-cor: {{ n.categoria.cor|default:'#1b4332' }};">
-                        <span class="pub-type">{{ n.categoria.nome|default:'Notícia' }}</span>
-                        <div class="pub-title h6 mb-1">{{ n.titulo }}</div>
-                        <div class="pub-meta"><i class="bi bi-calendar3"></i> {{ n.publicado_em|date:"d/m/Y" }}</div>
-                    </div>
-                </a>
-                {% empty %}
-                <p class="text-muted small">Nenhuma notícia encontrada.</p>
-                {% endfor %}
-            </div>
-            <div class="col-lg-6">
-                <h2 class="section-title h4">Publicações ({{ publicacoes|length }})</h2>
-                {% for pub in publicacoes %}
-                <a href="{% url 'core:publicacao_detalhe' pub.slug %}" class="text-decoration-none text-dark">
-                    <div class="pub-card mb-3" style="--pub-cor: {{ pub.tipo.cor }};">
-                        <span class="pub-type"><i class="bi {{ pub.tipo.icone|default:'bi-file-earmark-text' }}"></i> {{ pub.tipo.nome }}</span>
-                        <div class="pub-title h6 mb-1">{{ pub.titulo }}</div>
-                        <div class="pub-meta">
-                            {% if pub.publicado_em %}<span><i class="bi bi-calendar3"></i> {{ pub.publicado_em|date:"d/m/Y" }}</span>{% endif %}
-                            {% if pub.autores %}<span class="text-truncate"><i class="bi bi-person"></i> {{ pub.autores|truncatechars:30 }}</span>{% endif %}
+                    <a href="{% url 'core:noticia_detalhe' n.slug %}" class="text-decoration-none text-dark d-block mb-3">
+                        <div class="pub-card pub-card-list" style="--pub-cor: {{ n.categoria.cor|default:'#1b4332' }};">
+                            <span class="pub-type">{{ n.categoria.nome|default:'Notícia' }}</span>
+                            <div class="pub-title h6 mb-1">{{ n.titulo }}</div>
+                            {% if n.resumo %}
+                            <div class="pub-summary mb-2">{{ n.resumo|truncatechars:140 }}</div>
+                            {% endif %}
+                            <div class="pub-meta">
+                                <span><i class="bi bi-calendar3"></i> {{ n.publicado_em|date:"d/m/Y" }}</span>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 {% empty %}
-                <p class="text-muted small">Nenhuma publicação encontrada.</p>
+                    <div class="alert alert-light border text-muted">
+                        <i class="bi bi-info-circle me-1"></i> Nenhuma notícia encontrada para este termo.
+                    </div>
                 {% endfor %}
+                </div>
+            </div>
+
+            <!-- Coluna de Publicações -->
+            <div class="col-lg-6">
+                <div class="d-flex align-items-center justify-content-between pb-2 mb-3 border-bottom">
+                    <h2 class="h4 fw-bold mb-0 text-primary-dark">
+                        <i class="bi bi-file-earmark-text me-2"></i>Publicações
+                    </h2>
+                    <span class="badge bg-secondary rounded-pill fs-6">{{ publicacoes|length }}</span>
+                </div>
+
+                <div class="search-list">
+                {% for pub in publicacoes %}
+                    <a href="{% url 'core:publicacao_detalhe' pub.slug %}" class="text-decoration-none text-dark d-block mb-3">
+                        <div class="pub-card pub-card-list" style="--pub-cor: {{ pub.tipo.cor|default:'#0d3b66' }};">
+                            <span class="pub-type"><i class="bi {{ pub.tipo.icone|default:'bi-file-earmark-text' }}"></i> {{ pub.tipo.nome }}</span>
+                            <div class="pub-title h6 mb-1">{{ pub.titulo }}</div>
+                            {% if pub.resumo %}
+                            <div class="pub-summary mb-2">{{ pub.resumo|truncatechars:140 }}</div>
+                            {% endif %}
+                            <div class="pub-meta">
+                                {% if pub.publicado_em %}<span><i class="bi bi-calendar3"></i> {{ pub.publicado_em|date:"d/m/Y" }}</span>{% endif %}
+                                {% if pub.autores %}<span class="text-truncate" style="max-width: 250px;"><i class="bi bi-person"></i> {{ pub.autores|truncatechars:35 }}</span>{% endif %}
+                            </div>
+                        </div>
+                    </a>
+                {% empty %}
+                    <div class="alert alert-light border text-muted">
+                        <i class="bi bi-info-circle me-1"></i> Nenhuma publicação encontrada para este termo.
+                    </div>
+                {% endfor %}
+                </div>
             </div>
         </div>
     {% endif %}
 </div>
 {% endblock %}
+
+

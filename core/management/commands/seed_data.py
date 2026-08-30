@@ -523,26 +523,16 @@ class Command(BaseCommand):
         # ---- FAQ --------------------------------------------------------- #
         faqs = [
             ("Geral", "O que é o Observatório Socioambiental?",
-             "O Observatório Socioambiental é uma iniciativa multi-institucional que envolve universidades, "
-             "ONGs e empresas de tecnologia, dedicada a gerar mapas anuais de cobertura e "
-             "uso da terra do Brasil."),
+             "O Observatório de Conflitos Socioambientais e Direitos Humanos é uma iniciativa de pesquisa, formação engajada e incidência política."),
             ("Geral", "Os dados são gratuitos?",
              "Sim, todos os dados, mapas e estatísticas são públicos e gratuitos, sob "
              "licença Creative Commons CC-BY-SA."),
-            ("Geral", "Qual a resolução das imagens?",
-             "Utilizamos imagens do satélite Landsat (30 metros de resolução espacial) "
-             "com classificação pixel a pixel."),
-            ("Técnico", "Como os mapas são gerados?",
-             "Por meio de algoritmos de aprendizado de máquina aplicados a séries "
-             "temporais de imagens Landsat, validados por especialistas."),
             ("Técnico", "Posso usar os dados em publicações?",
              "Sim, basta citar a fonte: Projeto Observatório Socioambiental — Coleção X, ano, URL de acesso."),
-            ("Técnico", "Com que frequência os mapas são atualizados?",
-             "Anualmente. A cada nova coleção, publicamos mapas, estatísticas e painéis."),
             ("Acesso", "Preciso me cadastrar para baixar?",
              "Não, o acesso é totalmente livre."),
             ("Acesso", "Como citar o Observatório Socioambiental?",
-             "Projeto Observatório Socioambiental — Coleção X [ano]. Disponível em: https://mapbiomas.org. "
+             "Projeto Observatório Socioambiental — Coleção X [ano]. Disponível em: https://observapvh.org.br/. "
              "Acesso em: [data]."),
         ]
         for ordem, (cat, q, a) in enumerate(faqs):
