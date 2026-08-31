@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="notion-page-header">
+    <div class="notion-page-icon">⚡</div>
+    <h1 class="notion-page-title">Painel Administrativo</h1>
+    <p class="notion-page-subtitle">Gerencie os dados, notícias, coleções e configurações do Observatório.</p>
+</div>
+
+{% if app_list %}
+<div class="notion-dashboard-grid">
+    {% for app in app_list %}
+    <div class="notion-card">
+        <div class="notion-card-header">
+            <div class="notion-card-title">
+                {% if app.app_label == 'core' %}
+                    <i class="bi bi-folder2-open" style="color: var(--notion-accent);"></i>
+                {% else %}
+                    <i class="bi bi-shield-lock" style="color: var(--notion-text-muted);"></i>
+                {% endif %}
+                {{ app.name }}
+            </div>
+            <span class="notion-badge notion-badge-gray">{{ app.models|length }} tabelas</span>
+        </div>
+
+        <ul class="notion-model-list">
+            {% for model in app.models %}
+            <li class="notion-model-item">
+                <a href="{{ model.admin_url }}" class="notion-model-link">
+                    <i class="bi bi-table" style="color: var(--notion-text-muted);"></i>
+                    <span>{{ model.name }}</span>
+                </a>
+                <div class="notion-model-actions">
+                    {% if model.add_url %}
+                    <a href="{{ model.add_url }}" class="notion-btn" style="padding: 2px 8px; font-size: 11.5px;" title="Adicionar novo">
+                        <i class="bi bi-plus-lg"></i> Novo
+                    </a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>{% translate "You don't have permission to view or edit anything." %}</p>
+{% endif %}
+{% endblock %}

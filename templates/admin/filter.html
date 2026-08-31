@@ -1,0 +1,11 @@
+{% load i18n %}
+<div class="notion-filter-dropdown-box">
+    <label class="notion-filter-label">{{ title|capfirst }}:</label>
+    <select class="notion-filter-select" onchange="if (this.value) window.location.href=this.value;">
+        {% for choice in choices %}
+            <option value="{{ choice.query_string }}"{% if choice.selected %} selected{% endif %}>
+                {{ choice.display }}
+            </option>
+        {% endfor %}
+    </select>
+</div>

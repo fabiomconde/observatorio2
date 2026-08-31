@@ -1,0 +1,125 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'core/css/notion_admin.css' %}">
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+<body>
+<div id="container">
+    {% if user.is_authenticated and '/login/' not in request.path %}
+    <!-- Notion Sidebar -->
+    <aside id="notion-sidebar">
+        <div class="notion-workspace-header">
+            <div class="notion-workspace-icon">O</div>
+            <div class="notion-workspace-title">Observa PVH</div>
+        </div>
+
+        <nav class="notion-sidebar-nav">
+            <a href="{% url 'admin:index' %}" class="notion-nav-item {% if request.path == '/admin/' %}active{% endif %}">
+                <i class="bi bi-grid-1x2"></i> Início
+            </a>
+
+            <div class="notion-nav-section-title">Comunicação & Mídia</div>
+            <a href="/admin/core/noticia/" class="notion-nav-item {% if '/noticia/' in request.path %}active{% endif %}">
+                <i class="bi bi-newspaper"></i> Notícias
+            </a>
+            <a href="/admin/core/publicacao/" class="notion-nav-item {% if '/publicacao/' in request.path %}active{% endif %}">
+                <i class="bi bi-file-earmark-text"></i> Publicações
+            </a>
+            <a href="/admin/core/mensagemcontato/" class="notion-nav-item {% if '/mensagemcontato/' in request.path %}active{% endif %}">
+                <i class="bi bi-envelope"></i> Mensagens
+            </a>
+
+            <div class="notion-nav-section-title">Dados & Território</div>
+            <a href="/admin/core/distrito/" class="notion-nav-item {% if '/distrito/' in request.path %}active{% endif %}">
+                <i class="bi bi-geo-alt"></i> Distritos
+            </a>
+            <a href="/admin/core/colecao/" class="notion-nav-item {% if '/colecao/' in request.path %}active{% endif %}">
+                <i class="bi bi-collection"></i> Coleções
+            </a>
+            <a href="/admin/core/bioma/" class="notion-nav-item {% if '/bioma/' in request.path %}active{% endif %}">
+                <i class="bi bi-globe-americas"></i> Biomas
+            </a>
+            <a href="/admin/core/grupotrabalho/" class="notion-nav-item {% if '/grupotrabalho/' in request.path %}active{% endif %}">
+                <i class="bi bi-diagram-3"></i> Eixos Temáticos
+            </a>
+            <a href="/admin/core/termoglossario/" class="notion-nav-item {% if '/termoglossario/' in request.path %}active{% endif %}">
+                <i class="bi bi-book"></i> Glossário
+            </a>
+            <a href="/admin/core/faq/" class="notion-nav-item {% if '/faq/' in request.path %}active{% endif %}">
+                <i class="bi bi-question-circle"></i> FAQ
+            </a>
+
+            <div class="notion-nav-section-title">Institucional</div>
+            <a href="/admin/core/membro/" class="notion-nav-item {% if '/membro/' in request.path %}active{% endif %}">
+                <i class="bi bi-people"></i> Membros
+            </a>
+            <a href="/admin/core/parceiro/" class="notion-nav-item {% if '/parceiro/' in request.path %}active{% endif %}">
+                <i class="bi bi-building"></i> Parceiros
+            </a>
+
+            <div class="notion-nav-section-title">Autenticação</div>
+            <a href="/admin/auth/user/" class="notion-nav-item {% if '/auth/user/' in request.path %}active{% endif %}">
+                <i class="bi bi-person-badge"></i> Usuários
+            </a>
+            <a href="/admin/auth/group/" class="notion-nav-item {% if '/auth/group/' in request.path %}active{% endif %}">
+                <i class="bi bi-shield-check"></i> Grupos
+            </a>
+        </nav>
+
+        <div class="notion-sidebar-footer">
+            <a href="/" target="_blank" class="notion-btn w-100" style="display:flex; justify-content:center; width: 100%; box-sizing: border-box;">
+                <i class="bi bi-box-arrow-up-right"></i> Ver site público
+            </a>
+        </div>
+    </aside>
+    {% endif %}
+
+    <!-- Main Section -->
+    <div id="notion-main">
+        {% if user.is_authenticated and '/login/' not in request.path %}
+        <!-- Top Navbar -->
+        <header class="notion-topbar">
+            <div class="notion-breadcrumbs">
+                <a href="{% url 'admin:index' %}"><i class="bi bi-house"></i> Admin</a>
+                {% block breadcrumbs %}{% endblock %}
+            </div>
+            
+            <div class="notion-user-menu">
+                <span class="notion-user-badge">
+                    <i class="bi bi-person-circle"></i> {{ user.username }}
+                </span>
+                <a href="{% url 'admin:password_change' %}" class="notion-btn" style="padding: 3px 8px; font-size:12px;">Alterar senha</a>
+                <form action="{% url 'admin:logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="notion-btn" style="padding: 3px 8px; font-size:12px;">Sair</button>
+                </form>
+            </div>
+        </header>
+        {% endif %}
+
+        <!-- Content Body -->
+        <main id="content">
+            {% if messages %}
+            <ul class="messagelist">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    <i class="bi bi-info-circle"></i> {{ message|capfirst }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% block footer %}{% endblock %}
+</body>
+</html>

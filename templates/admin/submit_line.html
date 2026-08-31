@@ -1,0 +1,11 @@
+{% load i18n admin_urls %}
+<div class="submit-row">
+{% if show_delete_link and original %}
+    {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
+    <a href="{% add_preserved_filters delete_url %}" class="notion-btn notion-btn-danger"><i class="bi bi-trash"></i> {% translate "Delete" %}</a>
+{% endif %}
+{% if show_save_as_new %}<input type="submit" value="{% translate 'Save as new' %}" name="_saveasnew" class="notion-btn">{% endif %}
+{% if show_save_and_add_another %}<input type="submit" value="{% translate 'Save and add another' %}" name="_addanother" class="notion-btn">{% endif %}
+{% if show_save_and_continue %}<input type="submit" value="{% translate 'Save and continue editing' %}" name="_continue" class="notion-btn">{% endif %}
+{% if show_save %}<input type="submit" value="{% translate 'Save' %}" class="notion-btn notion-btn-primary" name="_save">{% endif %}
+</div>

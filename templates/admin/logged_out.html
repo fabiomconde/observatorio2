@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 75vh;">
+    <div class="notion-card" style="width: 100%; max-width: 420px; padding: 36px 32px; text-align: center; box-shadow: var(--notion-shadow-hover);">
+        <div class="notion-workspace-icon" style="width: 48px; height: 48px; font-size: 22px; border-radius: 12px; margin: 0 auto 16px auto;">O</div>
+        <h1 class="notion-page-title" style="font-size: 22px; margin-bottom: 8px;">Sessão Encerrada</h1>
+        <p class="notion-page-subtitle" style="margin-bottom: 24px; color: var(--notion-text-muted);">
+            Obrigado por utilizar o painel do Observa-PVH. Sua sessão foi encerrada com segurança.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="{% url 'admin:login' %}" class="notion-btn notion-btn-primary" style="padding: 10px; font-size: 14px; font-weight: 600; justify-content: center;">
+                <i class="bi bi-box-arrow-in-right"></i> Acessar novamente
+            </a>
+            <a href="/" class="notion-btn" style="padding: 9px; font-size: 13px; justify-content: center;">
+                <i class="bi bi-house"></i> Voltar ao site público
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

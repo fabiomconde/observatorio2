@@ -1,0 +1,68 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block breadcrumbs %}
+<span class="separator">/</span>
+<a href="{% url 'admin:app_list' app_label=cl.opts.app_label %}">{{ cl.opts.app_config.verbose_name }}</a>
+<span class="separator">/</span>
+<span>{{ cl.opts.verbose_name_plural|capfirst }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="notion-page-header" style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 20px;">
+    <div>
+        <div class="notion-page-icon" style="font-size:32px; margin-bottom:4px;">📋</div>
+        <h1 class="notion-page-title" style="font-size:26px; margin:0;">{{ cl.opts.verbose_name_plural|capfirst }}</h1>
+    </div>
+    {% if has_add_permission %}
+    <div>
+        <a href="{% url cl.opts|admin_urlname:'add' %}" class="notion-btn notion-btn-primary">
+            <i class="bi bi-plus-lg"></i> Adicionar {{ cl.opts.verbose_name }}
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Filtros no Topo em Dropdowns (Selects) -->
+{% if cl.has_filters %}
+<div id="changelist-filter">
+    <div class="notion-filter-header">
+        <i class="bi bi-funnel-fill" style="color: var(--notion-accent);"></i>
+        <span>Filtros</span>
+    </div>
+    <div class="notion-filter-grid">
+        {% for spec in cl.filter_specs %}
+            <div class="notion-filter-col">
+                {% admin_list_filter cl spec %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div id="changelist">
+    <form id="changelist-form" method="post">
+        {% csrf_token %}
+        
+        <!-- Barra Superior: Busca + Ações em Lote (Acima do Cabeçalho da Tabela) -->
+        <div class="notion-toolbar">
+            {% block search %}{% search_form cl %}{% endblock %}
+
+            {% if action_form and actions_on_top and cl.show_admin_actions %}
+                {% admin_actions %}
+            {% endif %}
+        </div>
+
+        {% block result_list %}
+            {% result_list cl %}
+        {% endblock %}
+
+        {% block pagination %}{% pagination cl %}{% endblock %}
+    </form>
+</div>
+{% endblock %}
+
+
+
+
+

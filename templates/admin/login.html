@@ -1,0 +1,45 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 75vh;">
+    <div class="notion-card" style="width: 100%; max-width: 400px; padding: 36px 32px; text-align: center; box-shadow: var(--notion-shadow-hover);">
+        <div class="notion-workspace-icon" style="width: 48px; height: 48px; font-size: 22px; border-radius: 12px; margin: 0 auto 16px auto;">O</div>
+        <h1 class="notion-page-title" style="font-size: 22px; margin-bottom: 6px;">Observa PVH</h1>
+        <p class="notion-page-subtitle" style="margin-bottom: 24px;">Entre com suas credenciais de acesso.</p>
+
+        {% if form.errors and not form.non_field_errors %}
+        <ul class="messagelist">
+            <li class="error" style="font-size:12px; justify-content:center;">
+                <i class="bi bi-exclamation-circle"></i> Por favor, verifique o usuário e a senha.
+            </li>
+        </ul>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <ul class="messagelist">
+            <li class="error" style="font-size:12px; justify-content:center;">
+                <i class="bi bi-exclamation-circle"></i> {{ error }}
+            </li>
+        </ul>
+        {% endfor %}
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+            <div style="margin-bottom: 16px; text-align: left;">
+                <label for="id_username" style="display:block; font-size:12.5px; font-weight:600; color:var(--notion-text); margin-bottom:6px;">Usuário</label>
+                <input type="text" name="username" autofocus maxlength="254" id="id_username" style="width:100%; box-sizing:border-box;" required>
+            </div>
+            <div style="margin-bottom: 24px; text-align: left;">
+                <label for="id_password" style="display:block; font-size:12.5px; font-weight:600; color:var(--notion-text); margin-bottom:6px;">Senha</label>
+                <input type="password" name="password" id="id_password" style="width:100%; box-sizing:border-box;" required>
+                <input type="hidden" name="next" value="{{ next }}">
+            </div>
+            <button type="submit" class="notion-btn notion-btn-primary" style="width: 100%; padding: 9px; font-size: 14px; font-weight: 600; justify-content: center;">
+                Acessar Painel
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

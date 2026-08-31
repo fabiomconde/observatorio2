@@ -141,14 +141,24 @@ class ParceiroAdmin(admin.ModelAdmin):
     ordering = ("ordem", "nome")
 
 
+from django.utils.html import format_html
+
+
 @admin.register(MensagemContato)
 class MensagemContatoAdmin(admin.ModelAdmin):
-    list_display = ("nome", "email", "assunto", "lida", "criado_em")
+    list_display = ("nome", "email", "assunto", "status_lida", "criado_em")
     list_filter = ("lida",)
     search_fields = ("nome", "email", "assunto", "mensagem")
     readonly_fields = ("nome", "email", "assunto", "mensagem", "criado_em")
     actions = ["marcar_como_lida"]
 
+    @admin.display(description="Status", ordering="lida")
+    def status_lida(self, obj):
+        if obj.lida:
+            return format_html('<span class="notion-badge notion-badge-green">✓ Lida</span>')
+        return format_html('<span class="notion-badge notion-badge-yellow">● Nova</span>')
+
     @admin.action(description="Marcar selecionadas como lidas")
     def marcar_como_lida(self, request, queryset):
         queryset.update(lida=True)
+
