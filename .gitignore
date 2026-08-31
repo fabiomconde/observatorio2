@@ -25,6 +25,7 @@ local_settings.py
 # --- Env / secrets ---
 .env
 .env.local
+aqui.txt
 
 # --- IDE ---
 .idea/

@@ -10,13 +10,10 @@ services:
              python manage.py seed_data &&
              gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --access-logfile -"
     volumes:
-      # SALVA SEU BANCO SQLITE AQUI PARA NÃO SER DELETADO NO DEPLOY:
-      - ./sqlite_data:/app/sqlite_data
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     networks:
       - rede_proxy
-    # Sem a linha 'ports', porque o Nginx Proxy Manager cuida da segurança!
 
 volumes:
   static_volume:

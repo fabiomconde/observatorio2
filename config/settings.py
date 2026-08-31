@@ -6,6 +6,7 @@ Production-ready defaults via env vars. Safe to develop locally with DEBUG=True.
 
 import os
 from pathlib import Path
+from decouple import config
 
 # -------------------------------------------------------------------- #
 # Paths
@@ -98,11 +99,11 @@ if DB_ENGINE == "postgres":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME", "mapbiomas"),
-            "USER": os.environ.get("DB_USER", "postgres"),
-            "PASSWORD": os.environ.get("DB_PASSWORD", "postgres"),
-            "HOST": os.environ.get("DB_HOST", "db"),
-            "PORT": os.environ.get("DB_PORT", "5432"),
+            "NAME": config("DB_NAME", default="observatorio_db"),
+            "USER": config("DB_USER", default="app_observatorio_user"),
+            "PASSWORD": config("DB_PASSWORD", default="Qwe135@@a"),
+            "HOST": config("DB_HOST", default="meubanco_postgres"),
+            "PORT": config("DB_PORT", default="5432"),
         }
     }
 else:
