@@ -517,18 +517,19 @@ function applyEditorFormatBlock(val) {
 function setEditorZoom(val) {
     const sheet = document.querySelector('.editorpaper-sheet');
     if (sheet) {
-        sheet.style.transform = `scale(${parEditornt(val)/100})`;
+        sheet.style.transform = `scale(${parseInt(val)/100})`;
         sheet.style.transformOrigin = 'top center';
     }
 }
 
 function changeFontSize(delta) {
     const current = document.queryCommandValue('fontSize') || '3';
-    let next = parEditornt(current) + delta;
+    let next = parseInt(current) + delta;
     if (next < 1) next = 1;
     if (next > 7) next = 7;
     document.execCommand('fontSize', false, next);
 }
 </script>
+
 {% endblock %}
 
