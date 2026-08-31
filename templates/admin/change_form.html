@@ -1,6 +1,202 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls static admin_modify %}
 
+{% block extrahead %}
+{{ block.super }}
+<!-- Summernote Lite (100% Gratuito - MIT License, Sem Avisos de Upgrade/Chaves) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-pt-BR.min.js"></script>
+
+<style>
+/* Editor Overlay */
+.editorwindow-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 999999;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.editorwindow-overlay.active {
+    display: flex !important;
+}
+
+.editorwindow-titlebar {
+    background: linear-gradient(180deg, #2b4970 0%, #1c355e 100%);
+    color: #ffffff;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    border-bottom: 2px solid #0b1a33;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.editorwindow-titlebar .editortitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.editorwindow-titlebar .editoractions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.editortoolbar-container {
+    background: #e6e6e6;
+    border-bottom: 1px solid #ababab;
+    padding: 6px 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    box-shadow: inset 0 1px 0 #ffffff;
+}
+
+.editortoolbar-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.editortoolbar-row:last-child {
+    margin-bottom: 0;
+}
+
+.editortoolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 4px;
+    background: #f4f4f4;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+}
+
+.editorbtn {
+    background: #fbfbfb;
+    border: 1px solid #b5b5b5;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    color: #333333;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 26px;
+    box-sizing: border-box;
+    transition: all 0.1s ease;
+    user-select: none;
+}
+
+.editorbtn:hover {
+    background: #e2e2e2;
+    border-color: #777777;
+}
+
+.editorbtn:active {
+    background: #d0d0d0;
+}
+
+.editorbtn-save {
+    background: #e8f5e9;
+    border-color: #4caf50;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.editorbtn-save:hover {
+    background: #c8e6c9;
+    border-color: #388e3c;
+}
+
+.editorselect {
+    height: 26px;
+    border: 1px solid #b5b5b5;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #333333;
+}
+
+.editordocument-viewport {
+    flex: 1;
+    background: #525659;
+    overflow-y: auto;
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.editorpaper-sheet {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    padding: 25mm 20mm;
+    box-sizing: border-box;
+    color: #000000;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 auto;
+}
+
+.editorheader-banner {
+    text-align: center;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.editorheader-banner h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 2px 0;
+    text-transform: uppercase;
+    color: #000000;
+}
+
+.editorheader-banner p {
+    font-size: 11px;
+    margin: 1px 0;
+    color: #333333;
+}
+
+#editorstatus-message {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #2e7d32;
+    color: #ffffff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 9999999;
+}
+</style>
+{% endblock %}
+
 {% block breadcrumbs %}
 <span class="separator">/</span>
 <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
@@ -52,4 +248,287 @@
         {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
     </div>
 </form>
+
+<!-- Editor System Editor Window Overlay -->
+<div id="editorwindow-overlay" class="editorwindow-overlay">
+    <!-- Titlebar -->
+    <div class="editorwindow-titlebar">
+        <div class="editortitle">
+            <i class="bi bi-file-earmark-word" style="font-size:18px;"></i>
+            <span>Editor de Documentos (Observa-PVH)</span>
+        </div>
+        <div class="editoractions">
+            <button type="button" class="editorbtn editorbtn-save" onclick="saveEditorEditorContent()">
+                <i class="bi bi-check-circle-fill"></i> Salvar e Sincronizar
+            </button>
+            <button type="button" class="editorbtn" onclick="closeEditorEditorWindow()" style="background:#d9534f; color:white; border-color:#d9534f;">
+                <i class="bi bi-x-lg"></i> Fechar Janela
+            </button>
+        </div>
+    </div>
+
+    <!-- Editor Toolbar Bar (Matching User Screenshot) -->
+    <div class="editortoolbar-container">
+        <!-- Row 1 -->
+        <div class="editortoolbar-row">
+            <div class="editortoolbar-group">
+                <button type="button" class="editorbtn" onclick="toggleEditorSourceCode()" title="Código-Fonte">
+                    <i class="bi bi-code-slash" style="color:#d9534f;"></i> Código-Fonte
+                </button>
+                <button type="button" class="editorbtn editorbtn-save" onclick="saveEditorEditorContent()" title="Salvar">
+                    <i class="bi bi-save"></i> Salvar
+                </button>
+            </div>
+
+            <div class="editortoolbar-group">
+                <button type="button" class="editorbtn" onclick="execEditorCommand('searchreplace')" title="Localizar e Substituir"><i class="bi bi-search"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('RemoveFormat')" title="Limpar Formatação"><i class="bi bi-eraser"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Bold')" title="Negrito"><b>N</b></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Italic')" title="Itálico"><i>I</i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Underline')" title="Sublinhado"><u>S</u></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Strikethrough')" title="Tachado"><s>S</s></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Subscript')" title="Subscrito">X₂</button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Superscript')" title="Sobrescrito">X²</button>
+                <button type="button" class="editorbtn" onclick="changeFontSize(1)" title="Aumentar Fonte">A+</button>
+                <button type="button" class="editorbtn" onclick="changeFontSize(-1)" title="Diminuir Fonte">A-</button>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="editortoolbar-row">
+            <div class="editortoolbar-group">
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Cut')" title="Recortar"><i class="bi bi-scissors"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Copy')" title="Copiar"><i class="bi bi-files"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Undo')" title="Desfazer"><i class="bi bi-arrow-counterclockwise"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('Redo')" title="Refazer"><i class="bi bi-arrow-clockwise"></i></button>
+            </div>
+
+            <div class="editortoolbar-group">
+                <button type="button" class="editorbtn" onclick="execEditorCommand('JustifyLeft')" title="Alinhar Esquerda"><i class="bi bi-text-left"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('JustifyCenter')" title="Centralizar"><i class="bi bi-text-center"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('JustifyRight')" title="Alinhar Direita"><i class="bi bi-text-right"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('JustifyFull')" title="Justificado"><i class="bi bi-justify"></i></button>
+            </div>
+
+            <div class="editortoolbar-group">
+                <button type="button" class="editorbtn" onclick="execEditorCommand('InsertOrderedList')" title="Lista Numerada"><i class="bi bi-list-ol"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('InsertUnorderedList')" title="Lista com Marcadores"><i class="bi bi-list-ul"></i></button>
+                <button type="button" class="editorbtn" onclick="insertEditorTable()" title="Tabela"><i class="bi bi-table"></i></button>
+                <button type="button" class="editorbtn" onclick="insertEditorImage()" title="Inserir Imagem"><i class="bi bi-image"></i></button>
+                <button type="button" class="editorbtn" onclick="execEditorCommand('CreateLink')" title="Link"><i class="bi bi-link-45deg"></i></button>
+            </div>
+
+            <div class="editortoolbar-group">
+                <select class="editorselect" onchange="setEditorZoom(this.value)">
+                    <option value="100%">100 %</option>
+                    <option value="125%">125 %</option>
+                    <option value="150%">150 %</option>
+                    <option value="75%">75 %</option>
+                </select>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Editor Document Sheet Viewport -->
+    <div class="editordocument-viewport">
+        <div class="editorpaper-sheet">
+            <!-- Editable Content Body -->
+            <div id="editoreditor-editable" contenteditable="true" style="min-height: 500px; outline: none;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editorstatus-message">
+    <i class="bi bi-check-circle-fill"></i> Conteúdo salvo com sucesso e sincronizado!
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Initialize Summernote Lite (100% Gratuito - MIT License, Sem Avisos)
+    if (typeof $ !== 'undefined' && $.fn.summernote) {
+        $('textarea[name="resumo"], textarea[name="conteudo"], textarea[name="descricao"]').summernote({
+            placeholder: 'Digite o texto do conteúdo aqui...',
+            lang: 'pt-BR',
+            height: 320,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    }
+
+    // 2. Add Editor Editor Launch Button next to 'conteudo' or 'descricao' fields
+    const targetTextareas = document.querySelectorAll('textarea[name="conteudo"], textarea[name="descricao"]');
+    targetTextareas.forEach(function(textarea) {
+        const formRow = textarea.closest('.form-row') || textarea.parentElement;
+        if (formRow) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'notion-btn notion-btn-primary';
+            btn.style.marginTop = '10px';
+            btn.style.display = 'inline-flex';
+            btn.style.alignItems = 'center';
+            btn.style.gap = '8px';
+            btn.style.background = '#1c355e';
+            btn.style.color = '#ffffff';
+            btn.innerHTML = '<i class="bi bi-window-stack" style="font-size:16px;"></i> <strong>Abrir no Editor (Nova Janela)</strong>';
+            
+            btn.onclick = function() {
+                openEditorEditorWindow(textarea);
+            };
+
+            formRow.appendChild(btn);
+        }
+    });
+});
+
+let currentTargetTextarea = null;
+
+function openEditorEditorWindow(textarea) {
+    currentTargetTextarea = textarea;
+    let content = '';
+    
+    // Get current HTML from Summernote or textarea
+    if (typeof $ !== 'undefined' && $(textarea).data('summernote')) {
+        content = $(textarea).summernote('code');
+    } else {
+        content = textarea.value;
+    }
+
+    if (!content || !content.trim()) {
+        content = '<p style="text-align: justify;">Digite o texto do documento aqui...</p>';
+    }
+
+    const editableEl = document.getElementById('editoreditor-editable');
+    editableEl.innerHTML = content;
+
+    const overlay = document.getElementById('editorwindow-overlay');
+    overlay.classList.add('active');
+}
+
+function closeEditorEditorWindow() {
+    const overlay = document.getElementById('editorwindow-overlay');
+    overlay.classList.remove('active');
+}
+
+function saveEditorEditorContent() {
+    if (!currentTargetTextarea) return;
+    
+    const editableEl = document.getElementById('editoreditor-editable');
+    const htmlContent = editableEl.innerHTML;
+
+    // Save back to textarea
+    currentTargetTextarea.value = htmlContent;
+
+    // Save back to Summernote instance
+    if (typeof $ !== 'undefined' && $(currentTargetTextarea).data('summernote')) {
+        $(currentTargetTextarea).summernote('code', htmlContent);
+    }
+
+    // Show toast notification
+    const msg = document.getElementById('editorstatus-message');
+    msg.style.display = 'block';
+    setTimeout(function() {
+        msg.style.display = 'none';
+    }, 3000);
+}
+
+
+function execEditorCommand(command, value = null) {
+    document.execCommand(command, false, value);
+}
+
+function toggleEditorSourceCode() {
+    const editableEl = document.getElementById('editoreditor-editable');
+    const isSource = editableEl.getAttribute('data-source-mode') === 'true';
+    if (isSource) {
+        editableEl.innerHTML = editableEl.innerText;
+        editableEl.setAttribute('data-source-mode', 'false');
+        editableEl.style.fontFamily = "'Times New Roman', Times, serif";
+        editableEl.style.whiteSpace = 'normal';
+    } else {
+        editableEl.innerText = editableEl.innerHTML;
+        editableEl.setAttribute('data-source-mode', 'true');
+        editableEl.style.fontFamily = "monospace";
+        editableEl.style.whiteSpace = 'pre-wrap';
+    }
+}
+
+function insertEditorSignature() {
+    const sigHTML = `
+        <br><br>
+        <div style="text-align: center; margin-top: 40px;">
+            <p>____________________________________________________</p>
+            <p><strong>COORDENAÇÃO DO OBSERVATÓRIO SOCIOAMBIENTAL (OBSERVA-PVH)</strong></p>
+            <p style="font-size: 11px; color: #555;">Documento assinado eletronicamente conforme diretrizes institucionais.</p>
+        </div>
+    `;
+    document.execCommand('insertHTML', false, sigHTML);
+}
+
+function insertEditorTable() {
+    const tableHTML = `
+        <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse; margin: 15px 0; border-color: #000;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th>Item</th>
+                    <th>Descrição</th>
+                    <th>Especificação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01</td>
+                    <td>Exemplo de dado</td>
+                    <td>Informação técnica</td>
+                </tr>
+            </tbody>
+        </table>
+    `;
+    document.execCommand('insertHTML', false, tableHTML);
+}
+
+function insertEditorImage() {
+    const url = prompt('Digite a URL da imagem:');
+    if (url) {
+        document.execCommand('insertHTML', false, `<img src="${url}" style="max-width: 100%; height: auto; display: block; margin: 15px auto;" />`);
+    }
+}
+
+function insertEditorAutoText() {
+    const text = `<p style="text-align: justify; text-indent: 30px;">O Observatório Socioambiental de Porto Velho (Observa-PVH) apresenta o presente relatório técnico com base no monitoramento e análise de dados georreferenciados e territoriais.</p>`;
+    document.execCommand('insertHTML', false, text);
+}
+
+function applyEditorFormatBlock(val) {
+    document.execCommand('formatBlock', false, val);
+}
+
+function setEditorZoom(val) {
+    const sheet = document.querySelector('.editorpaper-sheet');
+    if (sheet) {
+        sheet.style.transform = `scale(${parEditornt(val)/100})`;
+        sheet.style.transformOrigin = 'top center';
+    }
+}
+
+function changeFontSize(delta) {
+    const current = document.queryCommandValue('fontSize') || '3';
+    let next = parEditornt(current) + delta;
+    if (next < 1) next = 1;
+    if (next > 7) next = 7;
+    document.execCommand('fontSize', false, next);
+}
+</script>
 {% endblock %}
+

@@ -1,8 +1,8 @@
 services:
   web:
     build: .
-    image: observatorio-web
-    container_name: observatorio_web
+    image: observapvh
+    container_name: observapvh
     restart: always
     command: >
       sh -c "python manage.py migrate --noinput &&

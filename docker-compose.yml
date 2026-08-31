@@ -3,8 +3,8 @@ version: "3.9"
 services:
   web:
     build: .
-    image: mapbiomas-clone-web
-    container_name: mapbiomas_web
+    image: observapvh
+    container_name: observapvh
     command: >
       sh -c "python manage.py migrate --noinput &&
              python manage.py seed_data &&
