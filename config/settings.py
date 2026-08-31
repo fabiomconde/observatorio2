@@ -93,7 +93,7 @@ ASGI_APPLICATION = "config.asgi.application"
 # -------------------------------------------------------------------- #
 # Database
 # -------------------------------------------------------------------- #
-DB_ENGINE = os.environ.get("DB_ENGINE", "sqlite")
+DB_ENGINE = os.environ.get("DB_ENGINE", "postgres")
 
 if DB_ENGINE == "postgres":
     DATABASES = {
