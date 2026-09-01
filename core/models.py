@@ -545,9 +545,22 @@ class Dashboard(TimeStampedModel):
         verbose_name = _("Dashboard")
         verbose_name_plural = _("Dashboards")
 
+    @property
+    def link_standalone(self) -> str:
+        url = (self.link or "").strip()
+        if not url:
+            return ""
+        if "standalone=" in url:
+            return url
+        sep = "&" if "?" in url else "?"
+        return f"{url}{sep}standalone=1"
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.titulo)
+        if self.link and "standalone=" not in self.link:
+            sep = "&" if "?" in self.link else "?"
+            self.link = f"{self.link.strip()}{sep}standalone=1"
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
