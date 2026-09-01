@@ -3,7 +3,7 @@
 {% block extra_head %}
 {{ block.super }}
 <style>
-    /* Padrão base_painel: 100% largura horizontal e 100% altura vertical */
+    /* Padrão base_painel: 100% largura horizontal e altura responsiva ajustável */
     main.flex-grow-1 {
         display: flex;
         flex-direction: column;
@@ -23,19 +23,37 @@
     .painel-iframe-container {
         width: 100%;
         flex-grow: 1;
-        min-height: 85vh;
-        height: 100vh;
+        height: 78vh;
+        height: 78dvh;
+        min-height: 550px;
         border: 0;
         margin: 0;
         padding: 0;
         overflow: hidden;
         background-color: #ffffff;
+        -webkit-overflow-scrolling: touch;
     }
     .painel-iframe-container iframe {
         width: 100%;
         height: 100%;
         border: 0;
         display: block;
+    }
+
+    /* Responsividade para Tablets e Dispositivos Móveis */
+    @media (max-width: 992px) {
+        .painel-iframe-container {
+            height: 75vh;
+            height: 75dvh;
+            min-height: 480px;
+        }
+    }
+    @media (max-width: 576px) {
+        .painel-iframe-container {
+            height: 70vh;
+            height: 70dvh;
+            min-height: 400px;
+        }
     }
 </style>
 {% block painel_extra_head %}{% endblock %}
