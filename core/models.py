@@ -528,7 +528,7 @@ class Dashboard(TimeStampedModel):
     link = models.URLField(
         _("link / URL do iframe"),
         max_length=500,
-        help_text=_("URL pública do dashboard, ex: http://painel.provaconceito.tech/superset/dashboard/p/xOY1wMmwkZP/?standalone=1"),
+        help_text=_("URL pública do dashboard, ex: https://painel.provaconceito.tech/superset/dashboard/6e1ba906-05c6-4b95-a3d0-ee50fe1734c9/?permalink_key=xOY1wMmwkZP&standalone=1"),
     )
     icone = models.CharField(
         _("ícone (Bootstrap Icons)"),
