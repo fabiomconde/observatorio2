@@ -58,9 +58,9 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {% if 'biomas' in request.path or 'distritos' in request.path or 'colecoes' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dados &amp; Mapas</a>
+                            <a class="nav-link dropdown-toggle {% if 'biomas' in request.path or 'distritos' in request.path or 'colecoes' in request.path or 'dashboards' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dados &amp; Mapas</a>
                             <ul class="dropdown-menu">
-                                <!-- <li><a class="dropdown-item" href="{% url 'core:biomas' %}"><i class="bi bi-globe-americas"></i> Biomas</a></li> -->
+                                <li><a class="dropdown-item" href="{% url 'core:dashboards' %}"><i class="bi bi-bar-chart-line"></i> Dashboards &amp; Indicadores</a></li>
                                 <li><a class="dropdown-item" href="{% url 'core:distritos' %}"><i class="bi bi-geo-alt"></i> Distritos</a></li>
                                 <li><a class="dropdown-item" href="{% url 'core:colecoes' %}"><i class="bi bi-collection"></i> Coleções</a></li>
                                 <li><hr class="dropdown-divider"></li>

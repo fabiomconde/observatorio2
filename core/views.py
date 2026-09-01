@@ -16,6 +16,7 @@ from .models import (
     Bioma,
     CategoriaNoticia,
     Colecao,
+    Dashboard,
     Distrito,
     Faq,
     GrupoTrabalho,
@@ -383,8 +384,49 @@ def contato(request):
 
 
 # --------------------------------------------------------------------- #
+# Dashboards Públicos (Apache Superset)
+# --------------------------------------------------------------------- #
+def dashboards(request):
+    """Lista de dashboards de indicadores disponíveis publicamente."""
+    dashboards_list = Dashboard.objects.filter(ativo=True)
+    return render(
+        request,
+        "core/dashboards.html",
+        {"dashboards": dashboards_list},
+    )
+
+
+def dashboard_detalhe(request, pk):
+    """Exibe o dashboard selecionado pelo ID integrado ao layout do portal."""
+    dashboard = get_object_or_404(Dashboard, pk=pk, ativo=True)
+    outros = Dashboard.objects.filter(ativo=True).exclude(pk=dashboard.pk)[:5]
+    return render(
+        request,
+        "core/dashboard_detalhe.html",
+        {
+            "dashboard": dashboard,
+            "outros": outros,
+        },
+    )
+
+
+def dashboard_embed(request, pk):
+    """
+    Exibe SOMENTE o iframe do dashboard selecionado via ID.
+    Template minimalista e anônimo, sem navbar, header ou necessidade de autenticação.
+    """
+    dashboard = get_object_or_404(Dashboard, pk=pk, ativo=True)
+    return render(
+        request,
+        "core/dashboard_embed.html",
+        {"dashboard": dashboard},
+    )
+
+
+# --------------------------------------------------------------------- #
 # Error handlers
 # --------------------------------------------------------------------- #
+
 def error_404(request, exception=None):
     return render(request, "core/404.html", status=404)
 

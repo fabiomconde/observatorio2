@@ -11,6 +11,7 @@ from core.models import (
     Bioma,
     CategoriaNoticia,
     Colecao,
+    Dashboard,
     Distrito,
     Faq,
     GrupoTrabalho,
@@ -642,6 +643,21 @@ class Command(BaseCommand):
                 assunto="Interesse em parceria",
                 mensagem="Gostaríamos de conversar sobre uma possível parceria.",
             )
+
+        # ---- Dashboards -------------------------------------------------- #
+        Dashboard.objects.update_or_create(
+            id=1,
+            defaults=dict(
+                titulo="Dashboard de Dados Demográficos",
+                slug="dashboard-de-dados-demograficos",
+                descricao="Indicadores socioambientais e dados demográficos do município de Porto Velho/RO embutido via Apache Superset.",
+                link="http://painel.provaconceito.tech/superset/dashboard/p/xOY1wMmwkZP/?standalone=1",
+                icone="bi-people",
+                ordem=1,
+                destaque=True,
+                ativo=True,
+            ),
+        )
 
         self.stdout.write(self.style.SUCCESS("✅ Dados de demonstração prontos."))
         self.stdout.write(

@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ dashboard.titulo }}{% endblock %}
+
+{% block content %}
+<!-- Header da Página -->
+<section class="page-header py-4 bg-light border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'core:dashboards' %}">Dados &amp; Mapas</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'core:dashboards' %}">Dashboards</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ dashboard.titulo }}</li>
+            </ol>
+        </nav>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h1 class="fw-bold h2 mb-1">
+                    <i class="bi {{ dashboard.icone|default:'bi-bar-chart-line' }} text-primary me-2"></i>
+                    {{ dashboard.titulo }}
+                </h1>
+                {% if dashboard.descricao %}
+                <p class="text-muted mb-0">{{ dashboard.descricao }}</p>
+                {% endif %}
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'core:dashboard_embed' dashboard.pk %}" target="_blank" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-arrows-fullscreen"></i> Visualização Limpa / Anônima
+                </a>
+                <a href="{{ dashboard.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-box-arrow-up-right"></i> Abrir Original
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Conteúdo Principal - Iframe -->
+<div class="container py-4">
+    <div class="card border-0 shadow-sm overflow-hidden mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-semibold">
+                <i class="bi bi-circle-fill fs-6 me-1 text-success"></i> Painel Ativo
+            </span>
+            <small class="text-muted"><i class="bi bi-shield-check me-1"></i> Transmissão segura de dados públicos</small>
+        </div>
+        <div class="card-body p-0" style="position: relative; min-height: 700px;">
+            <iframe 
+                src="{{ dashboard.link }}" 
+                width="100%" 
+                height="750px" 
+                frameborder="0" 
+                scrolling="no"
+                style="border: 0; display: block; min-height: 750px;"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Outros Dashboards Disponíveis -->
+    {% if outros %}
+    <div class="mt-5">
+        <h4 class="fw-bold mb-3"><i class="bi bi-grid-1x2 text-primary me-2"></i>Outros Dashboards Públicos</h4>
+        <div class="row g-3">
+            {% for item in outros %}
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <div class="fs-3 text-primary"><i class="bi {{ item.icone|default:'bi-bar-chart-line' }}"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">{{ item.titulo }}</h6>
+                            <small class="text-muted">ID #{{ item.pk }}</small>
+                        </div>
+                    </div>
+                    <p class="small text-muted mb-3 flex-grow-1">{{ item.descricao|default:"Painel público de dados e estatísticas socioambientais."|truncatechars:90 }}</p>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'core:dashboard_detalhe' item.pk %}" class="btn btn-sm btn-primary w-100">Ver Dashboard</a>
+                        <a href="{% url 'core:dashboard_embed' item.pk %}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Modo Limpo"><i class="bi bi-arrows-fullscreen"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

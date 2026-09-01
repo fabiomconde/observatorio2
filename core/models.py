@@ -514,3 +514,42 @@ class MensagemContato(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.nome} <{self.email}> — {self.assunto}"
+
+
+# --------------------------------------------------------------------- #
+# Dashboards Públicos (Apache Superset ou outros iFrames)
+# --------------------------------------------------------------------- #
+class Dashboard(TimeStampedModel):
+    """Dashboards de indicadores públicos embutidos via iframe (ex: Apache Superset)."""
+
+    titulo = models.CharField(_("título"), max_length=150)
+    slug = models.SlugField(_("slug"), max_length=160, unique=True, blank=True)
+    descricao = models.TextField(_("descrição"), blank=True)
+    link = models.URLField(
+        _("link / URL do iframe"),
+        max_length=500,
+        help_text=_("URL pública do dashboard, ex: http://painel.provaconceito.tech/superset/dashboard/p/xOY1wMmwkZP/?standalone=1"),
+    )
+    icone = models.CharField(
+        _("ícone (Bootstrap Icons)"),
+        max_length=40,
+        default="bi-bar-chart-line",
+        blank=True,
+    )
+    ordem = models.PositiveIntegerField(_("ordem de exibição"), default=0)
+    destaque = models.BooleanField(_("destaque"), default=False)
+    ativo = models.BooleanField(_("ativo"), default=True)
+
+    class Meta:
+        ordering = ["ordem", "-criado_em"]
+        verbose_name = _("Dashboard")
+        verbose_name_plural = _("Dashboards")
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.titulo)
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.titulo
+

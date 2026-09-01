@@ -8,6 +8,7 @@ from .models import (
     Bioma,
     CategoriaNoticia,
     Colecao,
+    Dashboard,
     Distrito,
     Faq,
     GrupoTrabalho,
@@ -161,4 +162,14 @@ class MensagemContatoAdmin(admin.ModelAdmin):
     @admin.action(description="Marcar selecionadas como lidas")
     def marcar_como_lida(self, request, queryset):
         queryset.update(lida=True)
+
+
+@admin.register(Dashboard)
+class DashboardAdmin(admin.ModelAdmin):
+    list_display = ("titulo", "link", "ordem", "destaque", "ativo", "criado_em")
+    list_filter = ("ativo", "destaque")
+    search_fields = ("titulo", "descricao", "link")
+    prepopulated_fields = {"slug": ("titulo",)}
+    ordering = ("ordem", "-criado_em")
+
 

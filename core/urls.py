@@ -23,6 +23,10 @@ urlpatterns = [
     path("distritos/", views.distritos, name="distritos"),
     path("distritos/<slug:slug>/", views.distrito_detalhe, name="distrito_detalhe"),
     path("colecoes/", views.colecoes, name="colecoes"),
+    path("dashboards/", views.dashboards, name="dashboards"),
+    path("dashboards/<int:pk>/", views.dashboard_detalhe, name="dashboard_detalhe"),
+    path("dashboards/<int:pk>/embed/", views.dashboard_embed, name="dashboard_embed"),
+
 
     # Publicações
     path("publicacoes/", views.publicacoes, name="publicacoes"),

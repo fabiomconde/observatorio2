@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Dashboards & Indicadores{% endblock %}
+
+{% block content %}
+<!-- Header da Página -->
+<section class="page-header py-4 bg-light border-bottom">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Dados &amp; Mapas</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold h2 mb-1">Dashboards &amp; Indicadores Públicos</h1>
+        <p class="text-muted mb-0">Painéis interativos de monitoramento socioambiental, dados demográficos e estatísticas territoriais de Porto Velho/RO.</p>
+    </div>
+</section>
+
+<!-- Lista de Dashboards -->
+<div class="container py-5">
+    {% if dashboards %}
+    <div class="row g-4">
+        {% for dash in dashboards %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm transition-hover p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="fs-1 text-primary">
+                        <i class="bi {{ dash.icone|default:'bi-bar-chart-line' }}"></i>
+                    </div>
+                    {% if dash.destaque %}
+                    <span class="badge bg-warning text-dark fw-bold"><i class="bi bi-star-fill me-1"></i>Destaque</span>
+                    {% endif %}
+                </div>
+                <h4 class="fw-bold mb-2 text-dark">{{ dash.titulo }}</h4>
+                <p class="text-muted small mb-4 flex-grow-1">
+                    {{ dash.descricao|default:"Painel público de dados demográficos e indicadores de acompanhamento territorial." }}
+                </p>
+                <div class="d-flex gap-2 align-items-center">
+                    <a href="{% url 'core:dashboard_detalhe' dash.pk %}" class="btn btn-primary w-100 fw-semibold">
+                        <i class="bi bi-eye me-1"></i> Abrir Painel
+                    </a>
+                    <a href="{% url 'core:dashboard_embed' dash.pk %}" target="_blank" class="btn btn-outline-secondary" title="Modo Anônimo / Embed Limpo">
+                        <i class="bi bi-arrows-fullscreen"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="fs-1 text-muted mb-3"><i class="bi bi-bar-chart"></i></div>
+        <h4 class="fw-bold">Nenhum dashboard cadastrado no momento.</h4>
+        <p class="text-muted">Os painéis públicos de indicadores serão disponibilizados em breve.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
