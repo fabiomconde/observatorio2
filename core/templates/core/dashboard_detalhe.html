@@ -14,24 +14,33 @@
 {% endblock %}
 
 {% block painel_body %}
-<style>
-    /* Força o container do Bootstrap a não limitar a altura interna */
-    .painel-body-container { 
-        padding: 0 !important; 
-        overflow: hidden;
-    }
-</style>
+<div class="w-100 position-relative" style="overflow: hidden;">
+    <!-- Removido o height fixo do CSS; o JS vai controlar a altura real -->
+    <iframe
+        src="{{ url_dashboard|default:dashboard.link_standalone }}"
+        frameborder="0" 
+        style="width: 100%; min-height: 500px; display: block; border: none; transition: height 0.2s ease;"
+        scrolling="no"
+        id="superset-iframe"
+        allowfullscreen>
+    </iframe>
+</div>
 
-<iframe
-    src="{{ url_dashboard|default:dashboard.link_standalone }}"
-    frameborder="0" 
-    /* Subtrai os 57px do header do topo para encaixar perfeitamente sem criar rolagem na página principal */
-    style="width: 100%; height: calc(100vh - 57px); min-height: 600px; display: block; border: none;"
-    scrolling="no"
-    id="superset-iframe"
-    allowfullscreen>
-</iframe>
+<script>
+    // Escuta as mensagens enviadas pelo próprio Apache Superset dentro do iframe
+    window.addEventListener('message', function(event) {
+        // Verifica se a mensagem contém os dados de redimensionamento do dashboard
+        if (event.data && event.data.type === 'dashboard_height') {
+            const iframe = document.getElementById('superset-iframe');
+            if (iframe) {
+                // Ajusta a altura do iframe para o tamanho exato do conteúdo do Superset
+                iframe.style.height = event.data.height + 'px';
+            }
+        }
+    }, false);
+</script>
 {% endblock %}
+
 
 {% block painel_footer %}
 {% if outros %}
