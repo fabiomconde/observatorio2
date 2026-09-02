@@ -18,6 +18,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='dashboard',
             name='link',
-            field=models.URLField(help_text='URL pública do dashboard para Desktop, ex: https://painel.provaconceito.tech/superset/dashboard/.../?standalone=1', max_length=500, verbose_name='link / URL do iframe (Desktop)'),
+            field=models.URLField(help_text='URL pública do dashboard para Desktop, ex: https://painel.provaconceito.tech/superset/dashboard/.../?standalone=2', max_length=500, verbose_name='link / URL do iframe (Desktop)'),
         ),
     ]
