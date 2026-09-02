@@ -1,165 +1,33 @@
-{% extends 'core/base.html' %}
 {% load static %}
-
-{% block title %}{{ dashboard.titulo|default:"Dashboard" }} — {{ SITE_NAME }}{% endblock %}
-
-{% block extra_head %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-    /* Estilo do Modal */
-    .modal-overlay {
-        display: none; /* Escondido inicialmente */
-        position: fixed;
-        z-index: 10000; /* Fica acima de tudo */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.9); /* Fundo preto com opacidade */
-    }
-
-    /* Container do Iframe */
-    .modal-conteudo {
-        width: 100%;
-        height: 100%;
-    }
-
-    .modal-conteudo iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-    }
-
-    /* O Botão "X" no canto superior direito */
-    .botao-fechar {
-        position: absolute;
-        top: 15px;
-        right: 25px;
-        color: #ffffff;
-        font-size: 50px;
-        font-weight: bold;
-        cursor: pointer;
-        z-index: 10001; /* Fica acima do iframe */
-        transition: 0.3s;
-        line-height: 1;
-        user-select: none;
-    }
-
-    .botao-fechar:hover {
-        color: #ff4d4d; /* Muda para vermelho ao passar o mouse */
-    }
-
-    /* Impede o scroll do site principal quando o modal estiver aberto */
-    .no-scroll {
-        overflow: hidden;
-    }
-
-    /* Estilo do Botão de Gatilho */
-    .btn-visualizar {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.6rem;
-        padding: 0.85rem 1.75rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #ffffff;
-        background: linear-gradient(135deg, #1d4e89 0%, #0d3b66 100%);
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        box-shadow: 0 4px 14px rgba(13, 59, 102, 0.25);
-        transition: all 0.3s ease;
-    }
-
-    .btn-visualizar:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4e89 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(13, 59, 102, 0.35);
-        color: #ffffff;
-    }
-
-    .btn-visualizar:active {
-        transform: translateY(0);
-    }
-</style>
-{% endblock %}
-
-{% block content %}
-<section class="py-5 bg-light min-vh-75 d-flex align-items-center">
-    <div class="container text-center py-4">
-        <nav aria-label="breadcrumb" class="d-flex justify-content-center mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Início</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'core:dashboards' %}">Dashboards</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ dashboard.titulo|default:"Visualização" }}</li>
-            </ol>
-        </nav>
-        
-        <h1 class="fw-bold display-6 mb-3 text-dark">{{ dashboard.titulo|default:"Dashboard de Indicadores" }}</h1>
-        <p class="lead text-muted mx-auto mb-4" style="max-width: 700px;">
-            {{ dashboard.descricao|default:"Clique no botão abaixo para abrir a visualização limpa e imersiva do painel em tela cheia." }}
-        </p>
-
-        <!-- Botão que o usuário clica -->
-        <button class="btn-visualizar" onclick="abrirPainel()">
-            <i class="fas fa-expand"></i> Visualização Limpa / Anônima
-        </button>
-    </div>
-</section>
-
-<!-- Estrutura do Modal (Escondido por padrão) -->
-<div id="modalPainel" class="modal-overlay">
-    <!-- Botão de Fechar no canto superior direito -->
-    <span class="botao-fechar" onclick="fecharPainel()">&times;</span>
-    
-    <div class="modal-conteudo">
-        <iframe 
-            id="iframeSuperset" 
-            src="" 
-            frameborder="0">
-        </iframe>
-    </div>
-</div>
-
-<script>
-function abrirPainel() {
-    let urlDashboard = "{{ url_dashboard|escapejs }}";
-    if (urlDashboard) {
-        if (urlDashboard.includes("standalone=")) {
-            urlDashboard = urlDashboard.replace(/standalone=\d+/, "standalone=2");
-        } else {
-            urlDashboard += (urlDashboard.includes("?") ? "&" : "?") + "standalone=2";
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ dashboard.titulo|default:"Dashboard" }} — {{ SITE_NAME }}{% endblock %}</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; 
+            background-color: #f0f2f5;
         }
-    }
-    const modal = document.getElementById("modalPainel");
-    const iframe = document.getElementById("iframeSuperset");
 
-    // Define a URL do iframe e exibe o modal
-    iframe.src = urlDashboard;
-    modal.style.display = "block";
-    
-    // Trava a rolagem do site ao fundo
-    document.body.classList.add("no-scroll");
-}
-
-function fecharPainel() {
-    const modal = document.getElementById("modalPainel");
-    const iframe = document.getElementById("iframeSuperset");
-
-    // Limpa a URL do iframe (para parar de consumir dados/processamento)
-    iframe.src = "";
-    modal.style.display = "none";
-    
-    // Libera a rolagem do site
-    document.body.classList.remove("no-scroll");
-}
-
-// Opcional: Fechar se o usuário clicar na tecla 'ESC'
-document.addEventListener('keydown', function(event) {
-    if (event.key === "Escape") {
-        fecharPainel();
-    }
-});
-</script>
-{% endblock %}
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <iframe 
+        src="{{ url_dashboard }}" 
+        id="superset-frame"
+        allowfullscreen>
+    </iframe>
+</body>
+</html>

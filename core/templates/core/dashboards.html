@@ -40,9 +40,9 @@
                     <a href="{% url 'core:dashboard_detalhe' dash.pk %}" class="btn btn-primary w-100 fw-semibold">
                         <i class="bi bi-eye me-1"></i> Abrir Painel
                     </a>
-                    <a href="{% url 'core:dashboard_embed' dash.pk %}" target="_blank" class="btn btn-outline-secondary" title="Modo Anônimo / Embed Limpo">
+                    <button type="button" onclick="abrirPainelModal('{% url \'core:dashboard_embed\' dash.pk %}')" class="btn btn-outline-secondary" title="Visualização Limpa / Tela Cheia">
                         <i class="bi bi-arrows-fullscreen"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -56,4 +56,93 @@
     </div>
     {% endif %}
 </div>
+
+<!-- Estrutura do Modal Fullscreen -->
+<div id="modalPainel" class="modal-overlay">
+    <span class="botao-fechar" onclick="fecharPainel()">&times;</span>
+    <div class="modal-conteudo">
+        <iframe id="iframeSuperset" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
+
+<style>
+    /* Estilo do Modal Fullscreen */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+    }
+
+    .modal-conteudo {
+        width: 100%;
+        height: 100%;
+    }
+
+    .modal-conteudo iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .botao-fechar {
+        position: absolute;
+        top: 15px;
+        right: 25px;
+        color: #ffffff;
+        font-size: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 10001;
+        transition: 0.3s;
+        line-height: 1;
+        user-select: none;
+    }
+
+    .botao-fechar:hover {
+        color: #ff4d4d;
+    }
+
+    .no-scroll {
+        overflow: hidden;
+    }
+</style>
+
+<script>
+function abrirPainelModal(url) {
+    if (!url) return;
+    let urlDashboard = url;
+    if (urlDashboard.includes("standalone=")) {
+        urlDashboard = urlDashboard.replace(/standalone=\d+/, "standalone=2");
+    } else {
+        urlDashboard += (urlDashboard.includes("?") ? "&" : "?") + "standalone=2";
+    }
+    const modal = document.getElementById("modalPainel");
+    const iframe = document.getElementById("iframeSuperset");
+
+    iframe.src = urlDashboard;
+    modal.style.display = "block";
+    document.body.classList.add("no-scroll");
+}
+
+function fecharPainel() {
+    const modal = document.getElementById("modalPainel");
+    const iframe = document.getElementById("iframeSuperset");
+
+    iframe.src = "";
+    modal.style.display = "none";
+    document.body.classList.remove("no-scroll");
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === "Escape") {
+        fecharPainel();
+    }
+});
+</script>
 {% endblock %}
+
