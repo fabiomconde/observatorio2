@@ -12,6 +12,7 @@ from core.models import (
     Bioma,
     CategoriaNoticia,
     Colecao,
+    Dashboard,
     Distrito,
     Faq,
     GrupoTrabalho,
@@ -208,3 +209,31 @@ class PublicSiteTests(TestCase):
     def test_404_handler(self):
         r = self.client.get("/pagina-que-nao-existe/")
         self.assertEqual(r.status_code, 404)
+
+    def test_dashboard_save_and_device_urls(self):
+        # 1. Test save auto-formatting desktop and mobile links
+        dash = Dashboard.objects.create(
+            titulo="Painel Teste",
+            link="https://painel.tech/superset/dashboard/p/abc123desktop/",
+        )
+        self.assertIn("standalone=1", dash.link)
+        self.assertIn("standalone=2", dash.link_responsivo)
+        self.assertIn("show_filters=0", dash.link_responsivo)
+
+        # 2. Test desktop view rendering
+        r_desktop = self.client.get(
+            reverse("core:dashboard_detalhe", args=[dash.pk]),
+            HTTP_USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        )
+        self.assertEqual(r_desktop.status_code, 200)
+        self.assertContains(r_desktop, dash.link)
+
+        # 3. Test mobile view rendering
+        r_mobile = self.client.get(
+            reverse("core:dashboard_detalhe", args=[dash.pk]),
+            HTTP_USER_AGENT="Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1"
+        )
+        self.assertEqual(r_mobile.status_code, 200)
+        self.assertContains(r_mobile, "standalone=2")
+        self.assertContains(r_mobile, "show_filters=0")
+

@@ -400,11 +400,16 @@ def dashboard_detalhe(request, pk):
     """Exibe o dashboard selecionado pelo ID integrado ao layout do portal."""
     dashboard = get_object_or_404(Dashboard, pk=pk, ativo=True)
     outros = Dashboard.objects.filter(ativo=True).exclude(pk=dashboard.pk)[:5]
+
+    # Detecta se é celular ou tablet para utilizar a URL responsiva
+    url_dashboard = dashboard.get_url_for_request(request)
+
     return render(
         request,
         "core/dashboard_detalhe.html",
         {
             "dashboard": dashboard,
+            "url_dashboard": url_dashboard,
             "outros": outros,
         },
     )
@@ -416,10 +421,15 @@ def dashboard_embed(request, pk):
     Template minimalista e anônimo, sem navbar, header ou necessidade de autenticação.
     """
     dashboard = get_object_or_404(Dashboard, pk=pk, ativo=True)
+    url_dashboard = dashboard.get_url_for_request(request)
+
     return render(
         request,
         "core/dashboard_embed.html",
-        {"dashboard": dashboard},
+        {
+            "dashboard": dashboard,
+            "url_dashboard": url_dashboard,
+        },
     )
 
 

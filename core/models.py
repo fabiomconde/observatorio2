@@ -4,6 +4,7 @@ Domain models for the Observatório Socioambiental app.
 All entities used across the public site and the Django admin live here.
 """
 
+import re
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -516,6 +517,23 @@ class MensagemContato(TimeStampedModel):
         return f"{self.nome} <{self.email}> — {self.assunto}"
 
 
+def _format_mobile_url(url: str) -> str:
+    """Ajusta a URL para economizar espaço e otimizar a exibição em mobile: standalone=2 e show_filters=0."""
+    url = url.strip()
+    if not url:
+        return ""
+    if re.search(r"standalone=(1|true|0)", url):
+        url = re.sub(r"standalone=(1|true|0)", "standalone=2", url)
+    elif "standalone=" not in url:
+        sep = "&" if "?" in url else "?"
+        url = f"{url}{sep}standalone=2"
+
+    if "show_filters=" not in url:
+        sep = "&" if "?" in url else "?"
+        url = f"{url}{sep}show_filters=0"
+    return url
+
+
 # --------------------------------------------------------------------- #
 # Dashboards Públicos (Apache Superset ou outros iFrames)
 # --------------------------------------------------------------------- #
@@ -526,9 +544,16 @@ class Dashboard(TimeStampedModel):
     slug = models.SlugField(_("slug"), max_length=160, unique=True, blank=True)
     descricao = models.TextField(_("descrição"), blank=True)
     link = models.URLField(
-        _("link / URL do iframe"),
+        _("link / URL do iframe (Desktop)"),
         max_length=500,
-        help_text=_("URL pública do dashboard, ex: https://painel.provaconceito.tech/superset/dashboard/6e1ba906-05c6-4b95-a3d0-ee50fe1734c9/?permalink_key=xOY1wMmwkZP&standalone=1"),
+        help_text=_("URL pública do dashboard para Desktop, ex: https://painel.provaconceito.tech/superset/dashboard/.../?standalone=1"),
+    )
+    link_responsivo = models.URLField(
+        _("link / URL do iframe (Mobile)"),
+        max_length=500,
+        blank=True,
+        default="",
+        help_text=_("URL pública do dashboard para Mobile (ex: https://painel.provaconceito.tech/superset/dashboard/.../?standalone=2&show_filters=0). Se não preenchida, é gerada automaticamente no salvar."),
     )
     icone = models.CharField(
         _("ícone (Bootstrap Icons)"),
@@ -555,12 +580,28 @@ class Dashboard(TimeStampedModel):
         sep = "&" if "?" in url else "?"
         return f"{url}{sep}standalone=1"
 
+    def get_url_for_request(self, request) -> str:
+        """Retorna a URL adequada dependendo do dispositivo (Mobile/Tablet vs Desktop)."""
+        if hasattr(request, "user_agent") and (request.user_agent.is_mobile or request.user_agent.is_tablet):
+            return self.link_responsivo or self.link_standalone or self.link
+        return self.link_standalone or self.link
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.titulo)
-        if self.link and "standalone=" not in self.link:
-            sep = "&" if "?" in self.link else "?"
-            self.link = f"{self.link.strip()}{sep}standalone=1"
+
+        if self.link:
+            self.link = self.link.strip()
+            if "standalone=" not in self.link:
+                sep = "&" if "?" in self.link else "?"
+                self.link = f"{self.link}{sep}standalone=1"
+
+        if not self.link_responsivo:
+            if self.link:
+                self.link_responsivo = _format_mobile_url(self.link)
+        else:
+            self.link_responsivo = _format_mobile_url(self.link_responsivo)
+
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
