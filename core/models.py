@@ -594,7 +594,7 @@ class Dashboard(TimeStampedModel):
             self.link = self.link.strip()
             if "standalone=" not in self.link:
                 sep = "&" if "?" in self.link else "?"
-                self.link = f"{self.link}{sep}standalone=2
+                self.link = f"{self.link}{sep}standalone=2"
 
         if not self.link_responsivo:
             if self.link:
