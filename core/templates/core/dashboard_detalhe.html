@@ -59,8 +59,9 @@
                 </div>
                 <p class="small text-muted mb-3 flex-grow-1">{{ item.descricao|default:"Painel público de dados e estatísticas socioambientais."|truncatechars:90 }}</p>
                 <div class="d-flex gap-2">
-                    <a href="{% url 'core:dashboard_detalhe' item.pk %}" class="btn btn-sm btn-primary w-100">Ver Dashboard</a>
-                    <button type="button" onclick="abrirPainelModal('{{ item.link_standalone|default:item.link }}')" class="btn btn-sm btn-outline-secondary" title="Modo Limpo"><i class="bi bi-arrows-fullscreen"></i></button>
+                    <button type="button" onclick="abrirPainelModal('{{ item.link_standalone|default:item.link }}')" class="btn btn-sm btn-primary w-100 fw-semibold">
+                        <i class="bi bi-arrows-fullscreen me-1"></i> Abrir Dashboard
+                    </button>
                 </div>
             </div>
         </div>
