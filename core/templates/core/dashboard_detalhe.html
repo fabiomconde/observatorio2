@@ -14,9 +14,9 @@
 {% endblock %}
 
 {% block painel_body %}
-<iframe
-    src="{{ url_dashboard|default:dashboard.link_standalone }}"
-    frameborder="0"
+<iframe 
+    src="{{ url_dashboard|default:dashboard.link_standalone }}" 
+    frameborder="0" 
     style="width: 100%; min-height: 100vh; border: none;"
     scrolling="no"
     id="superset-iframe"

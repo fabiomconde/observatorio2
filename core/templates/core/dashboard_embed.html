@@ -5,10 +5,9 @@
 {% block content %}
 <iframe
     src="{{ url_dashboard|default:dashboard.link_standalone }}"
-    frameborder="0"
+    frameborder="0" 
     style="width: 100%; min-height: 100vh; border: none;"
     scrolling="no"
     id="superset-iframe"
-    allowfullscreen>
-</iframe>
+></iframe>
 {% endblock %}
