@@ -37,11 +37,8 @@
                     {{ dash.descricao|default:"Painel público de dados demográficos e indicadores de acompanhamento territorial." }}
                 </p>
                 <div class="d-flex gap-2 align-items-center">
-                    <a href="{% url 'core:dashboard_detalhe' dash.pk %}" class="btn btn-primary w-100 fw-semibold">
-                        <i class="bi bi-eye me-1"></i> Abrir Painel
-                    </a>
-                    <button type="button" onclick="abrirPainelModal('{% url 'core:dashboard_embed' dash.pk %}')" class="btn btn-outline-secondary" title="Visualização Limpa / Tela Cheia">
-                        <i class="bi bi-arrows-fullscreen"></i>
+                    <button type="button" onclick="abrirPainelModal('{% url 'core:dashboard_embed' dash.pk %}')" class="btn btn-outline-primary btn-sm fw-semibold shadow-sm text-center">
+                        <i class="bi bi-eye me-1"></i> Abrir Dashboard
                     </button>
                 </div>
             </div>
@@ -57,14 +54,12 @@
     {% endif %}
 </div>
 
-<!-- Estrutura do Modal Fullscreen -->
 <div id="modalPainel" class="modal-overlay">
     <span class="botao-fechar" onclick="fecharPainel()">&times;</span>
     <div class="modal-conteudo">
-        <iframe id="iframeSuperset" src="" frameborder="0" allowfullscreen></iframe>
+        <iframe id="iframeSupersetModal" src="" frameborder="0" allowfullscreen></iframe>
     </div>
 </div>
-
 <style>
     /* Estilo do Modal Fullscreen */
     .modal-overlay {
@@ -122,7 +117,7 @@ function abrirPainelModal(url) {
         urlDashboard += (urlDashboard.includes("?") ? "&" : "?") + "standalone=2";
     }
     const modal = document.getElementById("modalPainel");
-    const iframe = document.getElementById("iframeSuperset");
+    const iframe = document.getElementById("iframeSupersetModal");
 
     iframe.src = urlDashboard;
     modal.style.display = "block";
@@ -131,7 +126,7 @@ function abrirPainelModal(url) {
 
 function fecharPainel() {
     const modal = document.getElementById("modalPainel");
-    const iframe = document.getElementById("iframeSuperset");
+    const iframe = document.getElementById("iframeSupersetModal");
 
     iframe.src = "";
     modal.style.display = "none";
