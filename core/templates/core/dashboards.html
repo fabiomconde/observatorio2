@@ -37,7 +37,7 @@
                     {{ dash.descricao|default:"Painel público de dados demográficos e indicadores de acompanhamento territorial." }}
                 </p>
                 <div class="d-flex gap-2 align-items-center">
-                    <button type="button" onclick="abrirPainelModal('{{ dash.link_standalone|default:dash.link }}')" class="btn btn-primary w-100 fw-semibold">
+                    <button type="button" onclick="abrirPainelModal('{{ dash.link_standalone|default:dash.link }}', '{{ dash.link_responsivo|default:dash.link_standalone }}')" class="btn btn-primary w-100 fw-semibold">
                         <i class="bi bi-arrows-fullscreen me-1"></i> Abrir Dashboard
                     </button>
                 </div>
@@ -108,9 +108,11 @@
 </style>
 
 <script>
-function abrirPainelModal(url) {
-    if (!url) return;
-    let urlDashboard = url;
+function abrirPainelModal(urlDesktop, urlMobile) {
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    let urlDashboard = (isMobile && urlMobile) ? urlMobile : (urlDesktop || urlMobile);
+    if (!urlDashboard) return;
+
     if (urlDashboard.includes("standalone=")) {
         urlDashboard = urlDashboard.replace(/standalone=\d+/, "standalone=2");
     } else {

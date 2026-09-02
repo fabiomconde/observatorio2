@@ -4,7 +4,7 @@
 
 {% block painel_header %}
 <div class="container-fluid px-3 px-md-4 py-2 bg-light border-bottom d-flex flex-column flex-sm-row justify-content-sm-end align-items-stretch align-items-sm-center gap-2">
-    <button type="button" onclick="abrirPainelModal('{{ url_dashboard }}')" class="btn btn-outline-primary btn-sm fw-semibold shadow-sm text-center">
+    <button type="button" onclick="abrirPainelModal('{{ dashboard.link_standalone|default:dashboard.link }}', '{{ dashboard.link_responsivo|default:dashboard.link_standalone }}')" class="btn btn-outline-primary btn-sm fw-semibold shadow-sm text-center">
         <i class="bi bi-arrows-fullscreen me-1"></i> Visualização Limpa / Anônima
     </button>
     <a href="{{ url_dashboard|default:dashboard.link_standalone }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm fw-semibold shadow-sm text-center">
@@ -59,7 +59,7 @@
                 </div>
                 <p class="small text-muted mb-3 flex-grow-1">{{ item.descricao|default:"Painel público de dados e estatísticas socioambientais."|truncatechars:90 }}</p>
                 <div class="d-flex gap-2">
-                    <button type="button" onclick="abrirPainelModal('{{ item.link_standalone|default:item.link }}')" class="btn btn-sm btn-primary w-100 fw-semibold">
+                    <button type="button" onclick="abrirPainelModal('{{ item.link_standalone|default:item.link }}', '{{ item.link_responsivo|default:item.link_standalone }}')" class="btn btn-sm btn-primary w-100 fw-semibold">
                         <i class="bi bi-arrows-fullscreen me-1"></i> Abrir Dashboard
                     </button>
                 </div>
@@ -126,9 +126,11 @@
 </style>
 
 <script>
-function abrirPainelModal(url) {
-    if (!url) return;
-    let urlDashboard = url;
+function abrirPainelModal(urlDesktop, urlMobile) {
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    let urlDashboard = (isMobile && urlMobile) ? urlMobile : (urlDesktop || urlMobile);
+    if (!urlDashboard) return;
+
     if (urlDashboard.includes("standalone=")) {
         urlDashboard = urlDashboard.replace(/standalone=\d+/, "standalone=2");
     } else {
