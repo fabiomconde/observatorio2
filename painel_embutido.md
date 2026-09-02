@@ -1,49 +1,45 @@
 
-
 # 📊 Manual: Configuração de Dashboards Públicos no Superset
 
 Este guia abrange as camadas de configuração de arquivos, rede (proxy), permissões de banco de dados e segurança (RBAC).
 
 ## 1. Configuração do Superset (`superset_config.py`)
 
-No seu arquivo de configuração (mapeado no Docker), adicione ou ajuste as seguintes diretivas para permitir o acesso anônimo e a integração via Iframe.
+No seu arquivo de configuração, adicione ou ajuste as seguintes diretivas para permitir o acesso anônimo, integração via Iframe e **segurança avançada**.
 
 ```python
 # --- ACESSO ANÔNIMO ---
 AUTH_ROLE_PUBLIC = 'Public'
 PUBLIC_ROLE_LIKE = "Gamma"  # Herda permissões de visualização básicas
 
-# --- SEGURANÇA E IFRAME ---
+# --- SEGURANÇA ---
 ENABLE_PROXY_FIX = True
+CUSTOM_STACKTRACE = False  # Segurança: não mostra erros de código/logs para o usuário
 SESSION_COOKIE_SAMESITE = "None"
-SESSION_COOKIE_SECURE = True  # Obrigatório se usar HTTPS
+SESSION_COOKIE_SECURE = True 
 ENABLE_CORS = True
 CORS_OPTIONS = {
     "supports_credentials": True,
     "allow_headers": ["*"],
-    "resources": ["*"],
     "origins": ["https://observatorio.provaconceito.tech"]
 }
 
 # --- FEATURE FLAGS ---
 FEATURE_FLAGS = {
     "EMBEDDED_SUPERSET": True,
-    "DASHBOARD_RBAC": True  # Controle de acesso por Dashboard
+    "DASHBOARD_RBAC": True,
+    "MOBILE_CONSUMPTION_MODE": True # Empilha gráficos automaticamente em telas pequenas
 }
 
 # --- CSP (Content Security Policy) ---
 TALISMAN_CONFIG = {
     "content_security_policy": {
-        "frame-ancestors": [
-            "observatorio.provaconceito.tech",
-            "*.provaconceito.tech",
-            "self"
-        ]
+        "frame-ancestors": ["observatorio.provaconceito.tech", "*.provaconceito.tech", "self"]
     },
     "force_https": True,
 }
 
-# --- REMOÇÃO DE CABEÇALHOS RESTRITIVOS ---
+# --- HEADERS ---
 HTTP_HEADERS = {}
 OVERRIDE_HTTP_HEADERS = {
     "X-Frame-Options": "ALLOWALL",
@@ -55,92 +51,103 @@ OVERRIDE_HTTP_HEADERS = {
 
 ## 2. Ajuste no Proxy (Nginx Proxy Manager)
 
-Para evitar o erro **400 Bad Request** causado pelo tamanho excessivo dos cabeçalhos de permissão do Superset, ajuste o Host no NPM:
-
-1. Acesse o painel do **Nginx Proxy Manager**.
-2. Edite o Host do Superset (`painel.provaconceito.tech`).
-3. Vá na aba **Advanced** e cole as seguintes diretivas:
+Para evitar o erro **400 Bad Request** e permitir URLs longas de permissões, configure na aba **Advanced** do NPM:
 
 ```nginx
-# Aumenta os buffers para aceitar URLs e Headers gigantes (Resolve Erro 400)
 large_client_header_buffers 4 32k;
 proxy_buffer_size 128k;
 proxy_buffers 4 256k;
 proxy_busy_buffers_size 256k;
-
-# Timeouts para queries longas
 proxy_read_timeout 300;
-proxy_connect_timeout 300;
-proxy_send_timeout 300;
-
-# Informa ao Superset o protocolo original
 proxy_set_header X-Forwarded-Proto $scheme;
 ```
 
 ---
 
-## 3. Concessão de Permissões via CLI (Bypass de Interface)
+## 3. Blindagem de Segurança via CLI (Shell)
 
-Caso a interface de "Roles" esteja lenta ou inacessível, utilize o terminal para garantir que o papel `Public` tenha acesso aos dados.
+Para impedir que o usuário público clique nos títulos dos gráficos e seja encaminhado para a área de edição (Explore), execute o script de remoção de permissões:
 
-### Para dar acesso total (Apenas Testes - Perigoso):
 ```bash
 docker exec -it app_superset superset shell
-# Dentro do shell:
+```
+
+Dentro do shell, cole o código abaixo:
+
+```python
 from superset import db, security_manager
 role = security_manager.find_role("Public")
-perm = security_manager.find_permission_view_menu("all_datasource_access", "all_datasource_access")
-security_manager.add_permission_role(role, perm)
+
+# Lista de permissões que permitem navegar fora do Dashboard
+perms_para_remover = [
+    ("can_explore", "Superset"),
+    ("can_explore_json", "Superset"),
+    ("can_share_chart", "Superset"),
+    ("can_share_dashboard", "Superset")
+]
+
+for p_name, p_view in perms_para_remover:
+    perm = security_manager.find_permission_view_menu(p_name, p_view)
+    if perm:
+        security_manager.del_permission_role(role, perm)
+
 db.session.commit()
+print("--- Blindagem aplicada: Usuário público não pode mais explorar gráficos ---")
 exit()
 ```
 
-### Para remover acesso total e manter segurança:
-```python
-# Dentro do superset shell:
-security_manager.del_permission_role(role, perm)
-db.session.commit()
+---
+
+## 4. Estilização e Bloqueio de UI (CSS do Dashboard)
+
+Para garantir que os links nos títulos dos gráficos sejam desativados visualmente, aplique este CSS diretamente no Dashboard:
+
+1. No Dashboard, clique em **Edit Dashboard** -> `...` (Menu) -> **Edit CSS**.
+2. Cole o código:
+
+```css
+/* Desativa o clique nos títulos dos gráficos para evitar saída do dashboard */
+.slice_header .header-title a {
+    pointer-events: none;
+    cursor: default;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Esconde o botão de ações (três pontinhos) de cada gráfico */
+.slice_header .actions-trigger {
+    display: none !important;
+}
 ```
 
 ---
 
-## 4. Segurança e Refinamento (Modo Produção)
+## 5. Implementação do Iframe Responsivo
 
-Para garantir que o público veja apenas o que é autorizado:
+Para alternar entre dashboards Desktop e Mobile no Django, utilize a detecção de User-Agent e o parâmetro `standalone=2` (que remove bordas e títulos extras).
 
-### A. Atribuição de Role ao Dashboard
-1. Vá em **Dashboards** -> **Edit Properties**.
-2. No campo **Roles**, adicione o papel **Public**.
-3. Isso garante que o Dashboard específico seja visível para anônimos (RBAC).
-
-### B. Acesso Mínimo ao Dataset
-1. Vá em **Security** -> **List Roles** -> **Edit Public**.
-2. Remova `all_datasource_access`.
-3. Adicione apenas o dataset específico: `datasource access on [Nome_do_Banco].[Nome_da_Tabela]`.
-
-### C. Sincronização Final
-Sempre que alterar permissões ou o arquivo `superset_config.py`, reinicie e sincronize:
-```bash
-docker compose restart superset
-docker exec -it app_superset superset init
-```
-
----
-
-## 5. Implementação do Iframe
-
-Para embutir o dashboard no site `observatorio.provaconceito.tech`, utilize a URL de **Permalink** gerada pelo Superset com o parâmetro `standalone`:
-
+### Template Django:
 ```html
 <iframe
-  src="https://painel.provaconceito.tech/superset/dashboard/p/ID_DO_DASHBOARD/?standalone=true"
+  src="{{ url_dashboard }}&standalone=2"
   width="100%"
-  height="800px"
+  height="100%"
   frameborder="0"
+  style="min-height: 80vh;"
 ></iframe>
 ```
 
-**Benefícios desta configuração:**
-- **Invisibilidade:** O usuário anônimo não vê menus, barras de busca ou SQL Lab.
-- **Isolamento:** Somente domínios autorizados no `frame-ancestors` podem exibir o painel.
-- **Performance:** Buffers de proxy ajustados para evitar quedas em carregamentos pesados.
+---
+
+## 6. Sincronização e Manutenção
+
+Sempre que criar um novo dashboard, lembre-se de:
+1. Alterar para **Published**.
+2. Adicionar o papel **Public** em **Edit Properties** -> **Roles**.
+3. Rodar o comando de sincronização:
+
+```bash
+docker exec -it app_superset superset init
+```
+
+**Resultado:** O dashboard agora é um componente estético e funcional, sem barras de navegação, sem links clicáveis nos títulos e otimizado para dispositivos móveis.
