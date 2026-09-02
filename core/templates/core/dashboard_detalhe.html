@@ -14,16 +14,23 @@
 {% endblock %}
 
 {% block painel_body %}
+<style>
+    /* Força o container do Bootstrap a não limitar a altura interna */
+    .painel-body-container { 
+        padding: 0 !important; 
+        overflow: hidden;
+    }
+</style>
 
 <iframe
     src="{{ url_dashboard|default:dashboard.link_standalone }}"
     frameborder="0" 
-    style="width: 100%; height: 100vh; border: none; overflow: hidden;"
+    /* Subtrai os 57px do header do topo para encaixar perfeitamente sem criar rolagem na página principal */
+    style="width: 100%; height: calc(100vh - 57px); min-height: 600px; display: block; border: none;"
     scrolling="no"
     id="superset-iframe"
     allowfullscreen>
 </iframe>
-
 {% endblock %}
 
 {% block painel_footer %}

@@ -3,10 +3,21 @@
 {% block title %}{{ dashboard.titulo }}{% endblock %}
 
 {% block content %}
+<style>
+    /* Garante que a página do Django não crie rolagens fantasmas */
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+</style>
+
 <iframe
     src="{{ url_dashboard|default:dashboard.link_standalone }}"
     frameborder="0" 
-    style="width: 100%; height: 100vh; border: none; overflow: hidden;"
+    style="width: 100%; height: 100vh; display: block; border: none;"
     scrolling="no"
     id="superset-iframe"
 ></iframe>
+{% endblock %}
