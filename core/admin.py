@@ -18,6 +18,7 @@ from .models import (
     Parceiro,
     Pilar,
     Publicacao,
+    PublicacaoRedeSocial,
     Regiao,
     TermoGlossario,
     TipoPublicacao,
@@ -99,6 +100,58 @@ class NoticiaAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("titulo",)}
     date_hierarchy = "publicado_em"
     autocomplete_fields = ("categoria",)
+
+
+@admin.register(PublicacaoRedeSocial)
+class PublicacaoRedeSocialAdmin(admin.ModelAdmin):
+    list_display = (
+        "titulo",
+        "rede_social",
+        "perfil",
+        "publicado_em",
+        "destaque",
+        "ativo",
+    )
+    list_filter = ("rede_social", "destaque", "ativo", "publicado_em")
+    search_fields = ("titulo", "perfil", "legenda")
+    prepopulated_fields = {"slug": ("titulo",)}
+    date_hierarchy = "publicado_em"
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "titulo",
+                    "slug",
+                    "rede_social",
+                    "perfil",
+                    "link_postagem",
+                    "legenda",
+                )
+            },
+        ),
+        (
+            "Mídia / Imagem",
+            {
+                "fields": (
+                    "imagem",
+                    "imagem_url",
+                    "curtidas_texto",
+                )
+            },
+        ),
+        (
+            "Publicação & Visibilidade",
+            {
+                "fields": (
+                    "publicado_em",
+                    "destaque",
+                    "ativo",
+                    "ordem",
+                )
+            },
+        ),
+    )
 
 
 @admin.register(Faq)

@@ -77,6 +77,10 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link {% if 'divulgacao-popular' in request.path %}active{% endif %}" href="{% url 'core:redes_sociais' %}">Divulgação Popular</a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link {% if 'faq' in request.path %}active{% endif %}" href="{% url 'core:faq' %}">FAQ</a>
                         </li>
 

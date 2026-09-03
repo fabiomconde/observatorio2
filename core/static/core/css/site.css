@@ -696,3 +696,46 @@ h1, h2, h3, h4, h5, h6 {
     .stats-bar .stat-number { font-size: 1.6rem; }
     .header-search-form { margin: .5rem 0; }
 }
+
+/* =====================================================
+   DIVULGAÇÃO POPULAR / MÍDIAS SOCIAIS (Instagram & Facebook Mock)
+   ===================================================== */
+.social-post-card {
+    transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.25s ease;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+.social-post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12) !important;
+}
+.social-media-container {
+    background-color: #111;
+}
+.social-post-img {
+    transition: transform 0.4s ease;
+}
+.social-post-card:hover .social-post-img {
+    transform: scale(1.04);
+}
+.social-hover-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.social-media-container:hover .social-hover-overlay {
+    opacity: 1;
+}
+.social-caption {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: #495057;
+}
+.style-caption-box {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--cor-principal, #1d4e89);
+}

@@ -26,6 +26,7 @@ from .models import (
     Parceiro,
     Pilar,
     Publicacao,
+    PublicacaoRedeSocial,
     Regiao,
     TermoGlossario,
     TipoPublicacao,
@@ -38,6 +39,9 @@ from .models import (
 def home(request):
     """Landing page."""
     context = {
+        "redes_sociais": PublicacaoRedeSocial.objects.filter(ativo=True).order_by(
+            "-destaque", "-publicado_em", "-criado_em"
+        )[:4],
         "destaques": Noticia.objects.filter(ativo=True, destaque=True)
         .select_related("categoria")
         .order_by("-publicado_em")[:3],
@@ -285,6 +289,49 @@ def noticia_detalhe(request, slug):
         request,
         "core/noticia_detalhe.html",
         {"noticia": noticia, "relacionadas": relacionadas},
+    )
+
+
+# --------------------------------------------------------------------- #
+# Divulgação Popular (Mídias Sociais)
+# --------------------------------------------------------------------- #
+def redes_sociais(request):
+    qs = PublicacaoRedeSocial.objects.filter(ativo=True)
+    termo = request.GET.get("q", "").strip()
+    rede = request.GET.get("rede", "").strip()
+
+    if termo:
+        qs = qs.filter(
+            Q(titulo__icontains=termo)
+            | Q(legenda__icontains=termo)
+            | Q(perfil__icontains=termo)
+        )
+    if rede:
+        qs = qs.filter(rede_social=rede)
+
+    paginator = Paginator(qs, 9)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
+    context = {
+        "page_obj": page_obj,
+        "redes": PublicacaoRedeSocial.REDE_CHOICES,
+        "termo": termo,
+        "rede_ativa": rede,
+    }
+    return render(request, "core/redes_sociais.html", context)
+
+
+def rede_social_detalhe(request, slug):
+    post = get_object_or_404(PublicacaoRedeSocial, slug=slug, ativo=True)
+    relacionadas = (
+        PublicacaoRedeSocial.objects.filter(ativo=True)
+        .exclude(pk=post.pk)
+        .order_by("-publicado_em")[:3]
+    )
+    return render(
+        request,
+        "core/rede_social_detalhe.html",
+        {"post": post, "relacionadas": relacionadas},
     )
 
 

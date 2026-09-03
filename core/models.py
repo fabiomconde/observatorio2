@@ -380,6 +380,118 @@ class Noticia(TimeStampedModel):
 
 
 # --------------------------------------------------------------------- #
+# Divulgação Popular (Mídias Sociais)
+# --------------------------------------------------------------------- #
+class PublicacaoRedeSocial(TimeStampedModel):
+    """Postagens divulgadas em redes sociais (Instagram, Facebook, etc.)."""
+
+    REDE_CHOICES = [
+        ("instagram", "Instagram"),
+        ("facebook", "Facebook"),
+        ("youtube", "YouTube"),
+        ("tiktok", "TikTok"),
+        ("twitter", "X (Twitter)"),
+        ("outra", "Outra"),
+    ]
+
+    titulo = models.CharField(
+        _("título / assunto"),
+        max_length=200,
+        help_text=_("Título descritivo ou assunto principal da postagem."),
+    )
+    slug = models.SlugField(_("slug"), max_length=220, unique=True, blank=True)
+    rede_social = models.CharField(
+        _("rede social"),
+        max_length=20,
+        choices=REDE_CHOICES,
+        default="instagram",
+    )
+    perfil = models.CharField(
+        _("perfil / conta"),
+        max_length=100,
+        default="observa.pvh",
+        help_text=_("Nome do perfil nas redes (ex: observa.pvh)"),
+    )
+    legenda = models.TextField(
+        _("legenda da publicação"),
+        help_text=_("Legenda completa da publicação nas mídias sociais."),
+    )
+    imagem = models.ImageField(
+        _("imagem do post"),
+        upload_to="redes_sociais/",
+        blank=True,
+        null=True,
+        help_text=_("Upload da imagem ou card da postagem."),
+    )
+    imagem_url = models.URLField(
+        _("URL da imagem (opcional)"),
+        blank=True,
+        help_text=_("Link de imagem externa caso não envie arquivo."),
+    )
+    link_postagem = models.URLField(
+        _("link direto da publicação"),
+        help_text=_("URL direta para o post no Instagram ou Facebook."),
+    )
+    publicado_em = models.DateTimeField(_("publicado em"), null=True, blank=True)
+    curtidas_texto = models.CharField(
+        _("texto de interações/curtidas"),
+        max_length=150,
+        blank=True,
+        default="Curtido por outras pessoas",
+        help_text=_("ex: Curtido por denilsonsconde e outras 45 pessoas"),
+    )
+    destaque = models.BooleanField(_("destaque na home"), default=False)
+    ativo = models.BooleanField(_("ativo"), default=True)
+    ordem = models.PositiveIntegerField(_("ordem"), default=0)
+
+    class Meta:
+        ordering = ["-publicado_em", "-criado_em"]
+        verbose_name = _("Divulgação Popular (Rede Social)")
+        verbose_name_plural = _("Divulgação Popular (Mídias Sociais)")
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.titulo)[:200] or "post-rede-social"
+            slug = base
+            i = 1
+            while (
+                PublicacaoRedeSocial.objects.filter(slug=slug)
+                .exclude(pk=self.pk)
+                .exists()
+            ):
+                i += 1
+                slug = f"{base}-{i}"
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    @property
+    def get_imagem_url(self) -> str:
+        if self.imagem:
+            return self.imagem.url
+        if self.imagem_url:
+            return self.imagem_url
+        return ""
+
+    @property
+    def icone_rede(self) -> str:
+        icones = {
+            "instagram": "bi-instagram",
+            "facebook": "bi-facebook",
+            "youtube": "bi-youtube",
+            "tiktok": "bi-tiktok",
+            "twitter": "bi-twitter-x",
+        }
+        return icones.get(self.rede_social, "bi-share")
+
+    @property
+    def nome_rede(self) -> str:
+        return dict(self.REDE_CHOICES).get(self.rede_social, "Rede Social")
+
+    def __str__(self) -> str:
+        return f"{self.nome_rede}: {self.titulo}"
+
+
+# --------------------------------------------------------------------- #
 # FAQ
 # --------------------------------------------------------------------- #
 class Faq(TimeStampedModel):

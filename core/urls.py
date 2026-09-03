@@ -36,6 +36,10 @@ urlpatterns = [
     path("noticias/", views.noticias, name="noticias"),
     path("noticias/<slug:slug>/", views.noticia_detalhe, name="noticia_detalhe"),
 
+    # Divulgação Popular (Mídias Sociais)
+    path("divulgacao-popular/", views.redes_sociais, name="redes_sociais"),
+    path("divulgacao-popular/<slug:slug>/", views.rede_social_detalhe, name="rede_social_detalhe"),
+
     # Conteúdo
     path("faq/", views.faq, name="faq"),
     path("glossario/", views.glossario, name="glossario"),
