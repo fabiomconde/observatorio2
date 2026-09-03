@@ -218,7 +218,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero {
     background:
         linear-gradient(135deg, rgba(8, 28, 21, .92) 0%, rgba(27, 67, 50, .86) 50%, rgba(45, 106, 79, .78) 100%),
-        url('../img/topo.png') center/cover;
+        url('../img/topo2.jpg') center 65% / cover;
     color: white;
     padding: 90px 0 100px;
     position: relative;
