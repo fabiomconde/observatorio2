@@ -10,11 +10,12 @@
     --cor-destaque: #cd9e46;
     --cor-destaque-escuro: #b58838;
     --cor-sucesso: #40916c;
-    --cor-fundo: #f8f6f0;
+    --cor-fundo: #f8f5f5;
     --cor-fundo-alt: #ffffff;
     --cor-texto: #1c211e;
     --cor-muted: #57605b;
     --cor-borda: #dce0db;
+    --cor-fundo-home: #f8f6f0;
     --radius: 6px;
     --shadow-sm: 0 1px 2px rgba(27, 67, 50, 0.06);
     --shadow-md: 0 4px 12px rgba(27, 67, 50, 0.10);
@@ -146,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--cor-clara) !important;
     font-weight: 600;
 }
-.navbar-nav .nav-link.active::after {
+.navbar-nav .nav-link.active::before {
     content: "";
     position: absolute;
     left: .9rem; right: .9rem; bottom: .5rem;

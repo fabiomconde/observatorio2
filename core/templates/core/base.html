@@ -68,16 +68,13 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'publicacoes' in request.path %}active{% endif %}" href="{% url 'core:publicacoes' %}">Publicações</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'noticias' in request.path %}active{% endif %}" href="{% url 'core:noticias' %}">Notícias</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'divulgacao-popular' in request.path %}active{% endif %}" href="{% url 'core:redes_sociais' %}">Divulgação Popular</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if 'publicacoes' in request.path or 'noticias' in request.path or 'divulgacao-popular' in request.path %}active{% endif %}" href="#" data-bs-toggle="dropdown" aria-expanded="false">Publicações</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'core:publicacoes' %}"><i class="bi bi-journal-text"></i> Acadêmicas</a></li>
+                                <li><a class="dropdown-item" href="{% url 'core:noticias' %}"><i class="bi bi-newspaper"></i> Notícias</a></li>
+                                <li><a class="dropdown-item" href="{% url 'core:redes_sociais' %}"><i class="bi bi-share"></i> Divulgação Popular</a></li>
+                            </ul>
                         </li>
 
                         <li class="nav-item">
