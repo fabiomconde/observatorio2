@@ -20,7 +20,7 @@ urlpatterns = [
 urlpatterns += [
     path(
         "favicon.ico",
-        RedirectView.as_view(url=settings.STATIC_URL + "core/img/favicon.svg", permanent=True),
+        RedirectView.as_view(url=settings.STATIC_URL + "core/img/favicon.ico", permanent=True),
     ),
 ]
 
