@@ -164,6 +164,12 @@ class PublicSiteTests(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, "Coleção 9")
 
+    def test_painel_territorial(self):
+        r = self.client.get(reverse("core:painel_territorial"))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Painel Territorial")
+        self.assertContains(r, "distritos-table")
+
     def test_publicacoes(self):
         r = self.client.get(reverse("core:publicacoes"))
         self.assertEqual(r.status_code, 200)

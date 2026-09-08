@@ -207,6 +207,11 @@ def colecoes(request):
     return render(request, "core/colecoes.html", {"colecoes": colecoes})
 
 
+def painel_territorial(request):
+    """Página com mapa interativo dos distritos e indicadores territoriais."""
+    return render(request, "core/painel_territorial.html")
+
+
 # --------------------------------------------------------------------- #
 # Publicações
 # --------------------------------------------------------------------- #
