@@ -128,7 +128,9 @@
         </aside>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     const map = L.map('map').setView([-8.76, -63.90], 7);
@@ -138,12 +140,19 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    
     const workspace = 'geoportal';
     const layerName = 'distritos_porto_velho';
-    const wfsUrl = `http://localhost:8080/geoserver/${workspace}/ows?` +
+    
+    // CORREÇÃO 1: Definir a URL do GeoServer dinamicamente de acordo com o host atual
+    // Impede que o carregamento quebre quando acessado por outros computadores/produção
+    const geoserverHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:8080' 
+        : `http://${window.location.hostname}:8080`; // Ajuste para o IP correto do servidor em rede
+
+    // CORREÇÃO 2: Adicionado '&srsName=EPSG:4326' para garantir WGS 84 na resposta GeoJSON
+    const wfsUrl = `${geoserverHost}/geoserver/${workspace}/ows?` +
         `service=WFS&version=1.0.0&request=GetFeature&` +
-        `typeName=${workspace}:${layerName}&outputFormat=application/json`;
+        `typeName=${workspace}:${layerName}&outputFormat=application/json&srsName=EPSG:4326`;
 
     const layerGeoJsonList = {};
 
@@ -188,13 +197,21 @@
                 onEachFeature: function (feature, layer) {
                     const props = feature.properties || {};
                     const nome = props.nome_distrito || props.NM_DIST || 'Sem Nome';
-                    const populacao = props.populacao !== undefined ? Number(props.populacao).toLocaleString('pt-BR') : 'N/A';
-                    const area = props.area_km2 !== undefined ? Number(props.area_km2).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : 'N/A';
+                    
+                    // CORREÇÃO 3: Verificação de propriedades flexível para suportar diferentes fontes
+                    const populacao = props.populacao !== undefined && props.populacao !== null 
+                        ? Number(props.populacao).toLocaleString('pt-BR') 
+                        : 'N/A';
+                    const area = props.area_km2 !== undefined && props.area_km2 !== null 
+                        ? Number(props.area_km2).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) 
+                        : 'N/A';
 
                     layer.bindPopup(`
-                        <strong>Distrito:</strong> ${nome}<br>
-                        <strong>População:</strong> ${populacao} hab.<br>
-                        <strong>Área:</strong> ${area} km²
+                        <div style="font-size: 0.95rem; line-height: 1.4;">
+                            <strong>Distrito:</strong> ${nome}<br>
+                            <strong>População:</strong> ${populacao} hab.<br>
+                            <strong>Área:</strong> ${area} km²
+                        </div>
                     `);
 
                     layerGeoJsonList[nome] = layer;
@@ -209,7 +226,7 @@
         .catch((error) => {
             console.error('Erro ao carregar dados do GeoServer:', error);
             const tabela = document.querySelector('#distritos-table tbody');
-            tabela.innerHTML = '<tr><td colspan="3">Não foi possível carregar os dados geográficos do GeoServer. Verifique se o GeoServer está ativo e se o CORS está habilitado.</td></tr>';
+            tabela.innerHTML = '<tr><td colspan="3" class="text-danger text-center py-4">Não foi possível carregar os dados geográficos do GeoServer. Verifique se o GeoServer está ativo e se o CORS está habilitado.</td></tr>';
         });
 </script>
 {% endblock %}
