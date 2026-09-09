@@ -138,8 +138,8 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const workspace = 'meu_workspace';
-    const layerName = 'geoportal';
+    const workspace = 'geoportal';
+    const layerName = 'distritos_porto_velho';
     const wfsUrl = `http://localhost:8080/geoserver/${workspace}/ows?` +
         `service=WFS&version=1.0.0&request=GetFeature&` +
         `typeName=${workspace}:${layerName}&outputFormat=application/json`;
