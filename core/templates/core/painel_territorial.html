@@ -91,6 +91,8 @@
             }
         }
     </style>
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
 {% endblock %}
 
 {% block content %}
@@ -137,7 +139,8 @@
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
+        attribution: '&copy; OpenStreetMap contributors',
+        referrerPolicy: 'no-referrer-when-downgrade'
     }).addTo(map);
 
     const workspace = 'geoportal';
