@@ -5,8 +5,12 @@ Each view is a thin wrapper that fetches data from the ORM and delegates
 rendering to a template. There is no business logic here.
 """
 
+import secrets
+
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
+from django.core.validators import validate_email
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -412,6 +416,12 @@ def busca(request):
     )
 
 
+def _generate_contact_challenge(request):
+    token = secrets.token_urlsafe(32)
+    request.session["contact_challenge"] = token
+    return token
+
+
 # --------------------------------------------------------------------- #
 # Contato
 # --------------------------------------------------------------------- #
@@ -422,17 +432,61 @@ def contato(request):
         email = (request.POST.get("email") or "").strip()
         assunto = (request.POST.get("assunto") or "").strip()
         mensagem_texto = (request.POST.get("mensagem") or "").strip()
+        website = (request.POST.get("website") or "").strip()
+        human_verification = request.POST.get("human_verification")
+        challenge_token = (request.POST.get("challenge_token") or "").strip()
+        stored_token = request.session.get("contact_challenge")
+
+        if website or not human_verification or not stored_token or challenge_token != stored_token:
+            request.session["contact_challenge"] = secrets.token_urlsafe(32)
+            messages.error(
+                request,
+                "Validação de segurança falhou. Verifique os campos e tente novamente.",
+            )
+            return render(
+                request,
+                "core/contato.html",
+                {"challenge_token": request.session.get("contact_challenge")},
+            )
 
         if not (nome and email and assunto and mensagem_texto):
             messages.error(request, "Por favor, preencha todos os campos.")
-        else:
-            MensagemContato.objects.create(
-                nome=nome, email=email, assunto=assunto, mensagem=mensagem_texto
+            return render(
+                request,
+                "core/contato.html",
+                {"challenge_token": _generate_contact_challenge(request)},
             )
-            messages.success(request, "Mensagem enviada! Em breve entraremos em contato.")
-            return redirect(reverse("core:contato") + "?ok=1")
 
-    return render(request, "core/contato.html")
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, "Informe um e-mail válido.")
+            return render(
+                request,
+                "core/contato.html",
+                {"challenge_token": _generate_contact_challenge(request)},
+            )
+
+        if len(mensagem_texto) < 10:
+            messages.error(request, "A mensagem deve ter pelo menos 10 caracteres.")
+            return render(
+                request,
+                "core/contato.html",
+                {"challenge_token": _generate_contact_challenge(request)},
+            )
+
+        MensagemContato.objects.create(
+            nome=nome, email=email, assunto=assunto, mensagem=mensagem_texto
+        )
+        request.session.pop("contact_challenge", None)
+        messages.success(request, "Mensagem enviada! Em breve entraremos em contato.")
+        return redirect(reverse("core:contato") + "?ok=1")
+
+    return render(
+        request,
+        "core/contato.html",
+        {"challenge_token": _generate_contact_challenge(request)},
+    )
 
 
 # --------------------------------------------------------------------- #

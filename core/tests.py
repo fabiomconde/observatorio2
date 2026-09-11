@@ -199,16 +199,51 @@ class PublicSiteTests(TestCase):
         self.assertContains(r, "Fale conosco")
 
     def test_contato_post_ok(self):
+        response = self.client.get(reverse("core:contato"))
+        challenge = self.client.session.get("contact_challenge")
+        self.assertIsNotNone(challenge)
+        self.assertContains(response, "challenge_token")
+
         data = {
-            "nome": "Maria", "email": "maria@x.org",
-            "assunto": "Oi", "mensagem": "Olá!",
+            "nome": "Maria",
+            "email": "maria@x.org",
+            "assunto": "Oi",
+            "mensagem": "Olá! Esta é uma mensagem válida para teste.",
+            "human_verification": "on",
+            "challenge_token": challenge,
         }
         r = self.client.post(reverse("core:contato"), data)
         self.assertEqual(r.status_code, 302)
         self.assertEqual(MensagemContato.objects.count(), 1)
 
     def test_contato_post_invalido(self):
-        r = self.client.post(reverse("core:contato"), {"nome": "", "email": ""})
+        response = self.client.get(reverse("core:contato"))
+        challenge = self.client.session.get("contact_challenge")
+
+        r = self.client.post(
+            reverse("core:contato"),
+            {"nome": "", "email": "", "challenge_token": challenge},
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(MensagemContato.objects.count(), 0)
+        self.assertContains(response, "Fale conosco")
+
+    def test_contato_post_bot(self):
+        self.client.get(reverse("core:contato"))
+        challenge = self.client.session.get("contact_challenge")
+
+        r = self.client.post(
+            reverse("core:contato"),
+            {
+                "nome": "Bot",
+                "email": "bot@evil.com",
+                "assunto": "Spam",
+                "mensagem": "Mensagem automática",
+                "website": "https://evil.example",
+                "human_verification": "off",
+                "challenge_token": challenge,
+            },
+        )
         self.assertEqual(r.status_code, 200)
         self.assertEqual(MensagemContato.objects.count(), 0)
 
