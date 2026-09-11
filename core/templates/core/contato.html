@@ -35,19 +35,19 @@
                         <textarea name="mensagem" rows="6" class="form-control" required></textarea>
                     </div>
                     <div class="col-12">
-                        <div class="border rounded-4 p-3 bg-light" style="border: 1px solid #dbe4f0 !important; background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);">
+                        <div class="rounded-4 p-3" style="border: 2px solid #e3a850; background: linear-gradient(180deg, #fffaf2 0%, #fff2d9 100%); box-shadow: inset 0 0 0 1px rgba(227, 168, 80, 0.15);">
                             <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="rounded-circle border border-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: #fff; color: var(--bs-primary); font-weight: 700;">
+                                    <div class="rounded-circle border d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: #fff; border-color: #d28d2f; color: #9b5f00; font-weight: 800; box-shadow: 0 0 0 2px rgba(210, 141, 47, 0.12);">
                                         <i class="bi bi-shield-check"></i>
                                     </div>
                                     <div>
-                                        <div class="small text-uppercase fw-bold text-secondary mb-1">Verificação humana</div>
-                                        <div class="fw-semibold text-dark">Qual é o resultado de {{ captcha_prompt|default:'7 + 3' }}?</div>
+                                        <div class="small text-uppercase fw-bold mb-1" style="color: #8e5b00; letter-spacing: 0.08em;">Verificação humana</div>
+                                        <div class="fw-bold" style="color: #2f2d2a; font-size: 1.02rem;">Qual é o resultado de {{ captcha_prompt|default:'7 + 3' }}?</div>
                                     </div>
                                 </div>
-                                <div style="min-width: 120px;">
-                                    <input type="number" name="captcha_answer" class="form-control text-center" placeholder="Resposta" inputmode="numeric" required>
+                                <div style="min-width: 140px;">
+                                    <input type="number" name="captcha_answer" class="form-control text-center" placeholder="Digite o resultado" inputmode="numeric" required style="border: 1.5px solid #d69a42; background: #fffdf9; color: #1f1f1f; font-weight: 600;">
                                 </div>
                             </div>
                         </div>
