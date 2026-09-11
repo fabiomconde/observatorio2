@@ -33,6 +33,37 @@ body {
     font-size: 16px;
 }
 
+.alert {
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(27, 67, 50, 0.08);
+}
+
+.alert-success {
+    background: linear-gradient(180deg, #edfdf6 0%, #ddf7ea 100%);
+    border-color: #9bd3b0;
+    color: #184b37;
+}
+
+.alert-info {
+    background: linear-gradient(180deg, #eef7ff 0%, #dfeeff 100%);
+    border-color: #a8c8ec;
+    color: #1d4668;
+}
+
+.alert-danger {
+    background: linear-gradient(180deg, #fff3f3 0%, #ffe1e1 100%);
+    border-color: #eb9a9a;
+    color: #7b1f1f;
+}
+
+.alert-warning {
+    background: linear-gradient(180deg, #fff9eb 0%, #ffeec4 100%);
+    border-color: #e9c66d;
+    color: #6e4d00;
+}
+
 a { color: var(--cor-clara); text-decoration: none; transition: color .15s; }
 a:hover { color: var(--cor-destaque); }
 
