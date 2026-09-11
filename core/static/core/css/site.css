@@ -34,10 +34,14 @@ body {
 }
 
 .alert {
-    border-radius: 12px;
-    border: 1px solid transparent;
+    --bs-alert-bg: rgba(223, 17, 17, 0.55);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     font-weight: 600;
-    box-shadow: 0 6px 18px rgba(27, 67, 50, 0.08);
+    box-shadow: 0 12px 28px rgba(27, 67, 50, 0.08);
+    padding: 1.2rem 1.3rem;
+    font-size: 1.05rem;
+    line-height: 1.45;
 }
 
 .alert-success {
@@ -53,9 +57,21 @@ body {
 }
 
 .alert-danger {
-    background: linear-gradient(180deg, #fff3f3 0%, #ffe1e1 100%);
-    border-color: #eb9a9a;
-    color: #7b1f1f;
+    background: var(--bs-alert-bg);
+    border-color: rgba(185, 7, 7, 0.7);
+    color: #ffffff;
+    min-height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.alert-danger .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 1;
+    flex-shrink: 0;
+    margin-left: auto;
 }
 
 .alert-warning {
