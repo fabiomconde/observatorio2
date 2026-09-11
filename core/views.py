@@ -419,6 +419,10 @@ def busca(request):
 def _generate_contact_challenge(request):
     token = secrets.token_urlsafe(32)
     request.session["contact_challenge"] = token
+    number_a = secrets.randbelow(9) + 2
+    number_b = secrets.randbelow(9) + 2
+    request.session["contact_captcha_answer"] = str(number_a + number_b)
+    request.session["contact_captcha_text"] = f"{number_a} + {number_b}"
     return token
 
 
@@ -433,11 +437,12 @@ def contato(request):
         assunto = (request.POST.get("assunto") or "").strip()
         mensagem_texto = (request.POST.get("mensagem") or "").strip()
         website = (request.POST.get("website") or "").strip()
-        human_verification = request.POST.get("human_verification")
         challenge_token = (request.POST.get("challenge_token") or "").strip()
+        captcha_answer = (request.POST.get("captcha_answer") or "").strip()
         stored_token = request.session.get("contact_challenge")
+        stored_captcha_answer = request.session.get("contact_captcha_answer")
 
-        if website or not human_verification or not stored_token or challenge_token != stored_token:
+        if website or not stored_token or challenge_token != stored_token:
             request.session["contact_challenge"] = secrets.token_urlsafe(32)
             messages.error(
                 request,
@@ -446,46 +451,72 @@ def contato(request):
             return render(
                 request,
                 "core/contato.html",
-                {"challenge_token": request.session.get("contact_challenge")},
+                {"challenge_token": request.session.get("contact_challenge"), "captcha_prompt": request.session.get("contact_captcha_text")},
             )
 
-        if not (nome and email and assunto and mensagem_texto):
-            messages.error(request, "Por favor, preencha todos os campos.")
+        if not captcha_answer or str(captcha_answer).strip() != str(stored_captcha_answer or ""):
+            request.session["contact_challenge"] = secrets.token_urlsafe(32)
+            messages.error(request, "A validação humana falhou. Resolva a conta de segurança e tente novamente.")
             return render(
                 request,
                 "core/contato.html",
-                {"challenge_token": _generate_contact_challenge(request)},
+                {"challenge_token": request.session.get("contact_challenge"), "captcha_prompt": request.session.get("contact_captcha_text")},
+            )
+
+        missing_fields = []
+        if not nome:
+            missing_fields.append("nome")
+        if not email:
+            missing_fields.append("e-mail")
+        if not assunto:
+            missing_fields.append("assunto")
+        if not mensagem_texto:
+            missing_fields.append("mensagem")
+
+        if missing_fields:
+            messages.error(
+                request,
+                "Preenchimento incompleto: verifique os campos obrigatórios antes de enviar."
+                f" Campos faltando: {', '.join(missing_fields)}.",
+            )
+            return render(
+                request,
+                "core/contato.html",
+                {"challenge_token": _generate_contact_challenge(request), "captcha_prompt": request.session.get("contact_captcha_text")},
             )
 
         try:
             validate_email(email)
         except ValidationError:
-            messages.error(request, "Informe um e-mail válido.")
+            messages.error(request, "O e-mail informado não parece válido. Verifique o endereço e tente novamente.")
             return render(
                 request,
                 "core/contato.html",
-                {"challenge_token": _generate_contact_challenge(request)},
+                {"challenge_token": _generate_contact_challenge(request), "captcha_prompt": request.session.get("contact_captcha_text")},
             )
 
         if len(mensagem_texto) < 10:
-            messages.error(request, "A mensagem deve ter pelo menos 10 caracteres.")
+            messages.error(request, "A mensagem deve ter pelo menos 10 caracteres para ser enviada.")
             return render(
                 request,
                 "core/contato.html",
-                {"challenge_token": _generate_contact_challenge(request)},
+                {"challenge_token": _generate_contact_challenge(request), "captcha_prompt": request.session.get("contact_captcha_text")},
             )
 
         MensagemContato.objects.create(
             nome=nome, email=email, assunto=assunto, mensagem=mensagem_texto
         )
         request.session.pop("contact_challenge", None)
+        request.session.pop("contact_captcha_answer", None)
+        request.session.pop("contact_captcha_text", None)
         messages.success(request, "Mensagem enviada! Em breve entraremos em contato.")
         return redirect(reverse("core:contato") + "?ok=1")
 
+    challenge_token = _generate_contact_challenge(request)
     return render(
         request,
         "core/contato.html",
-        {"challenge_token": _generate_contact_challenge(request)},
+        {"challenge_token": challenge_token, "captcha_prompt": request.session.get("contact_captcha_text")},
     )
 
 
