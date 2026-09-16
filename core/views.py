@@ -62,6 +62,10 @@ def home(request):
         .order_by("-publicado_em")[:6],
         "parceiros": Parceiro.objects.filter(ativo=True)[:12],
         "tipos_publicacao": TipoPublicacao.objects.all(),
+        "distritos_total": Distrito.objects.filter(ativo=True).count(),
+        "eixos_total": GrupoTrabalho.objects.filter(ativo=True).count(),
+        "publicacoes_total": Publicacao.objects.filter(ativo=True).count(),
+        "dashboards_total": Dashboard.objects.filter(ativo=True).count(),
     }
     return render(request, "core/home.html", context)
 
