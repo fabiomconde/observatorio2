@@ -1,28 +1,34 @@
 {% extends 'core/base.html' %}
-{% load static humanize %}
+{% load static humanize ui_icons %}
 
 {% block title %}Início{% endblock %}
 
 {% block content %}
-<!-- ===================== HERO ===================== -->
 <section class="hero">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-9">
-                <span class="hero-eyebrow"><i class="bi bi-globe-americas"></i> Ciência aberta · Dados públicos</span>
+        <div class="row align-items-center">
+            <div class="col-lg-9 col-xl-8">
+                <span class="hero-eyebrow"><i class="bi bi-globe-americas" aria-hidden="true"></i> Ciência aberta · Dados públicos</span>
                 <h1 class="mb-3">Observatório de Conflitos Socioambientais e Direitos Humanos</h1>
-                <p class="lead mb-4">Transformar dados dispersos em conhecimento socialmente relevante e útil ao controle social e às políticas públicas.</p>
+                <p class="lead mb-4">Transformamos dados dispersos em conhecimento territorial acessível para pesquisa, participação social e políticas públicas.</p>
                 <form class="hero-search" action="{% url 'core:busca' %}" method="get" role="search">
-                    <input class="form-control" type="search" name="q" placeholder="Buscar por mapas, relatórios, notícias…">
-                    <button type="submit"><i class="bi bi-search"></i> Buscar</button>
+                    <input class="form-control" type="search" name="q" placeholder="Buscar mapas, relatórios, notícias…" aria-label="Buscar no Observatório">
+                    <button type="submit"><i class="bi bi-search" aria-hidden="true"></i> Buscar</button>
                 </form>
+                <div class="hero-actions" aria-label="Acessos rápidos">
+                    <a class="btn btn-light fw-semibold" href="{% url 'core:dashboards' %}">
+                        {% ui_icon 'chart' 20 %} Explorar indicadores
+                    </a>
+                    <a class="btn btn-outline-light fw-semibold" href="{% url 'core:painel_territorial' %}">
+                        {% ui_icon 'map' 20 %} Abrir mapa territorial
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ===================== STATS BAR ===================== -->
-<section class="stats-bar">
+<section class="stats-bar" aria-label="Números do Observatório">
     <div class="container">
         <div class="row text-center text-lg-start">
             <div class="col-6 col-md-3">
@@ -45,8 +51,6 @@
     </div>
 </section>
 
-
-<!-- ===================== EIXOS TEMÁTICOS ===================== -->
 {% if grupos %}
 <section class="py-5 bg-white">
     <div class="container">
@@ -57,7 +61,7 @@
                 <p class="text-muted mb-0">Conheça os eixos de pesquisa do observatório.</p>
             </div>
             <a href="{% url 'core:grupos' %}" class="btn btn-outline-primary btn-sm">
-                Ver todos <i class="bi bi-arrow-right"></i>
+                Ver todos <i class="bi bi-arrow-right" aria-hidden="true"></i>
             </a>
         </div>
         <div class="row g-3">
@@ -65,7 +69,7 @@
             <div class="col-md-6 col-lg-4 col-xl-3">
                 <a href="{% url 'core:grupo_detalhe' g.slug %}" class="text-decoration-none text-dark">
                     <div class="gt-card" style="--gt-cor: {{ g.cor }};">
-                        <div class="gt-icon"><i class="bi {{ g.icone|default:'bi-diagram-3' }}"></i></div>
+                        <div class="gt-icon"><i class="bi {{ g.icone|default:'bi-diagram-3' }}" aria-hidden="true"></i></div>
                         <h5>{{ g.titulo }}</h5>
                         <p>{{ g.descricao_curta|default:g.descricao|truncatechars:120 }}</p>
                         {% if g.coordenador %}<div class="gt-coord">Coord.: {{ g.coordenador }}</div>{% endif %}
@@ -78,7 +82,6 @@
 </section>
 {% endif %}
 
-<!-- ===================== COLEÇÃO EM DESTAQUE + ÚLTIMAS PUBLICAÇÕES ===================== -->
 <section class="py-5" style="background: var(--cor-fundo-home);">
     <div class="container">
         <div class="row g-4">
@@ -94,18 +97,18 @@
                         <h3 class="fw-bold mb-2" style="color: var(--cor-escura);">{{ colecao_destaque.nome }}</h3>
                         <p class="text-muted">{{ colecao_destaque.resumo|truncatechars:180 }}</p>
                         <ul class="list-unstyled text-muted small">
-                            <li class="mb-1"><i class="bi bi-calendar-range text-primary"></i>
+                            <li class="mb-1"><i class="bi bi-calendar-range text-primary" aria-hidden="true"></i>
                                 Cobertura: <strong>{{ colecao_destaque.ano_inicio }}–{{ colecao_destaque.ano_fim }}</strong>
                                 ({{ colecao_destaque.anos_cobertura }} anos)
                             </li>
                             {% if colecao_destaque.lancado_em %}
-                            <li><i class="bi bi-rocket-takeoff text-primary"></i>
+                            <li><i class="bi bi-rocket-takeoff text-primary" aria-hidden="true"></i>
                                 Lançada em {{ colecao_destaque.lancado_em|date:"d/m/Y" }}
                             </li>
                             {% endif %}
                         </ul>
                         <a href="{% url 'core:colecoes' %}" class="btn btn-primary mt-3">
-                            Ver todas as coleções <i class="bi bi-arrow-right"></i>
+                            Ver todas as coleções <i class="bi bi-arrow-right" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
@@ -115,19 +118,19 @@
             <div class="{% if colecao_destaque %}col-lg-7{% else %}col-12{% endif %}">
                 <div class="d-flex justify-content-between align-items-end mb-3">
                     <h2 class="section-title mb-0">Últimas publicações</h2>
-                    <a href="{% url 'core:publicacoes' %}" class="btn btn-outline-primary btn-sm">Ver todas <i class="bi bi-arrow-right"></i></a>
+                    <a href="{% url 'core:publicacoes' %}" class="btn btn-outline-primary btn-sm">Ver todas <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                 </div>
                 <div class="row g-3">
                     {% for pub in ultimas_publicacoes %}
                     <div class="col-md-6">
                         <a href="{% url 'core:publicacao_detalhe' pub.slug %}" class="text-decoration-none text-dark">
                             <div class="pub-card" style="--pub-cor: {{ pub.tipo.cor }};">
-                                <span class="pub-type"><i class="bi {{ pub.tipo.icone|default:'bi-file-earmark-text' }}"></i> {{ pub.tipo.nome }}</span>
+                                <span class="pub-type"><i class="bi {{ pub.tipo.icone|default:'bi-file-earmark-text' }}" aria-hidden="true"></i> {{ pub.tipo.nome }}</span>
                                 <div class="pub-title">{{ pub.titulo }}</div>
                                 <div class="pub-summary">{{ pub.resumo|truncatechars:130 }}</div>
                                 <div class="pub-meta">
-                                    {% if pub.publicado_em %}<span><i class="bi bi-calendar3"></i> {{ pub.publicado_em|date:"d/m/Y" }}</span>{% endif %}
-                                    {% if pub.arquivo or pub.link_externo %}<span><i class="bi bi-download"></i> Disponível</span>{% endif %}
+                                    {% if pub.publicado_em %}<span><i class="bi bi-calendar3" aria-hidden="true"></i> {{ pub.publicado_em|date:"d/m/Y" }}</span>{% endif %}
+                                    {% if pub.arquivo or pub.link_externo %}<span><i class="bi bi-download" aria-hidden="true"></i> Disponível</span>{% endif %}
                                 </div>
                             </div>
                         </a>
@@ -139,7 +142,6 @@
     </div>
 </section>
 
-<!-- ===================== NOTÍCIAS ===================== -->
 {% if ultimas_noticias %}
 <section class="py-5 bg-white">
     <div class="container">
@@ -148,7 +150,7 @@
                 <span class="section-eyebrow">Comunicação</span>
                 <h2 class="section-title mb-0">Notícias</h2>
             </div>
-            <a href="{% url 'core:noticias' %}" class="btn btn-outline-primary btn-sm">Ver todas <i class="bi bi-arrow-right"></i></a>
+            <a href="{% url 'core:noticias' %}" class="btn btn-outline-primary btn-sm">Ver todas <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
         </div>
         <div class="row g-4">
             {% for n in ultimas_noticias %}
@@ -159,7 +161,7 @@
                             {% if n.imagem %}
                             <img src="{{ n.imagem.url }}" alt="{{ n.titulo }}" style="width:100%; height:100%; object-fit:cover;">
                             {% else %}
-                            <i class="bi bi-newspaper"></i>
+                            {% ui_icon 'globe' 42 %}
                             {% endif %}
                         </div>
                         <div class="news-body">
@@ -167,7 +169,7 @@
                             <h6 class="news-title">{{ n.titulo }}</h6>
                             <p class="news-summary">{{ n.resumo|truncatechars:100 }}</p>
                             <div class="news-meta">
-                                <i class="bi bi-calendar3"></i>
+                                <i class="bi bi-calendar3" aria-hidden="true"></i>
                                 {{ n.publicado_em|date:"d/m/Y" }}
                             </div>
                         </div>
@@ -180,43 +182,58 @@
 </section>
 {% endif %}
 
-<!-- ===================== BIOMAS ===================== -->
-<section class="py-5" style="background: var(--cor-fundo-home);">
+<section class="py-5 territory-entry">
     <div class="container">
-        <div class="text-center mb-4">
-            <span class="section-eyebrow">Cobertura local</span>
-            <h2 class="section-title text-center">Os 12 distritos de Porto Velho/Rondônia</h2>
-            <p class="text-muted">Acompanhamos a dinâmica de cada distrito com publicações, dados abertos, notícias e painéis interativos.</p>
+        <div class="row align-items-end g-3 mb-2">
+            <div class="col-lg-8">
+                <span class="section-eyebrow">Cobertura local</span>
+                <h2 class="section-title mb-2">Explore Porto Velho por dados, mapas e território</h2>
+                <p class="text-muted mb-0">A home agora direciona cada necessidade para a ferramenta certa, em vez de misturar biomas com os 12 distritos do município.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'core:distritos' %}" class="btn btn-outline-primary">Ver os 12 distritos <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+            </div>
         </div>
-        <div class="row g-3">
-            {% for b in biomas %}
-            <div class="col-6 col-md-4 col-lg-2">
-                <a href="{% url 'core:bioma_detalhe' b.slug %}" class="text-decoration-none">
-                    <div class="bioma-card" style="--bioma-cor: {{ b.cor }};">
-                        <div class="bioma-thumb">{{ b.icone }}</div>
-                        <div class="bioma-body">
-                            <h5>{{ b.nome }}</h5>
-                            <p>{{ b.descricao|truncatechars:60 }}</p>
-                        </div>
-                    </div>
+
+        <div class="row g-3 ux-quick-grid">
+            <div class="col-md-4">
+                <a class="ux-quick-card" style="--quick-color:#0d3b66;--quick-tint:rgba(13,59,102,.08);" href="{% url 'core:dashboards' %}">
+                    <div class="ux-quick-icon">{% ui_icon 'chart' 30 %}</div>
+                    <h3>Dashboards &amp; indicadores</h3>
+                    <p>Consulte painéis interativos e séries de indicadores públicos em uma experiência focada na leitura dos dados.</p>
+                    <span class="ux-quick-link">Explorar painéis <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
                 </a>
             </div>
-            {% endfor %}
+            <div class="col-md-4">
+                <a class="ux-quick-card" style="--quick-color:#1d7a47;--quick-tint:rgba(29,122,71,.09);" href="{% url 'core:painel_territorial' %}">
+                    <div class="ux-quick-icon">{% ui_icon 'map' 30 %}</div>
+                    <h3>Painel territorial</h3>
+                    <p>Navegue visualmente pelos distritos no mapa e relacione localização, população e área territorial.</p>
+                    <span class="ux-quick-link">Abrir mapa <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="ux-quick-card" style="--quick-color:#b35a16;--quick-tint:rgba(238,150,75,.13);" href="{% url 'core:distritos' %}">
+                    <div class="ux-quick-icon">{% ui_icon 'people' 30 %}</div>
+                    <h3>Perfis dos distritos</h3>
+                    <p>Acesse os perfis territoriais, descrições e indicadores básicos das localidades monitoradas pelo Observatório.</p>
+                    <span class="ux-quick-link">Conhecer distritos <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ===================== DIVULGAÇÃO POPULAR (MÍDIAS SOCIAIS) ===================== -->
-<section class="py-5 bg-white social-feed-section" >
+<section class="py-5 bg-white social-feed-section">
     <div class="container">
         <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
             <div>
-                <span class="section-eyebrow"><i class="bi bi-share-fill text-primary"></i> Mídias Sociais</span>
+                <span class="section-eyebrow"><i class="bi bi-share-fill text-primary" aria-hidden="true"></i> Mídias Sociais</span>
                 <h2 class="section-title mb-0">Divulgação Popular</h2>
                 <p class="text-muted mb-0">Acompanhe nossas publicações, cards educativos e ações de conscientização nas redes.</p>
             </div>
             <a href="{% url 'core:redes_sociais' %}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                Ver todos <i class="bi bi-arrow-right"></i>
+                Ver todos <i class="bi bi-arrow-right" aria-hidden="true"></i>
             </a>
         </div>
 
@@ -225,7 +242,6 @@
             {% for item in redes_sociais %}
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100 border-0 shadow-sm social-post-card rounded-4 overflow-hidden">
-                    <!-- Post Header (Instagram / Social Mock) -->
                     <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between p-3">
                         <div class="d-flex align-items-center gap-2">
                             <div class="social-avatar rounded-circle bg-light d-flex align-items-center justify-content-center text-primary fw-bold" style="width:36px; height:36px; border:2px solid #e9ecef;">
@@ -240,44 +256,41 @@
                             </div>
                         </div>
                         <span class="badge rounded-pill bg-light text-dark border d-flex align-items-center gap-1 px-2 py-1" title="{{ item.nome_rede }}">
-                            <i class="bi {{ item.icone_rede }} text-danger"></i>
+                            <i class="bi {{ item.icone_rede }} text-danger" aria-hidden="true"></i>
                             <span class="small font-monospace" style="font-size:0.75rem;">{{ item.rede_social|capfirst }}</span>
                         </span>
                     </div>
 
-                    <!-- Post Media / Image -->
                     <div class="social-media-container position-relative bg-dark" style="aspect-ratio: 1/1; overflow: hidden;">
                         {% if item.get_imagem_url %}
                         <img src="{{ item.get_imagem_url }}" alt="{{ item.titulo }}" class="w-100 h-100 object-fit-cover social-post-img">
                         {% else %}
                         <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center bg-light text-muted p-4 text-center">
-                            <i class="bi bi-image fs-1 mb-2"></i>
+                            <i class="bi bi-image fs-1 mb-2" aria-hidden="true"></i>
                             <span class="small fw-semibold">{{ item.titulo }}</span>
                         </div>
                         {% endif %}
                         {% if item.link_postagem %}
                         <a href="{{ item.link_postagem }}" target="_blank" rel="noopener noreferrer" class="social-hover-overlay d-flex flex-column align-items-center justify-content-center text-white text-decoration-none p-3 text-center">
-                            <i class="bi bi-box-arrow-up-right fs-2 mb-2"></i>
+                            <i class="bi bi-box-arrow-up-right fs-2 mb-2" aria-hidden="true"></i>
                             <span class="fw-bold">Ver no {{ item.nome_rede }}</span>
                         </a>
                         {% endif %}
                     </div>
 
-                    <!-- Post Body & Action Footer -->
                     <div class="card-body p-3 d-flex flex-column justify-content-between">
                         <div>
-                            <!-- Action Bar Mock -->
                             <div class="d-flex align-items-center justify-content-between text-muted mb-2 fs-6">
-                                <div class="d-flex gap-3">
+                                <div class="d-flex gap-3" aria-hidden="true">
                                     <i class="bi bi-heart text-danger"></i>
                                     <i class="bi bi-chat"></i>
                                     <i class="bi bi-send"></i>
                                 </div>
-                                <i class="bi bi-bookmark"></i>
+                                <i class="bi bi-bookmark" aria-hidden="true"></i>
                             </div>
                             {% if item.curtidas_texto %}
                             <div class="small fw-semibold text-dark mb-2" style="font-size:0.8rem;">
-                                <i class="bi bi-suit-heart-fill text-danger me-1"></i>{{ item.curtidas_texto }}
+                                <i class="bi bi-suit-heart-fill text-danger me-1" aria-hidden="true"></i>{{ item.curtidas_texto }}
                             </div>
                             {% endif %}
                             <h6 class="fw-bold text-dark mb-1 fs-6 text-truncate" title="{{ item.titulo }}">{{ item.titulo }}</h6>
@@ -288,11 +301,11 @@
 
                         <div class="pt-2 border-top mt-3 d-flex justify-content-between align-items-center">
                             <a href="{% url 'core:rede_social_detalhe' item.slug %}" class="small text-muted text-decoration-none">
-                                Ler legenda <i class="bi bi-chevron-right"></i>
+                                Ler legenda <i class="bi bi-chevron-right" aria-hidden="true"></i>
                             </a>
                             {% if item.link_postagem %}
                             <a href="{{ item.link_postagem }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary rounded-pill px-3 py-1 extra-small fw-semibold">
-                                <i class="bi {{ item.icone_rede }}"></i> Abrir post
+                                <i class="bi {{ item.icone_rede }}" aria-hidden="true"></i> Abrir post
                             </a>
                             {% endif %}
                         </div>
@@ -303,7 +316,7 @@
         </div>
         {% else %}
         <div class="text-center py-5 bg-white rounded-4 shadow-sm border p-4">
-            <i class="bi bi-instagram fs-1 text-muted mb-3 d-block"></i>
+            <i class="bi bi-instagram fs-1 text-muted mb-3 d-block" aria-hidden="true"></i>
             <h5 class="fw-bold">Nenhuma publicação cadastrada</h5>
             <p class="text-muted small">Acesse o painel administrativo para cadastrar postagens do Instagram e Facebook.</p>
         </div>
@@ -311,10 +324,8 @@
     </div>
 </section>
 
-
-<!-- ===================== PARCEIROS ===================== -->
 {% if parceiros %}
-<section class="py-5"  style="background: var(--cor-fundo-home);">
+<section class="py-5" style="background: var(--cor-fundo-home);">
     <div class="container text-center">
         <span class="section-eyebrow">Rede de colaboração</span>
         <h2 class="section-title text-center">Parceiros</h2>

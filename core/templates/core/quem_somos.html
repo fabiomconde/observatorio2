@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load ui_icons %}
 
 {% block title %}O Projeto{% endblock %}
 
@@ -17,7 +18,7 @@
 </section>
 
 <div class="container py-5">
-    <div class="row g-5">
+    <div class="row g-5 align-items-start">
         <div class="col-lg-7">
             <span class="section-eyebrow">Sobre nós</span>
             <h2 class="section-title">Quem somos</h2>
@@ -34,28 +35,46 @@
             <p><strong>Coordenação da Plataforma:</strong> desenvolve e mantém a plataforma, garantindo que a tecnologia funcione de forma segura e eficiente.</p>
             <p><strong>Coordenação de Comunicação:</strong> transforma os resultados da pesquisa em informações claras e acessíveis, fortalecendo a comunicação institucional e científica.</p>
             <p><strong>Equipe técnica e de apoio:</strong> reúne e organiza informações sociais, ambientais, econômicas e produtivas, além de apoiar a comunicação e as atividades administrativas.</p>
-
-<strong>O trabalho é coletivo:</strong> diferentes conhecimentos e áreas se conectam para transformar dados em informações úteis para a sociedade.
-</p>
+            <p><strong>O trabalho é coletivo:</strong> diferentes conhecimentos e áreas se conectam para transformar dados em informações úteis para a sociedade.</p>
         </div>
+
         <div class="col-lg-5">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3"><i class="bi bi-bullseye text-primary"></i> Missão</h5>
-                    <p class="text-muted small mb-4">Gerar e disseminar conhecimento sobre a cobertura e o uso da terra, com rigor científico e transparência.</p>
-                    <h5 class="fw-bold mb-3"><i class="bi bi-eye text-primary"></i> Visão</h5>
-                    <p class="text-muted small mb-0">Tornar-se referência global em monitoramento territorial colaborativo e aberto.</p>
+            <div class="concept-card sticky-lg-top" style="top: 100px;">
+                <div class="concept-item">
+                    <div class="concept-icon">{% ui_icon 'research' 24 %}</div>
+                    <div>
+                        <h5 class="fw-bold mb-1">Missão</h5>
+                        <p class="text-muted small mb-0">Produzir, organizar e comunicar conhecimento territorial de forma aberta, compreensível e útil à sociedade.</p>
+                    </div>
+                </div>
+                <div class="concept-item">
+                    <div class="concept-icon">{% ui_icon 'globe' 24 %}</div>
+                    <div>
+                        <h5 class="fw-bold mb-1">Visão</h5>
+                        <p class="text-muted small mb-0">Consolidar uma plataforma pública de referência para compreender conflitos, direitos e transformações territoriais em Porto Velho.</p>
+                    </div>
+                </div>
+                <div class="concept-item">
+                    <div class="concept-icon">{% ui_icon 'shield' 24 %}</div>
+                    <div>
+                        <h5 class="fw-bold mb-1">Princípio de design</h5>
+                        <p class="text-muted small mb-0">Dados complexos devem chegar ao público com contexto, hierarquia visual e caminhos claros de exploração.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <h2 class="section-title text-center mt-5">Nossos pilares</h2>
+    <div class="text-center mt-5 mb-4">
+        <span class="section-eyebrow">Fundamentos</span>
+        <h2 class="section-title text-center mb-2">Nossos pilares</h2>
+        <p class="text-muted mb-0">Os valores que orientam pesquisa, tecnologia e comunicação.</p>
+    </div>
     <div class="row g-4">
         {% for pilar in pilares %}
         <div class="col-md-6 col-lg-3">
             <div class="pilar-card h-100">
-                <div class="display-4">{{ pilar.icone }}</div>
+                <div class="pilar-icon" aria-hidden="true">{% ui_icon pilar.icone 30 %}</div>
                 <h5>{{ pilar.titulo }}</h5>
                 <p>{{ pilar.descricao }}</p>
             </div>
@@ -73,7 +92,7 @@
         <div class="col-md-6 col-lg-4">
             <a href="{% url 'core:grupo_detalhe' g.slug %}" class="text-decoration-none text-dark">
                 <div class="gt-card" style="--gt-cor: {{ g.cor }};">
-                    <div class="gt-icon"><i class="bi {{ g.icone|default:'bi-diagram-3' }}"></i></div>
+                    <div class="gt-icon"><i class="bi {{ g.icone|default:'bi-diagram-3' }}" aria-hidden="true"></i></div>
                     <h5>{{ g.titulo }}</h5>
                     <p>{{ g.descricao_curta|truncatechars:130 }}</p>
                     {% if g.coordenador %}<div class="gt-coord">Coord.: {{ g.coordenador }}</div>{% endif %}
@@ -83,7 +102,7 @@
         {% endfor %}
     </div>
     <div class="text-center mt-4">
-        <a href="{% url 'core:grupos' %}" class="btn btn-outline-primary">Ver todos os eixos temáticos <i class="bi bi-arrow-right"></i></a>
+        <a href="{% url 'core:grupos' %}" class="btn btn-outline-primary">Ver todos os eixos temáticos <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
     </div>
     {% endif %}
 
