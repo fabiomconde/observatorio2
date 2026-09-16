@@ -10,19 +10,11 @@
             <div class="col-lg-9 col-xl-8">
                 <span class="hero-eyebrow"><i class="bi bi-globe-americas" aria-hidden="true"></i> Ciência aberta · Dados públicos</span>
                 <h1 class="mb-3">Observatório de Conflitos Socioambientais e Direitos Humanos</h1>
-                <p class="lead mb-4">Transformamos dados dispersos em conhecimento territorial acessível para pesquisa, participação social e políticas públicas.</p>
+                <p class="lead mb-4">Transformar dados dispersos em conhecimento socialmente relevante e útil ao controle social e às políticas públicas.</p>
                 <form class="hero-search" action="{% url 'core:busca' %}" method="get" role="search">
                     <input class="form-control" type="search" name="q" placeholder="Buscar mapas, relatórios, notícias…" aria-label="Buscar no Observatório">
-                    <button type="submit"><i class="bi bi-search" aria-hidden="true"></i> Buscar</button>
+                    <button type="submit" aria-label="Buscar"><i class="bi bi-search" aria-hidden="true"></i><span class="hero-search-label">Buscar</span></button>
                 </form>
-                <div class="hero-actions" aria-label="Acessos rápidos">
-                    <a class="btn btn-light fw-semibold" href="{% url 'core:dashboards' %}">
-                        {% ui_icon 'chart' 20 %} Explorar indicadores
-                    </a>
-                    <a class="btn btn-outline-light fw-semibold" href="{% url 'core:painel_territorial' %}">
-                        {% ui_icon 'map' 20 %} Abrir mapa territorial
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -32,24 +24,68 @@
     <div class="container">
         <div class="row text-center text-lg-start">
             <div class="col-6 col-md-3">
-                <div class="stat-number">12</div>
+                <div class="stat-number">{{ distritos_total|default:12 }}</div>
                 <div class="stat-label">distritos monitorados</div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="stat-number">5</div>
+                <div class="stat-number">{{ eixos_total|default:5 }}</div>
                 <div class="stat-label">eixos estratégicos</div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="stat-number">7</div>
-                <div class="stat-label">pilares</div>
+                <div class="stat-number">{{ publicacoes_total|default:0 }}</div>
+                <div class="stat-label">publicações ativas</div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">dados abertos</div>
+                <div class="stat-number">{{ dashboards_total|default:0 }}</div>
+                <div class="stat-label">painéis disponíveis</div>
             </div>
         </div>
     </div>
 </section>
+<section class="ux-access-section py-4 py-lg-5" aria-labelledby="acesso-rapido-title">
+    <div class="container">
+        <div class="ux-access-head">
+            <span class="section-eyebrow">Dados &amp; território</span>
+            <h2 class="section-title" id="acesso-rapido-title">O que você quer explorar?</h2>
+            <p class="text-muted mb-0">Acesso direto às principais formas de consultar os dados do Observatório.</p>
+        </div>
+
+        <div class="ux-quick-grid" aria-label="Acessos rápidos aos dados">
+            <a class="ux-quick-card" style="--quick-color:#1b4332;" href="{% url 'core:dashboards' %}">
+                <div class="ux-quick-icon">{% ui_icon 'chart-bar' 28 %}</div>
+                <span class="ux-quick-kicker">Dados interativos</span>
+                <h3>Dashboards &amp; indicadores</h3>
+                <p>Visualize painéis públicos, séries e indicadores de acompanhamento territorial.</p>
+                <span class="ux-quick-link">Explorar painéis <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+            </a>
+
+            <a class="ux-quick-card" style="--quick-color:#2d6a4f;" href="{% url 'core:painel_territorial' %}">
+                <div class="ux-quick-icon">{% ui_icon 'map-2' 28 %}</div>
+                <span class="ux-quick-kicker">Leitura espacial</span>
+                <h3>Mapa territorial</h3>
+                <p>Navegue pelos distritos e relacione localização, população e área no território.</p>
+                <span class="ux-quick-link">Abrir mapa <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+            </a>
+
+            <a class="ux-quick-card" style="--quick-color:#40916c;" href="{% url 'core:distritos' %}">
+                <div class="ux-quick-icon">{% ui_icon 'users-group' 28 %}</div>
+                <span class="ux-quick-kicker">Perfis locais</span>
+                <h3>Distritos de Porto Velho</h3>
+                <p>Consulte características, população, área e informações básicas de cada distrito.</p>
+                <span class="ux-quick-link">Ver distritos <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+            </a>
+
+            <a class="ux-quick-card" style="--quick-color:#9a6a1c;" href="{% url 'core:colecoes' %}">
+                <div class="ux-quick-icon">{% ui_icon 'book-2' 28 %}</div>
+                <span class="ux-quick-kicker">Séries e acervos</span>
+                <h3>Coleções de dados</h3>
+                <p>Acesse conjuntos organizados de mapas, estatísticas e séries históricas do projeto.</p>
+                <span class="ux-quick-link">Ver coleções <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+            </a>
+        </div>
+    </div>
+</section>
+
 
 {% if grupos %}
 <section class="py-5 bg-white">
@@ -161,7 +197,7 @@
                             {% if n.imagem %}
                             <img src="{{ n.imagem.url }}" alt="{{ n.titulo }}" style="width:100%; height:100%; object-fit:cover;">
                             {% else %}
-                            {% ui_icon 'globe' 42 %}
+                            <i class="bi bi-newspaper" aria-hidden="true"></i>
                             {% endif %}
                         </div>
                         <div class="news-body">
@@ -181,48 +217,6 @@
     </div>
 </section>
 {% endif %}
-
-<section class="py-5 territory-entry">
-    <div class="container">
-        <div class="row align-items-end g-3 mb-2">
-            <div class="col-lg-8">
-                <span class="section-eyebrow">Cobertura local</span>
-                <h2 class="section-title mb-2">Explore Porto Velho por dados, mapas e território</h2>
-                <p class="text-muted mb-0">A home agora direciona cada necessidade para a ferramenta certa, em vez de misturar biomas com os 12 distritos do município.</p>
-            </div>
-            <div class="col-lg-4 text-lg-end">
-                <a href="{% url 'core:distritos' %}" class="btn btn-outline-primary">Ver os 12 distritos <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <div class="row g-3 ux-quick-grid">
-            <div class="col-md-4">
-                <a class="ux-quick-card" style="--quick-color:#0d3b66;--quick-tint:rgba(13,59,102,.08);" href="{% url 'core:dashboards' %}">
-                    <div class="ux-quick-icon">{% ui_icon 'chart' 30 %}</div>
-                    <h3>Dashboards &amp; indicadores</h3>
-                    <p>Consulte painéis interativos e séries de indicadores públicos em uma experiência focada na leitura dos dados.</p>
-                    <span class="ux-quick-link">Explorar painéis <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="ux-quick-card" style="--quick-color:#1d7a47;--quick-tint:rgba(29,122,71,.09);" href="{% url 'core:painel_territorial' %}">
-                    <div class="ux-quick-icon">{% ui_icon 'map' 30 %}</div>
-                    <h3>Painel territorial</h3>
-                    <p>Navegue visualmente pelos distritos no mapa e relacione localização, população e área territorial.</p>
-                    <span class="ux-quick-link">Abrir mapa <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="ux-quick-card" style="--quick-color:#b35a16;--quick-tint:rgba(238,150,75,.13);" href="{% url 'core:distritos' %}">
-                    <div class="ux-quick-icon">{% ui_icon 'people' 30 %}</div>
-                    <h3>Perfis dos distritos</h3>
-                    <p>Acesse os perfis territoriais, descrições e indicadores básicos das localidades monitoradas pelo Observatório.</p>
-                    <span class="ux-quick-link">Conhecer distritos <i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
 
 <section class="py-5 bg-white social-feed-section">
     <div class="container">

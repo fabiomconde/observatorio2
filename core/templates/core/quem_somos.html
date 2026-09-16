@@ -74,7 +74,7 @@
         {% for pilar in pilares %}
         <div class="col-md-6 col-lg-3">
             <div class="pilar-card h-100">
-                <div class="pilar-icon" aria-hidden="true">{% ui_icon pilar.icone 30 %}</div>
+                <div class="pilar-icon" aria-hidden="true">{% pillar_icon pilar.titulo pilar.icone 32 %}</div>
                 <h5>{{ pilar.titulo }}</h5>
                 <p>{{ pilar.descricao }}</p>
             </div>

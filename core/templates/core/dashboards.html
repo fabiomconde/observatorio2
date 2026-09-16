@@ -3,7 +3,6 @@
 {% block title %}Dashboards & Indicadores{% endblock %}
 
 {% block content %}
-<!-- Header da Página -->
 <section class="page-header py-4">
     <div class="container">
         <nav aria-label="breadcrumb">
@@ -13,35 +12,42 @@
             </ol>
         </nav>
         <h1 class="fw-bold h2 mb-1 text-white">Dashboards &amp; Indicadores Públicos</h1>
-        <p class="lead small mb-0" style="color: rgba(255, 255, 255, 0.85);">Painéis interativos de monitoramento socioambiental, dados demográficos e estatísticas territoriais de Porto Velho/RO.</p>
+        <p class="lead small mb-0" style="color: rgba(255,255,255,.85);">Painéis interativos de monitoramento socioambiental, dados demográficos e estatísticas territoriais de Porto Velho/RO.</p>
     </div>
 </section>
 
-<!-- Lista de Dashboards -->
-<div class="container py-5">
+<div class="container py-4 py-lg-5">
+    <div class="dashboard-intro-note d-md-none">
+        <i class="bi bi-phone-landscape fs-5" aria-hidden="true"></i>
+        <span>No celular, o painel abre em tela cheia para aproveitar melhor a área disponível.</span>
+    </div>
+
     {% if dashboards %}
-    <div class="row g-4">
+    <div class="row g-3 g-lg-4">
         {% for dash in dashboards %}
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm transition-hover p-4">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <div class="fs-1 text-primary">
+            <article class="dashboard-card">
+                <div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+                    <div class="dashboard-icon" aria-hidden="true">
                         <i class="bi {{ dash.icone|default:'bi-bar-chart-line' }}"></i>
                     </div>
                     {% if dash.destaque %}
-                    <span class="badge bg-warning text-dark fw-bold"><i class="bi bi-star-fill me-1"></i>Destaque</span>
+                    <span class="badge dashboard-badge fw-semibold"><i class="bi bi-star-fill me-1"></i>Destaque</span>
                     {% endif %}
                 </div>
-                <h4 class="fw-bold mb-2 text-dark">{{ dash.titulo }}</h4>
+
+                <h2 class="h5 fw-bold mb-2">{{ dash.titulo }}</h2>
                 <p class="text-muted small mb-4 flex-grow-1">
                     {{ dash.descricao|default:"Painel público de dados demográficos e indicadores de acompanhamento territorial." }}
                 </p>
-                <div class="d-flex gap-2 align-items-center">
-                    <button type="button" onclick="abrirPainelModal('{{ dash.link_standalone|default:dash.link }}', '{{ dash.link_responsivo|default:dash.link_standalone }}')" class="btn btn-primary w-100 fw-semibold">
-                        <i class="bi bi-arrows-fullscreen me-1"></i> Abrir Dashboard
-                    </button>
-                </div>
-            </div>
+
+                <button type="button"
+                        data-dashboard-title="{{ dash.titulo }}"
+                        onclick="abrirPainelModal(this, '{{ dash.link_standalone|default:dash.link|escapejs }}', '{{ dash.link_responsivo|default:dash.link_standalone|escapejs }}')"
+                        class="btn btn-primary w-100 fw-semibold">
+                    <i class="bi bi-arrows-fullscreen me-1" aria-hidden="true"></i> Abrir dashboard
+                </button>
+            </article>
         </div>
         {% endfor %}
     </div>
@@ -54,92 +60,103 @@
     {% endif %}
 </div>
 
-<div id="modalPainel" class="modal-overlay">
-    <span class="botao-fechar" onclick="fecharPainel()">&times;</span>
-    <div class="modal-conteudo">
-        <iframe id="iframeSupersetModal" src="" frameborder="0" allowfullscreen></iframe>
+<div id="modalPainel" class="dashboard-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="dashboardModalTitle">
+    <div class="dashboard-modal-shell">
+        <div class="dashboard-modal-toolbar">
+            <div class="dashboard-modal-heading">
+                <span class="dashboard-modal-kicker">Painel interativo</span>
+                <span class="dashboard-modal-title" id="dashboardModalTitle">Dashboard</span>
+            </div>
+
+            <div class="dashboard-modal-actions">
+                <a id="dashboardOpenExternal" class="dashboard-modal-action" href="#" target="_blank" rel="noopener noreferrer" aria-label="Abrir dashboard em nova aba">
+                    <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                    <span>Abrir em nova aba</span>
+                </a>
+                <button id="dashboardCloseButton" class="dashboard-modal-close" type="button" onclick="fecharPainel()" aria-label="Fechar dashboard">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-modal-frame-wrap">
+            <div id="dashboardLoading" class="dashboard-loading" aria-live="polite">
+                <div class="text-center">
+                    <div class="spinner-border text-success mb-2" role="status" aria-hidden="true"></div>
+                    <div class="small">Carregando painel…</div>
+                </div>
+            </div>
+            <iframe id="iframeSupersetModal" src="" title="Dashboard interativo" allowfullscreen onload="dashboardCarregado()"></iframe>
+        </div>
     </div>
 </div>
-<style>
-    /* Estilo do Modal Fullscreen */
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        z-index: 10000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.9);
-    }
-
-    .modal-conteudo {
-        width: 100%;
-        height: 100%;
-    }
-
-    .modal-conteudo iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-    }
-
-    .botao-fechar {
-        position: absolute;
-        top: 15px;
-        right: 25px;
-        color: #645a5a;
-        font-size: 50px;
-        font-weight: bold;
-        cursor: pointer;
-        z-index: 10001;
-        transition: 0.3s;
-        line-height: 1;
-        user-select: none;
-    }
-
-    .botao-fechar:hover {
-        color: #ff4d4d;
-    }
-
-    .no-scroll {
-        overflow: hidden;
-    }
-</style>
 
 <script>
-function abrirPainelModal(urlDesktop, urlMobile) {
-    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    let urlDashboard = (isMobile && urlMobile) ? urlMobile : (urlDesktop || urlMobile);
+let dashboardLastTrigger = null;
+
+function normalizarDashboardUrl(url) {
+    if (!url) return '';
+    let normalized = url;
+    if (normalized.includes('standalone=')) {
+        normalized = normalized.replace(/standalone=\d+/, 'standalone=2');
+    } else {
+        normalized += (normalized.includes('?') ? '&' : '?') + 'standalone=2';
+    }
+    return normalized;
+}
+
+function abrirPainelModal(trigger, urlDesktop, urlMobile) {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const selected = (isMobile && urlMobile) ? urlMobile : (urlDesktop || urlMobile);
+    const urlDashboard = normalizarDashboardUrl(selected);
     if (!urlDashboard) return;
 
-    if (urlDashboard.includes("standalone=")) {
-        urlDashboard = urlDashboard.replace(/standalone=\d+/, "standalone=2");
-    } else {
-        urlDashboard += (urlDashboard.includes("?") ? "&" : "?") + "standalone=2";
-    }
-    const modal = document.getElementById("modalPainel");
-    const iframe = document.getElementById("iframeSupersetModal");
+    dashboardLastTrigger = trigger || document.activeElement;
 
+    const modal = document.getElementById('modalPainel');
+    const iframe = document.getElementById('iframeSupersetModal');
+    const title = document.getElementById('dashboardModalTitle');
+    const external = document.getElementById('dashboardOpenExternal');
+    const loading = document.getElementById('dashboardLoading');
+    const closeButton = document.getElementById('dashboardCloseButton');
+
+    title.textContent = trigger?.dataset.dashboardTitle || 'Dashboard';
+    external.href = urlDashboard;
+    loading.classList.remove('is-hidden');
     iframe.src = urlDashboard;
-    modal.style.display = "block";
-    document.body.classList.add("no-scroll");
+
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+    window.setTimeout(() => closeButton.focus(), 0);
+}
+
+function dashboardCarregado() {
+    const loading = document.getElementById('dashboardLoading');
+    if (loading) loading.classList.add('is-hidden');
 }
 
 function fecharPainel() {
-    const modal = document.getElementById("modalPainel");
-    const iframe = document.getElementById("iframeSupersetModal");
+    const modal = document.getElementById('modalPainel');
+    if (!modal.classList.contains('is-open')) return;
 
-    iframe.src = "";
-    modal.style.display = "none";
-    document.body.classList.remove("no-scroll");
+    const iframe = document.getElementById('iframeSupersetModal');
+    iframe.src = '';
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+
+    if (dashboardLastTrigger && typeof dashboardLastTrigger.focus === 'function') {
+        dashboardLastTrigger.focus();
+    }
 }
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === "Escape") {
-        fecharPainel();
-    }
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') fecharPainel();
+});
+
+document.getElementById('modalPainel')?.addEventListener('click', event => {
+    if (event.target.id === 'modalPainel') fecharPainel();
 });
 </script>
 {% endblock %}
-
