@@ -46,6 +46,9 @@ docker-down:
 docker-logs:
 	docker compose logs -f web
 
+docker-logs-docs:
+	docker compose logs -f docs
+
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	rm -rf staticfiles db.sqlite3 sqlite_data

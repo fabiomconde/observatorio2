@@ -14,6 +14,17 @@ services:
     networks:
       - rede_proxy
 
+  docs:
+    image: squidfunk/mkdocs-material
+    container_name: observapvh_docs
+    restart: always
+    volumes:
+      - .:/docs
+    ports:
+      - "8001:8000"
+    networks:
+      - rede_proxy
+
 volumes:
   static_volume:
   media_volume:
