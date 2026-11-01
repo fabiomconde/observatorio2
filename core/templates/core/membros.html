@@ -1,6 +1,11 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}Membros{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'core/css/membros.css' %}?v=1.0">
+{% endblock %}
 
 {% block content %}
 <section class="page-header">
@@ -17,19 +22,78 @@
 </section>
 
 <div class="container py-5">
-    <div class="row g-4">
-        {% for m in membros %}
-        <div class="col-6 col-md-4 col-lg-3">
-            <div class="membro-card">
-                <div class="membro-avatar">{{ m.nome|slice:":1"|upper }}</div>
-                <h5>{{ m.nome }}</h5>
-                {% if m.funcao %}<div class="funcao">{{ m.funcao }}</div>{% endif %}
-                {% if m.instituicao %}<div class="instituicao">{{ m.instituicao }}</div>{% endif %}
+    <section aria-labelledby="membros-atuais-title">
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">Equipe</span>
+                <h2 id="membros-atuais-title">Membros atuais</h2>
             </div>
+            <p>Participações vigentes no Observatório.</p>
         </div>
-        {% empty %}
-        <div class="col-12 text-center text-muted">Nenhum membro cadastrado.</div>
-        {% endfor %}
-    </div>
+
+        <div class="row g-4">
+            {% for m in membros_atuais %}
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                <article class="membro-card h-100">
+                    {% if m.foto %}
+                    <img src="{{ m.foto.url }}" alt="Foto de {{ m.nome }}"
+                         class="membro-avatar membro-avatar-image" loading="lazy">
+                    {% else %}
+                    <div class="membro-avatar" aria-hidden="true">{{ m.nome|slice:":1"|upper }}</div>
+                    {% endif %}
+
+                    <h3 class="h5">{{ m.nome }}</h3>
+                    {% if m.funcao %}<div class="funcao">{{ m.funcao }}</div>{% endif %}
+                    {% if m.instituicao %}<div class="instituicao">{{ m.instituicao }}</div>{% endif %}
+                    {% if m.inicio_participacao %}
+                    <div class="membro-periodo">Desde {{ m.inicio_participacao|date:"m/Y" }}</div>
+                    {% endif %}
+                </article>
+            </div>
+            {% empty %}
+            <div class="col-12"><div class="empty-state">Nenhum membro atual cadastrado.</div></div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="historico-section" aria-labelledby="historico-title">
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">Memória institucional</span>
+                <h2 id="historico-title">Histórico de participação</h2>
+            </div>
+            <p>Pessoas que contribuíram com o Observatório e concluíram sua participação.</p>
+        </div>
+
+        {% if membros_historicos %}
+        <div class="table-responsive historico-table-wrap">
+            <table class="table historico-table align-middle mb-0">
+                <caption class="visually-hidden">Histórico dos membros que finalizaram sua participação no Observatório.</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Membro</th>
+                        <th scope="col">Função</th>
+                        <th scope="col">Instituição</th>
+                        <th scope="col">Início</th>
+                        <th scope="col">Fim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in membros_historicos %}
+                    <tr>
+                        <th scope="row">{{ m.nome }}</th>
+                        <td>{{ m.funcao|default:"—" }}</td>
+                        <td>{{ m.instituicao|default:"—" }}</td>
+                        <td>{% if m.inicio_participacao %}{{ m.inicio_participacao|date:"m/Y" }}{% else %}—{% endif %}</td>
+                        <td>{{ m.fim_participacao|date:"m/Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">Ainda não há participações encerradas registradas.</div>
+        {% endif %}
+    </section>
 </div>
 {% endblock %}
