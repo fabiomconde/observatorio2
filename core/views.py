@@ -105,11 +105,14 @@ def grupo_detalhe(request, slug):
 
 
 def membros(request):
-    return render(
-        request,
-        "core/membros.html",
-        {"membros": Membro.objects.filter(ativo=True)},
-    )
+    """Lista a equipe vigente e preserva o histórico de participação."""
+    context = {
+        "membros_atuais": Membro.objects.atuais(),
+        "membros_historicos": Membro.objects.historicos().order_by(
+            "-fim_participacao", "nome"
+        ),
+    }
+    return render(request, "core/membros.html", context)
 
 
 # --------------------------------------------------------------------- #

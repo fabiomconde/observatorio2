@@ -5,7 +5,10 @@ All entities used across the public site and the Django admin live here.
 """
 
 import re
+
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -555,8 +558,31 @@ class Pilar(TimeStampedModel):
         return self.titulo
 
 
+class MembroQuerySet(models.QuerySet):
+    """Consultas de domínio para o ciclo de participação dos membros."""
+
+    def publicados(self):
+        """Registros permitidos para exibição pública."""
+        return self.filter(ativo=True)
+
+    def atuais(self, referencia=None):
+        """Participações vigentes na data de referência."""
+        referencia = referencia or timezone.localdate()
+        return self.publicados().filter(
+            models.Q(inicio_participacao__isnull=True)
+            | models.Q(inicio_participacao__lte=referencia),
+            models.Q(fim_participacao__isnull=True)
+            | models.Q(fim_participacao__gte=referencia),
+        )
+
+    def historicos(self, referencia=None):
+        """Participações encerradas antes da data de referência."""
+        referencia = referencia or timezone.localdate()
+        return self.publicados().filter(fim_participacao__lt=referencia)
+
+
 class Membro(TimeStampedModel):
-    """Team members (membros do observatório)."""
+    """Pessoa que integra ou integrou a equipe do Observatório."""
 
     nome = models.CharField(_("nome"), max_length=120)
     slug = models.SlugField(_("slug"), max_length=140, unique=True, blank=True)
@@ -566,13 +592,93 @@ class Membro(TimeStampedModel):
     foto = models.ImageField(_("foto"), upload_to="membros/", blank=True, null=True)
     email = models.EmailField(_("e-mail"), blank=True)
     link_lattes = models.URLField(_("Lattes"), blank=True)
+    inicio_participacao = models.DateField(
+        _("início da participação"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Data em que a pessoa passou a integrar o Observatório. "
+            "Pode ficar em branco para registros legados."
+        ),
+    )
+    fim_participacao = models.DateField(
+        _("fim da participação"),
+        null=True,
+        blank=True,
+        help_text=_(
+            "Deixe em branco enquanto a participação estiver vigente. "
+            "Ao preencher, o membro passa ao histórico após essa data."
+        ),
+    )
     ordem = models.PositiveIntegerField(_("ordem"), default=0)
-    ativo = models.BooleanField(_("ativo"), default=True)
+    ativo = models.BooleanField(
+        _("publicado"),
+        default=True,
+        help_text=_(
+            "Controla apenas a visibilidade pública do registro; "
+            "não representa o encerramento da participação."
+        ),
+    )
+
+    objects = MembroQuerySet.as_manager()
 
     class Meta:
         ordering = ["ordem", "nome"]
         verbose_name = _("Membro")
         verbose_name_plural = _("Membros")
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(inicio_participacao__isnull=True)
+                    | models.Q(fim_participacao__isnull=True)
+                    | models.Q(fim_participacao__gte=models.F("inicio_participacao"))
+                ),
+                name="membro_fim_nao_anterior_inicio",
+            )
+        ]
+
+    def clean(self):
+        super().clean()
+        if (
+            self.inicio_participacao
+            and self.fim_participacao
+            and self.fim_participacao < self.inicio_participacao
+        ):
+            raise ValidationError(
+                {
+                    "fim_participacao": _(
+                        "A data de fim não pode ser anterior à data de início."
+                    )
+                }
+            )
+
+    @property
+    def participacao_atual(self) -> bool:
+        hoje = timezone.localdate()
+        if not self.ativo:
+            return False
+        if self.inicio_participacao and self.inicio_participacao > hoje:
+            return False
+        return self.fim_participacao is None or self.fim_participacao >= hoje
+
+    @property
+    def participacao_historica(self) -> bool:
+        return bool(
+            self.ativo
+            and self.fim_participacao
+            and self.fim_participacao < timezone.localdate()
+        )
+
+    @property
+    def status_participacao(self) -> str:
+        hoje = timezone.localdate()
+        if not self.ativo:
+            return _("Oculto")
+        if self.inicio_participacao and self.inicio_participacao > hoje:
+            return _("Previsto")
+        if self.fim_participacao and self.fim_participacao < hoje:
+            return _("Encerrado")
+        return _("Atual")
 
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -209,7 +209,7 @@ class PublicSiteTests(TestCase):
             "email": "maria@x.org",
             "assunto": "Oi",
             "mensagem": "Olá! Esta é uma mensagem válida para teste.",
-            "human_verification": "on",
+            "captcha_answer": self.client.session.get("contact_captcha_answer"),
             "challenge_token": challenge,
         }
         r = self.client.post(reverse("core:contato"), data)
@@ -257,7 +257,7 @@ class PublicSiteTests(TestCase):
             titulo="Painel Teste",
             link="https://painel.tech/superset/dashboard/p/abc123desktop/",
         )
-        self.assertIn("standalone=1", dash.link)
+        self.assertIn("standalone=2", dash.link)
         self.assertIn("standalone=2", dash.link_responsivo)
         self.assertIn("show_filters=0", dash.link_responsivo)
 

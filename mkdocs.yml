@@ -1,0 +1,36 @@
+site_name: Central de Ajuda do Observatório
+site_description: Manual de uso e administração do Observatório de Conflitos Socioambientais e Direitos Humanos
+repo_url: https://github.com/fabiomconde/observatorio2
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: pt-BR
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.action.edit
+
+plugins:
+  - search:
+      lang: pt
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Início: index.md
+  - Administração:
+      - Membros: administracao/membros.md
+  - Superset:
+      - Visão geral: superset/index.md
+      - Gráficos: superset/graficos.md
+      - Publicação e acesso público: superset/publicacao.md
+      - Integração de dashboards (legado): superset/painel-embutido-legado.md
+  - Desenvolvimento: desenvolvimento.md

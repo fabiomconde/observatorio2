@@ -180,11 +180,54 @@ class PilarAdmin(admin.ModelAdmin):
 
 @admin.register(Membro)
 class MembroAdmin(admin.ModelAdmin):
-    list_display = ("nome", "funcao", "instituicao", "ordem", "ativo")
-    list_filter = ("ativo", "instituicao")
+    list_display = (
+        "nome",
+        "funcao",
+        "instituicao",
+        "inicio_participacao",
+        "fim_participacao",
+        "status_participacao",
+        "ativo",
+    )
+    list_filter = ("ativo", "instituicao", "inicio_participacao", "fim_participacao")
     search_fields = ("nome", "funcao", "instituicao", "biografia")
     prepopulated_fields = {"slug": ("nome",)}
     ordering = ("ordem", "nome")
+    fieldsets = (
+        (
+            "Identificação",
+            {
+                "fields": (
+                    "nome",
+                    "slug",
+                    "funcao",
+                    "instituicao",
+                    "biografia",
+                    "foto",
+                )
+            },
+        ),
+        ("Contato", {"fields": ("email", "link_lattes")}),
+        (
+            "Participação",
+            {
+                "fields": (
+                    "inicio_participacao",
+                    "fim_participacao",
+                    "ordem",
+                    "ativo",
+                ),
+                "description": (
+                    "Use a data de fim para encerrar a participação. "
+                    "O campo publicado controla somente a visibilidade pública."
+                ),
+            },
+        ),
+    )
+
+    @admin.display(description="Situação")
+    def status_participacao(self, obj):
+        return obj.status_participacao
 
 
 @admin.register(Parceiro)
