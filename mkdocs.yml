@@ -27,7 +27,21 @@ markdown_extensions:
 nav:
   - Início: index.md
   - Administração:
-      - Membros: administracao/membros.md
+      - Notícias: administracao/noticia.md
+      - Publicações: administracao/publicacao.md
+      - Mensagens de contato: administracao/mensagemcontato.md
+      - Divulgação Popular: administracao/publicacaoredesocial.md
+      - Distritos: administracao/distrito.md
+      - Coleções: administracao/colecao.md
+      - Dashboard: administracao/dashboard.md
+      - Biomas: administracao/bioma.md
+      - Eixos Temáticos: administracao/grupotrabalho.md
+      - Glossário: administracao/termoglossario.md
+      - FAQ: administracao/faq.md
+      - Membros: administracao/membro.md
+      - Parceiros: administracao/parceiro.md
+      - Usuários: administracao/usuario.md
+      - Grupos: administracao/grupo.md
   - Superset:
       - Visão geral: superset/index.md
       - Gráficos: superset/graficos.md
