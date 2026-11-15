@@ -1,22 +1,38 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: observapvh
     container_name: observapvh
+    restart: always
+    env_file:
+      - .env
     command: >
       sh -c "python manage.py migrate --noinput &&
-             python manage.py seed_data &&
-             python manage.py runserver 0.0.0.0:8000"
+             python manage.py collectstatic --noinput &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60 --access-logfile -"
     volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    networks:
+      - rede_proxy
 
   docs:
     image: squidfunk/mkdocs-material
     container_name: observapvh_docs
+    restart: always
     volumes:
       - .:/docs
     ports:
       - "8001:8000"
+    networks:
+      - rede_proxy
 
+volumes:
+  static_volume:
+  media_volume:
+
+networks:
+  rede_proxy:
+    external: true

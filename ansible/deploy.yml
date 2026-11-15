@@ -21,6 +21,6 @@
         mode: '0600'
 
     - name: Reconstruir a imagem e subir os containers
-      ansible.builtin.shell: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+      ansible.builtin.shell: docker compose up -d --build
       args:
         chdir: "{{ app_dir }}"
